@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid_1819_g13\\prid_1819_g13.csproj": {}
+    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid_1819_g13.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid_1819_g13\\prid_1819_g13.csproj": {
+    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid_1819_g13.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid_1819_g13\\prid_1819_g13.csproj",
+        "projectUniqueName": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid_1819_g13.csproj",
         "projectName": "prid_1819_g13",
-        "projectPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid_1819_g13\\prid_1819_g13.csproj",
+        "projectPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid_1819_g13.csproj",
         "packagesPath": "C:\\Users\\nicol\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid_1819_g13\\obj\\",
+        "outputPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"

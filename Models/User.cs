@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace prid_1819_g13.Models
 {
@@ -20,7 +21,7 @@ namespace prid_1819_g13.Models
         public string LastName {get; set;}
         [StringLength (50,MinimumLength=3,ErrorMessage="FirstName Should be minimum 3 characters and a maximum of 50 characters")]
         public string FirstName {get; set;}
-        public DataType BirthDate {get; set;}
+        public DateTime? BirthDate {get; set;}
         [Required(ErrorMessage = "Requiered")]
         public int Reputation {get; set;}
     }
