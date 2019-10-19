@@ -27,8 +27,12 @@ namespace prid_1819_g13
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(opt =>
-                opt.UseInMemoryDatabase("UserList"));
+            // services.AddDbContext<Context>(opt => opt.UseSqlServer(
+            //     Configuration.GetConnectionString("prid-1920-g13-mssql"))
+            // );
+            services.AddDbContext<Context>(opt => opt.UseMySql(
+                Configuration.GetConnectionString("prid-1920-g13-mysql"))
+            );
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

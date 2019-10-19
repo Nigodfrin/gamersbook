@@ -7,7 +7,7 @@ using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -16,13 +16,6 @@ namespace prid_1819_g13.Controllers
         public UsersController(Context context)
         {
             _context = context;
-
-            if (_context.Users.Count() == 0)
-            {
-                
-                _context.Users.Add(new User { Pseudo = "Item1" });
-                _context.SaveChanges();
-            }
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()

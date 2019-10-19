@@ -11,5 +11,6 @@ export class UserListComponent {
         userService.getAll().subscribe(users => {
             this.users = users;
         })
+        console.log(this.users.length);
     }
 }
