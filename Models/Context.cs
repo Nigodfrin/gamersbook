@@ -20,8 +20,9 @@ namespace prid_1819_g13.Models
             .IsUnique();
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasData(
-                new User() { Id = 1,Pseudo = "ben", Password = "ben", LastName = "Godfrin", FirstName="Nicolas", Reputation = 5, Email = "nicolas.godfrin@live.be" },
-                new User() { Id = 2 ,Pseudo = "bruno", Password = "bruno", LastName = "Costa", FirstName = "Raphael", Reputation = 2, Email = "raphCosta@hotmail.com" }
+                new User() { Id = 1,Pseudo = "Nico", Password = "123",Role = Role.Member, LastName = "Godfrin", FirstName="Nicolas", Reputation = 5, Email = "nicolas.godfrin@live.be" },
+                new User() { Id = 2 ,Pseudo = "Raph", Password = "123",Role = Role.Member, LastName = "Costa", FirstName = "Raphael", Reputation = 2, Email = "raphCosta@hotmail.com" },
+                new User() { Id = 3 ,Pseudo = "admin", Password = "admin",Role = Role.Admin, LastName = "admin", FirstName = "admin", Reputation = 5, Email = "admin@hotmail.com" }
             );
         }
     }
