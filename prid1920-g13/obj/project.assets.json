@@ -12171,37 +12171,35 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nicol\\.nuget\\packages\\": {},
-    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\RAphael Costa\\.nuget\\packages\\": {},
+    "G:\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid1920-g13\\prid_1819_g13.csproj",
+      "projectUniqueName": "G:\\PRID\\prid1920-g13\\prid1920-g13\\prid_1819_g13.csproj",
       "projectName": "prid_1819_g13",
-      "projectPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid1920-g13\\prid_1819_g13.csproj",
-      "packagesPath": "C:\\Users\\nicol\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\prid1920-g13\\obj\\",
+      "projectPath": "G:\\PRID\\prid1920-g13\\prid1920-g13\\prid_1819_g13.csproj",
+      "packagesPath": "C:\\Users\\RAphael Costa\\.nuget\\packages\\",
+      "outputPath": "G:\\PRID\\prid1920-g13\\prid1920-g13\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
+        "G:\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\nicol\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\RAphael Costa\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {
-              "projectPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj"
+            "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {
+              "projectPath": "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj"
             }
           }
         }

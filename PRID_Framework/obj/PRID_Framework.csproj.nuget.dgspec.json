@@ -1,30 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {}
+    "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {
+    "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj",
+        "projectUniqueName": "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj",
         "projectName": "PRID_Framework",
-        "projectPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj",
-        "packagesPath": "C:\\Users\\nicol\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\prid1920-g13\\PRID_Framework\\obj\\",
+        "projectPath": "G:\\PRID\\prid1920-g13\\PRID_Framework\\PRID_Framework.csproj",
+        "packagesPath": "C:\\Users\\RAphael Costa\\.nuget\\packages\\",
+        "outputPath": "G:\\PRID\\prid1920-g13\\PRID_Framework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Users\\nicol\\Documents\\EPFC3\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
+          "G:\\PRID\\PRID1920\\dotnet-sdk-2.2.401-win-x64\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\nicol\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\RAphael Costa\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.2"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

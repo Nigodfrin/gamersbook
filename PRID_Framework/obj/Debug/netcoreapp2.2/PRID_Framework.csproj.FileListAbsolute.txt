@@ -25,3 +25,12 @@ C:\Users\nicol\Documents\EPFC3\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcor
 C:\Users\nicol\Documents\EPFC3\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfo.cs
 C:\Users\nicol\Documents\EPFC3\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.dll
 C:\Users\nicol\Documents\EPFC3\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.pdb
+G:\PRID\prid1920-g13\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.deps.json
+G:\PRID\prid1920-g13\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.dll
+G:\PRID\prid1920-g13\PRID_Framework\bin\Debug\netcoreapp2.2\PRID_Framework.pdb
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.csprojAssemblyReference.cache
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.csproj.CoreCompileInputs.cache
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfoInputs.cache
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.AssemblyInfo.cs
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.dll
+G:\PRID\prid1920-g13\PRID_Framework\obj\Debug\netcoreapp2.2\PRID_Framework.pdb

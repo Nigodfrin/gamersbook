@@ -14,7 +14,7 @@ namespace prid_1819_g13.Models
         public int Id { get; set; }
         [StringLength(10, MinimumLength = 3, ErrorMessage = "Pseudo Should be minimum 3 characters and a maximum of 10 characters")]
         [Required(ErrorMessage = "Required")]
-        [RegularExpression(@"^[a-zA-Z0-9\_]+$", ErrorMessage = "Pseudo can contain only letters, numbers or underscore")]
+        [RegularExpression("^[a-zA-Z][a-zA-Z0-9_]{2,9}$", ErrorMessage = "Pseudo can contain only letters, numbers or underscore")]
         public string Pseudo { get; set; }
         [Required(ErrorMessage = "Requiered")]
         [StringLength(10, MinimumLength = 3, ErrorMessage = "Password Should be minimum 3 characters and a maximum of 10 characters")]

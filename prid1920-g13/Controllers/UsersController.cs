@@ -32,13 +32,76 @@ namespace prid_1819_g13.Controllers
         {
             return (await _context.Users.ToListAsync()).ToDTO();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id)
+        {
+             var user = await _context.Users.FindAsync(id);
+             
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpPost]
+        public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == data.Pseudo);
+            if (user != null)
+            {
+                var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
+                return BadRequest(err);
+            }
+            var newUser = new User()
+            {
+                Pseudo = data.Pseudo,
+                Password = data.Password,
+                LastName = data.LastName,
+                FirstName = data.FirstName,
+                BirthDate = data.BirthDate,
+                Email = data.Email,
+            };
+            _context.Users.Add(newUser);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+
+            return CreatedAtAction(nameof(GetOneUser), new { pseudo = newUser.Pseudo }, newUser.ToDTO());
+        }
+        [HttpGet("{pseudo}")]
+        public async Task<ActionResult<UserDTO>> GetOneUser(string pseudo)
+        {
+            var user = await _context.Users.FindAsync(pseudo);
+            if (user == null)
+                return NotFound();
+            return user.ToDTO();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<ActionResult<User>> Authenticate(UserDTO data)
         {
             var user = await Authenticate(data.Pseudo, data.Password);
             if (user == null)
-                return BadRequest(new ValidationErrors().Add("Member not found", "Pseudo"));
+                return BadRequest(new ValidationErrors().Add("User not found", "Pseudo"));
             if (user.Token == null)
                 return BadRequest(new ValidationErrors().Add("Incorrect password", "Password"));
             return Ok(user);
