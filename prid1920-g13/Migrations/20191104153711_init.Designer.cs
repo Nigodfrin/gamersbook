@@ -9,8 +9,8 @@ using prid_1819_g13.Models;
 namespace prid_1819_g13.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20191102111918_initV2")]
-    partial class initV2
+    [Migration("20191104153711_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

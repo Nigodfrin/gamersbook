@@ -33,7 +33,7 @@ namespace prid_1819_g13.Controllers
             return (await _context.Users.ToListAsync()).ToDTO();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id)
+        public async Task<IActionResult> UpdateUser(int id ,UserDTO data)
         {
              var user = await _context.Users.FindAsync(id);
              
@@ -41,6 +41,12 @@ namespace prid_1819_g13.Controllers
             {
                 return BadRequest();
             }
+            user.Pseudo = data.Pseudo;
+            user.LastName = data.LastName;
+            user.Password = data.Password;
+            user.BirthDate = data.BirthDate;
+            user.Email = data.Email;
+            user.FirstName = data.FirstName;
 
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
