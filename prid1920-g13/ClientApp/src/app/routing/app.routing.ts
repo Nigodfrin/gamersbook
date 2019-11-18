@@ -7,10 +7,12 @@ import { LoginComponent } from '../components/login/login.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
-import { Role } from '../models/user';
+import { Role } from '../models/User';
+import { CounterParentComponent } from '../components/counter-stateless/counter-parent.component';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'counter', component: CounterComponent },
+  { path: 'counter-stateless', component: CounterParentComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   {
     path: 'members',

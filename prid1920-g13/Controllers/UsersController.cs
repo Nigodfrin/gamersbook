@@ -46,7 +46,9 @@ namespace prid_1819_g13.Controllers
             }
             user.Pseudo = data.Pseudo;
             user.LastName = data.LastName;
-            user.Password = data.Password;
+            if (data.Password != null){
+                user.Password = data.Password;
+            }           
             user.BirthDate = data.BirthDate;
             user.Email = data.Email;
             user.FirstName = data.FirstName;
@@ -73,6 +75,7 @@ namespace prid_1819_g13.Controllers
                 FirstName = data.FirstName,
                 BirthDate = data.BirthDate,
                 Email = data.Email,
+                Role = data.Role
             };
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();

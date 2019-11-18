@@ -14,24 +14,37 @@ import { FetchDataComponent } from '../components/fetch-data/fetch-data.componen
 import { UserListComponent } from '../components/userlist/userlist.component';
 import { UnknownComponent } from '../components/unknown/unknown.component';
 import { RestrictedComponent } from '../components/restricted/restricted.component';
+import { CounterParentComponent } from '../components/counter-stateless/counter-parent.component';
+import { CounterStatelessComponent } from '../components/counter-stateless/counter-stateless.component';
+import { SharedModule } from './shared.module';
+import { EditUserComponent } from '../components/edit-user/edit-user.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SetFocusDirective } from '../directives/setfocus.directive';
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
+    CounterParentComponent,
+    CounterStatelessComponent,
     FetchDataComponent,
     LoginComponent,
     UserListComponent,
     UnknownComponent,
-    RestrictedComponent
+    RestrictedComponent,
+    SetFocusDirective,
+    EditUserComponent
   ],
+  entryComponents: [EditUserComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutes
+    AppRoutes,
+    BrowserAnimationsModule,
+    SharedModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
