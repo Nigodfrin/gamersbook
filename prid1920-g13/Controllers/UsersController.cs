@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
 using System.Security.Claims;
-//using prid1920_tuto.Helpers;
+using prid_1819_g13.Helpers;
 using System;
 using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -27,11 +28,13 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
+        [Authorized(Role.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
             return (await _context.Users.ToListAsync()).ToDTO();
         }
+        [Authorized(Role.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id ,UserDTO data)
         {
@@ -86,6 +89,7 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             return user.ToDTO();
         }
+        [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -114,7 +118,7 @@ namespace prid_1819_g13.Controllers
         }
         private async Task<User> Authenticate(string pseudo, string password)
         {
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Pseudo == pseudo);
             // return null if member not found
             if (user == null)
                 return null;
