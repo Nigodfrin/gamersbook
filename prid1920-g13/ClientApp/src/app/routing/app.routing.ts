@@ -9,13 +9,14 @@ import { UnknownComponent } from '../components/unknown/unknown.component';
 import { AuthGuard } from '../services/auth.guard';
 import { Role } from '../models/User';
 import { CounterParentComponent } from '../components/counter-stateless/counter-parent.component';
+import { SignUpComponent } from '../components/signup/signup.component';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'counter', component: CounterComponent },
   { path: 'counter-stateless', component: CounterParentComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   {
-    path: 'members',
+    path: 'users',
     component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin] }
@@ -23,6 +24,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: SignUpComponent
   },
   { path: 'restricted', component: RestrictedComponent },
   { path: '**', component: UnknownComponent }

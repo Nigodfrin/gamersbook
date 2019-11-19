@@ -16,7 +16,7 @@ import { User, Role } from 'src/app/models/User';
 export class EditUserComponent {
     public frm: FormGroup;
     public ctlPseudo: FormControl;
-    public ctlProfile: FormControl;
+    public ctlFirstname: FormControl;
     public ctlPassword: FormControl;
     public ctlBirthDate: FormControl;
     public ctlRole: FormControl;
@@ -32,14 +32,14 @@ export class EditUserComponent {
             this.forbiddenValue('abc')
         ], [this.pseudoUsed()]);
         this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3)] : []);
-        this.ctlProfile = this.fb.control('', []);
+        this.ctlFirstname = this.fb.control('', []);
         // this.ctlBirthDate = this.fb.control('', []);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
         this.ctlRole = this.fb.control(Role.Member, []);
         this.frm = this.fb.group({
             pseudo: this.ctlPseudo,
             password: this.ctlPassword,
-            fullName: this.ctlProfile,
+            firstName: this.ctlFirstname,
             birthDate: this.ctlBirthDate,
             role: this.ctlRole
         });

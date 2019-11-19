@@ -109,6 +109,23 @@ namespace prid_1819_g13.Controllers
             return NoContent();
         }
         [AllowAnonymous]
+        [HttpGet("available/{pseudo}")]
+        public async Task<ActionResult<bool>> IsAvailable(string pseudo) {
+            var member = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == pseudo);
+            return member == null;
+        }
+        [AllowAnonymous]
+        [HttpGet("verif/{email}")]
+        public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
+            var member = await _context.Users.FirstOrDefaultAsync( x => x.Email == email);
+            return member == null;
+        }
+        [AllowAnonymous]
+        [HttpPost("signup")]
+        public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
+            return await CreateUser(data);
+        }
+        [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<ActionResult<User>> Authenticate(UserDTO data)
         {

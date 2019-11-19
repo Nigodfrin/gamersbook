@@ -1,0 +1,58 @@
+<form [formGroup]="frm" novalidate>
+    <h1>Sign Up</h1>
+    <mat-form-field>
+        <input matInput placeholder="Pseudo" [formControl]="ctlPseudo" required appSetFocus>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is
+            {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPseudo.hasError('pseudoUsed')">This pseudo is not available</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput placeholder="Password" [formControl]="ctlPassword" required autocomplete="new-password">
+        <mat-error class="float-right" *ngIf="ctlPassword.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPassword.hasError('minlength')">Minimum length is
+            {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlPassword.hasError('maxlength')">Maximum length is
+                {{ctlPassword.errors['maxlength'].requiredLength}}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput placeholder="Confirm Password" [formControl]="ctlPasswordConfirm" required>
+        <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('minlength')">Minimum length is
+            {{ctlPasswordConfirm.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="float-right" *ngIf="ctlPasswordConfirm.hasError('maxlength')">Maximum length is
+                {{ctlPasswordConfirm.errors['maxlength'].requiredLength}}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="First name" [formControl]="ctlFirstname">
+        <mat-error class="float-right" *ngIf="ctlFirstname.hasError('minlength')">Minimum lenght is 
+            {{ctlFirstname.errors['minlength'].requiredLength}} </mat-error>
+        <mat-error class="float-right" *ngIf="ctlFirstname.hasError('maxlength')">Maximum lenght is 
+            {{ctlFirstname.errors['maxlength'].requiredLength}} </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Last name" [formControl]="ctlLastname">
+        <mat-error class="float-right" *ngIf="ctlLastname.hasError('minlength')">Minimum lenght is 
+            {{ctlLastname.errors['minlength'].requiredLength}} </mat-error>
+        <mat-error class="float-right" *ngIf="ctlLastname.hasError('maxlength')">Maximum lenght is 
+            {{ctlLastname.errors['maxlength'].requiredLength}} </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Email" [formControl]="ctlEmail" required>
+        <mat-error class="float-right" *ngIf="ctlEmail.hasError('required')">Required</mat-error>
+        <mat-error class="float-right" *ngIf="ctlEmail.hasError('email')">Wrong email type</mat-error>
+        <mat-error class="float-right" *ngIf="ctlEmail.hasError('emailUsed')">Not available</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="date" matInput placeholder="Birthdate" [formControl]="ctlBirthdate">
+        <mat-error class="float-right" *ngIf="ctlBirthdate.hasError('isAdult')">Wrong age</mat-error>
+    </mat-form-field>
+    <div>
+        <mat-error class="float-left" *ngIf="frm.hasError('passwordNotConfirmed')">The passwords don't match</mat-error>
+        <mat-error class="float-left" *ngIf="frm.hasError('lastnameError')">The lastname error</mat-error>
+        <mat-error class="float-left" *ngIf="frm.hasError('firstnameError')">The firstname error</mat-error>
+    </div>
+    <div>
+        <button mat-stroked-button (click)="signup()" [disabled]="frm.invalid">Sign Up</button>
+    </div>
+</form>

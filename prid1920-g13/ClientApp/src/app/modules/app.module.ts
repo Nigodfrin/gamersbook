@@ -20,6 +20,7 @@ import { SharedModule } from './shared.module';
 import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
+import { SignUpComponent } from '../components/signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +35,7 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
     UnknownComponent,
     RestrictedComponent,
     SetFocusDirective,
+    SignUpComponent,
     EditUserComponent
   ],
   entryComponents: [EditUserComponent],

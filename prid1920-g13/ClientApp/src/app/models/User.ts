@@ -11,7 +11,7 @@ export class User {
     email: string;
     lastName: string;
     firstName: string;
-    birthDate: string;
+    birthDate: Date;
     reputation: any;
     role: Role;
     token: string;
