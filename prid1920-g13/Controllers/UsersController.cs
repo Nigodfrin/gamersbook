@@ -61,6 +61,7 @@ namespace prid_1819_g13.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
         {
+            Console.Write(data);
             var user = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == data.Pseudo);
             if (user != null)
             {
@@ -123,6 +124,7 @@ namespace prid_1819_g13.Controllers
         [AllowAnonymous]
         [HttpPost("signup")]
         public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
+            Console.Write(data);
             return await CreateUser(data);
         }
         [AllowAnonymous]

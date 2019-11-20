@@ -13,7 +13,7 @@ export class AuthenticationService {
     this.currentUser = data ? new User(data) : null;
   }
   login(pseudo: string, password: string) {
-    return this.http.post<User>(`${this.baseUrl}api/Users/authenticate`, { pseudo, password })
+    return this.http.post<User>(`${this.baseUrl}api/users/authenticate`, { pseudo, password })
       .pipe(map(user => {
         user = new User(user);
         // login successful if there's a jwt token in the response
@@ -33,8 +33,10 @@ export class AuthenticationService {
   public isPseudoAvailable(pseudo: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
   }
-  public signup(pseudo: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this.baseUrl}api/users/signup`, { pseudo: pseudo, password: password }).pipe(
+  public signup(pseudo: string, password: string,firstname: string,lastname:string,email:string,birthdate: string): Observable<User> {
+    if(firstname == ""){firstname = null;}
+    if(lastname == ""){lastname = null;}
+    return this.http.post<User>(`${this.baseUrl}api/users/signup`, { pseudo: pseudo, password: password,firstname: firstname,lastname: lastname,email: email,birthdate:birthdate }).pipe(
       flatMap(res => this.login(pseudo, password)),
     );
   }
