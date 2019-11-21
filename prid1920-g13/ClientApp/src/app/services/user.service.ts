@@ -10,14 +10,18 @@ export class UserService {
     return this.http.get<User[]>(`${this.baseUrl}api/users`)
       .pipe(map(res => res.map(m => new User(m))));
   }
-  getById(pseudo: string) {
-    return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
+  getById(id: number) {
+    return this.http.get<User>(`${this.baseUrl}api/users/${id}`).pipe(
       map(m => !m ? null : new User(m)),
       catchError(err => of(null))
     );
   }
+  public isPseudoAvailable(pseudo: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
+  }
   public update(m: User): Observable<boolean> {
-    return this.http.put<User>(`${this.baseUrl}api/users/${m.pseudo}`, m).pipe(
+    
+    return this.http.put<User>(`${this.baseUrl}api/users/${m.id}`, m).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);

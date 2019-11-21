@@ -30,9 +30,9 @@ namespace prid_1819_g13.Models
             .HasIndex(u => u.Email)
             .IsUnique();
             modelBuilder.Entity<User>().HasData(
-                new User() { Id = 1, Pseudo = "Nico", Password = "123", Role = Role.Member,BirthDate = new DateTime(02/11/1994), LastName = "Godfrin", FirstName = "Nicolas", Reputation = 5, Email = "nicolas.godfrin@live.be" },
-                new User() { Id = 2, Pseudo = "Raph", Password = "123", Role = Role.Member,BirthDate = new DateTime(11/09/1995), LastName = "Costa", FirstName = "Raphael", Reputation = 2, Email = "raphCosta@hotmail.com" },
-                new User() { Id = 3, Pseudo = "admin", Password = "admin", Role = Role.Admin, BirthDate = new DateTime(03/01/1991),LastName = "admin", FirstName = "admin", Reputation = 5, Email = "admin@hotmail.com" }
+                new User() { Id = 1, Pseudo = "Nico", Password = "123", Role = Role.Member,BirthDate = new DateTime(1994,11,02), LastName = "Godfrin", FirstName = "Nicolas", Reputation = 5, Email = "nicolas.godfrin@live.be" },
+                new User() { Id = 2, Pseudo = "Raph", Password = "123", Role = Role.Member,BirthDate = new DateTime(1995,09,11), LastName = "Costa", FirstName = "Raphael", Reputation = 2, Email = "raphCosta@hotmail.com" },
+                new User() { Id = 3, Pseudo = "admin", Password = "admin", Role = Role.Admin, BirthDate = new DateTime(1989,03,28),LastName = "admin", FirstName = "admin", Reputation = 5, Email = "admin@hotmail.com" }
             );
         }
     }

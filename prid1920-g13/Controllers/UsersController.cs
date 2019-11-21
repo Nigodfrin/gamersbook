@@ -38,6 +38,7 @@ namespace prid_1819_g13.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id ,UserDTO data)
         {
+            Console.Write(data);
              var user = await _context.Users.FindAsync(id);
              
             if (id != user.Id)
@@ -118,8 +119,8 @@ namespace prid_1819_g13.Controllers
         [AllowAnonymous]
         [HttpGet("verif/{email}")]
         public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
-            var member = await _context.Users.FirstOrDefaultAsync( x => x.Email == email);
-            return member == null;
+            var e = await _context.Users.FirstOrDefaultAsync( x => x.Email == email);
+            return e == null;
         }
         [AllowAnonymous]
         [HttpPost("signup")]

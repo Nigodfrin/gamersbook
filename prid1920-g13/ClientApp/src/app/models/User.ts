@@ -23,6 +23,7 @@ export class User {
         this.lastName = data.lastName;
         this.firstName = data.firstName;
         this.reputation = data.reputation;
+        this.email = data.email;
         this.birthDate = data.birthDate &&
           data.birthDate.length > 10 ? data.birthDate.substring(0, 10) : data.birthDate;
         this.role = data.role || Role.Member;

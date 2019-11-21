@@ -12,7 +12,7 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
     styleUrls: ['./userlist.component.css']
 })
 export class UserListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['pseudo', 'firstName','lastName', 'birthDate', 'role', 'actions'];
+    displayedColumns: string[] = ['pseudo','email', 'firstName','lastName', 'birthDate', 'role', 'actions'];
     dataSource: MatTableDataSource<User> = new MatTableDataSource();
     filter: string;
     state: MatTableState;
@@ -43,13 +43,13 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
     refresh() {
         this.userService.getAll().subscribe(users => {
+            console.log(users);
             // assigne les données récupérées au datasource
             this.dataSource.data = users;
             // restaure l'état du datasource (tri et pagination) à partir du state
             this.state.restoreState(this.dataSource);
             // restaure l'état du filtre à partir du state
             this.filter = this.state.filter;
-            console.log(users);
         });
     }
     // appelée chaque fois que le filtre est modifié par l'utilisateur
@@ -67,9 +67,10 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     edit(user: User) {
         const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false } });
         dlg.beforeClose().subscribe(res => {
+            console.log(res);
             if (res) {
                 _.assign(user, res);
-                this.userService.update(res).subscribe(res => {
+                this.userService.update(user).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();

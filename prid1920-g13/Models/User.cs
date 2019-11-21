@@ -25,7 +25,7 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Requiered")]
         [EmailAddress(ErrorMessage = "Email is not valid")]
         public string Email { get; set; }
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "this.Lastname Should be minimum 3 characters and a maximum of 50 characters")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Lastname Should be minimum 3 characters and a maximum of 50 characters")]
         public string LastName { get; set; }
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Firstname Should be minimum 3 characters and a maximum of 50 characters")]
         public string FirstName { get; set; }

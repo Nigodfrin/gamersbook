@@ -59,6 +59,7 @@ namespace prid_1819_g13.Migrations
                         new
                         {
                             Id = 1,
+                            BirthDate = new DateTime(1994, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nicolas.godfrin@live.be",
                             FirstName = "Nicolas",
                             LastName = "Godfrin",
@@ -70,6 +71,7 @@ namespace prid_1819_g13.Migrations
                         new
                         {
                             Id = 2,
+                            BirthDate = new DateTime(1995, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "raphCosta@hotmail.com",
                             FirstName = "Raphael",
                             LastName = "Costa",
@@ -81,6 +83,7 @@ namespace prid_1819_g13.Migrations
                         new
                         {
                             Id = 3,
+                            BirthDate = new DateTime(1989, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@hotmail.com",
                             FirstName = "admin",
                             LastName = "admin",
