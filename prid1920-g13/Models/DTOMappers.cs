@@ -18,8 +18,20 @@ namespace prid_1819_g13.Models {
                 Role = user.Role,
             };
         }
+        public static PostDTO ToDTO(this Post post) {
+            return new PostDTO {
+                Id = post.Id,
+                Title = post.Title,
+                Body = post.Body,
+                Timestamp = post.Timestamp,
+                UserId = post.UserId
+            };
+        }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
             return members.Select(m => m.ToDTO()).ToList();
+        }
+        public static List<PostDTO> ToDTO(this IEnumerable<Post> posts) {
+            return posts.Select(p => p.ToDTO()).ToList();
         }
     }
 }

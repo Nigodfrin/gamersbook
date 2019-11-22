@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace prid_1819_g13.Models
 {
@@ -11,10 +12,14 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Required")]
         public string Body {get;set;}
         [Required(ErrorMessage = "Required")]
-        public DateTime Timestamp { get{return Timestamp;} set {Timestamp = DateTime.Today;}}
-        public virtual ICollection<Post> CollectionPosts {get;set;}
-        public virtual ICollection<Vote> CollectionVotes {get;set;}
-        public virtual User User {get; set;}
+        public DateTime Timestamp { get;set;} = DateTime.Now;
+        public int UserId {get;set;}
+        [NotMapped]
+        public ICollection<Post> CollectionPosts {get;set;}
+        [NotMapped]
+        public ICollection<Vote> CollectionVotes {get;set;}
+        [NotMapped]
+        public User User {get; set;}
         // public virtual ICollection<Comment> CollectionComments {get;set;}
         // public virtual ICollection<Tag> CollectionTags {get;set;}
         

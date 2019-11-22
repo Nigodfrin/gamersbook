@@ -35,9 +35,12 @@ namespace prid_1819_g13.Models
         public Role Role { get; set; } = Role.Member;
         [NotMapped]
         public string Token { get; set; }
-        public virtual ICollection<Vote> Votes {get;set;}
-        public virtual ICollection<Post> Posts {get;set;}
+        [NotMapped]
+        public ICollection<Vote> Votes {get;set;}
+        [NotMapped]
+        public ICollection<Post> Posts {get;set;}
         // public virtual ICollection<Comment> Comments {get;set;}
+        [NotMapped]
         public int? Age
         {
             get
