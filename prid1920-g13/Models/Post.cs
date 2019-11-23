@@ -20,8 +20,10 @@ namespace prid_1819_g13.Models
         public ICollection<Vote> CollectionVotes {get;set;}
         [NotMapped]
         public User User {get; set;}
-        // public virtual ICollection<Comment> CollectionComments {get;set;}
-        // public virtual ICollection<Tag> CollectionTags {get;set;}
+        [NotMapped]
+        public ICollection<Comment> CollectionComments {get;set;}
+        [NotMapped]
+        public ICollection<Tag> CollectionTags {get;set;}
         
     }
 }

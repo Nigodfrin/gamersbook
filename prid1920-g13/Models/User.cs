@@ -39,7 +39,8 @@ namespace prid_1819_g13.Models
         public ICollection<Vote> Votes {get;set;}
         [NotMapped]
         public ICollection<Post> Posts {get;set;}
-        // public virtual ICollection<Comment> Comments {get;set;}
+        [NotMapped]
+        public virtual ICollection<Comment> Comments {get;set;}
         [NotMapped]
         public int? Age
         {
