@@ -10,8 +10,6 @@ namespace prid_1819_g13.Models
     public class Vote : IValidatableObject {
         [Required(ErrorMessage = "Required")]
         public int UpDown {get; set;}
-        [Required(ErrorMessage = "Required")]
-        public DateTime Timestamp { get; set;} = DateTime.Now;
         public int UserId {get;set;}
         public int PostId {get;set;}
         [NotMapped]

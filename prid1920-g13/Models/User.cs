@@ -20,7 +20,6 @@ namespace prid_1819_g13.Models
         [RegularExpression("^[a-zA-Z][a-zA-Z0-9_]{2,9}$", ErrorMessage = "Pseudo can contain only letters, numbers or underscore")]
         public string Pseudo { get; set; }
         [Required(ErrorMessage = "Requiered")]
-        [StringLength(10, MinimumLength = 3, ErrorMessage = "Password Should be minimum 3 characters and a maximum of 10 characters")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Requiered")]
         [EmailAddress(ErrorMessage = "Email is not valid")]
@@ -36,11 +35,11 @@ namespace prid_1819_g13.Models
         [NotMapped]
         public string Token { get; set; }
         [NotMapped]
-        public ICollection<Vote> Votes {get;set;}
+        public IList<Vote> Votes {get;set;}
         [NotMapped]
-        public ICollection<Post> Posts {get;set;}
+        public IList<Post> Posts {get;set;}
         [NotMapped]
-        public virtual ICollection<Comment> Comments {get;set;}
+        public virtual IList<Comment> Comments {get;set;}
         [NotMapped]
         public int? Age
         {

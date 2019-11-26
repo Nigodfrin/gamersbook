@@ -12,7 +12,7 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
         [NotMapped]
-        public ICollection<Post> CollectionPosts {get;set;}
+        public IList<Post> CollectionPosts {get;set;}
         
     }
 }

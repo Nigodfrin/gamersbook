@@ -13,9 +13,11 @@ namespace prid_1819_g13.Models
         public string Body { get; set; }
         [Required(ErrorMessage = "Timestamp is required")]
         public DateTime Timestamp {get;set;} = DateTime.Now;
+        public int UserId {get;set;}
+        public int PostId {get;set;}
         [NotMapped]
-        public User user{get;set;}
+        public User User{get;set;}
         [NotMapped]
-        public Post post {get;set;}
+        public Post Post {get;set;}
     }
 }

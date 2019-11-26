@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using prid_1819_g13.Models;
 
 namespace prid_1819_g13
 {
@@ -14,7 +15,7 @@ namespace prid_1819_g13
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().Seed().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

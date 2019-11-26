@@ -14,16 +14,22 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Required")]
         public DateTime Timestamp { get;set;} = DateTime.Now;
         public int UserId {get;set;}
-        [NotMapped]
-        public ICollection<Post> CollectionPosts {get;set;}
-        [NotMapped]
-        public ICollection<Vote> CollectionVotes {get;set;}
+        public int? ParentId {get;set;}
+        public int? AcceptedPostId {get;set;}
         [NotMapped]
         public User User {get; set;}
         [NotMapped]
-        public ICollection<Comment> CollectionComments {get;set;}
+        public Post ParentPost {get; set;}
         [NotMapped]
-        public ICollection<Tag> CollectionTags {get;set;}
+        public Post AcceptedPost {get; set;}
+        [NotMapped]
+        public IList<Post> Posts {get;set;}
+        [NotMapped]
+        public IList<Vote> Votes {get;set;}
+        [NotMapped]
+        public IList<Comment> Comments {get;set;}
+        [NotMapped]
+        public IList<Tag> Tags {get;set;}
         
     }
 }
