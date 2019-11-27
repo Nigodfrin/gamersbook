@@ -28,7 +28,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
-        [Authorized(Role.Admin)]
+       //  [Authorized(Role.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
@@ -38,7 +38,6 @@ namespace prid_1819_g13.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id ,UserDTO data)
         {
-            Console.Write(data);
              var user = await _context.Users.FindAsync(id);
              
             if (id != user.Id)
@@ -62,7 +61,6 @@ namespace prid_1819_g13.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
         {
-            Console.Write(data);
             var user = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == data.Pseudo);
             if (user != null)
             {
