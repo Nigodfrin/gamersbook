@@ -34,13 +34,64 @@ namespace prid_1819_g13.Models
             modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+            /* modelBuilder.Entity<User>()
+           .HasMany( u => u.Comments)
+           */
+            modelBuilder.Entity<Tag>()
+            .HasIndex(t => t.Name)
+            .IsUnique();
+
             modelBuilder.Entity<Vote>()
             .HasKey(vote => new { vote.UserId, vote.PostId });
+
+            modelBuilder.Entity<Comment>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.Comments)
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Comment>()
             .HasOne(c => c.Post)                  // définit la propriété de navigation pour le côté (1) de la relation
             .WithMany(p => p.Comments)            // définit la propriété de navigation pour le côté (N) de la relation
             .HasForeignKey(c => c.PostId)         // spécifie que la clé étrangère est Comment.PostId
             .OnDelete(DeleteBehavior.Restrict);   // spécifie le comportement en cas de delete : ici, un refus
-            }
+
+            modelBuilder.Entity<Vote>()
+            .HasOne(p => p.Post)
+            .WithMany(p => p.Votes)
+            .HasForeignKey(p => p.PostId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Vote>()
+            .HasOne(v => v.User)
+            .WithMany(u => u.Votes)
+            .HasForeignKey(v => v.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Post>()
+            .HasOne(u => u.User)
+            .WithMany( p =>p.Posts)
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            /* 
+             modelBuilder.Entity<PostTag>()
+             .HasKey(t => new { t.PostId, t.TagId });
+
+             modelBuilder.Entity<PostTag>()
+             .HasOne(pt => pt.Post)
+             .WithMany(p => p.)
+             .HasForeignKey(pt => pt.PostId);
+
+         modelBuilder.Entity<PostTag>()
+             .HasOne(pt => pt.Tag)
+             .WithMany(t => t.PostTags)
+             .HasForeignKey(pt => pt.TagId);
+              */
+
+
+
+
+        }
     }
 }

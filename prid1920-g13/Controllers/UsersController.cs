@@ -17,7 +17,7 @@ using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
-    [Authorize]
+
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase

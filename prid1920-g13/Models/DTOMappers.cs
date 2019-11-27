@@ -16,8 +16,8 @@ namespace prid_1819_g13.Models {
                 Reputation = user.Reputation,
                 Id = user.Id,
                 Role = user.Role,
-                Votes = user.Votes.ToDTO(),
-                Comments = user.Comments.ToDTO()
+                Votes = user.Votes?.ToDTO(),
+                Comments = user.Comments?.ToDTO()
             };
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
@@ -30,9 +30,9 @@ namespace prid_1819_g13.Models {
                 Body = post.Body,
                 Timestamp = post.Timestamp,
                 UserId = post.UserId,
-                Posts = post.Posts.PostRepToDTO(),
-                Tags = post.Tags.ToDTO(),
-                Comments = post.Comments.ToDTO()
+                Posts = post.Posts?.PostRepToDTO(),
+                Tags = post.Tags?.ToDTO(),
+                Comments = post.Comments?.ToDTO()
             };
         }
         public static List<PostQuestionDTO> PostQuestToDTO(this IEnumerable<Post> posts) {
@@ -44,7 +44,7 @@ namespace prid_1819_g13.Models {
                 Body = post.Body,
                 Timestamp = post.Timestamp,
                 UserId = post.UserId,
-                Votes = post.Votes.ToDTO()
+                Votes = post.Votes?.ToDTO()
             };
         }
         public static List<PostReponseDTO> PostRepToDTO(this IEnumerable<Post> posts) {
