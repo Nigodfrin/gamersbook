@@ -10,11 +10,9 @@ namespace prid_1819_g13.Models
     public class Vote : IValidatableObject {
         [Required(ErrorMessage = "Required")]
         public int UpDown {get; set;}
-        public int UserId {get;set;}
+        public int AuthorId {get;set;}
         public int PostId {get;set;}
-        [NotMapped]
         public User User {get;set;}
-        [NotMapped]
         public Post Post {get;set;}
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
