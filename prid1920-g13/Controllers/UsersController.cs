@@ -145,7 +145,7 @@ namespace prid_1819_g13.Controllers
             // return null if member not found
             if (user == null)
                 return null;
-            if (user.Password == password)
+            if (user.Password == TokenHelper.GetPasswordHash(password))
             {
                 // authentication successful so generate jwt token
                 var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,0 +1,17 @@
+<div class="example-button-row">
+  <button mat-raised-button color="primary"(click)="newest()">Newest</button>
+  <button mat-raised-button color="accent" (click)="votes()">Votes</button>
+  <button mat-raised-button color="warn" (click)="unanswered()">Unanswered</button>
+  <button mat-raised-button (click)="withTags()" >Tags</button>
+</div>
+
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let post of posts">
+        <mat-expansion-panel-header class="mat-row">
+            <span class="mat-cell">{{post.title}}</span>
+            <span class="mat-cell"><a routerLink='["/readQuestion/"{{ post.id }}"]'>Go to this question</a></span>
+        </mat-expansion-panel-header>
+        <p>{{post.body}}</p>
+    </mat-expansion-panel>
+</mat-accordion>
+<a class="btn-warning" [routerLink]='["/readQuestion"]'>Go to this question</a>
