@@ -29,7 +29,7 @@ namespace prid_1819_g13.Models {
                 Title = post.Title,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                UserId = post.UserId,
+                UserId = post.AuthorId,
                 Posts = post.Posts?.PostRepToDTO(),
                 Tags = post.Tags?.ToDTO(),
                 Comments = post.Comments?.ToDTO()
@@ -43,7 +43,7 @@ namespace prid_1819_g13.Models {
                 Id = post.Id,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                UserId = post.UserId,
+                AuthorId = post.AuthorId,
                 Votes = post.Votes?.ToDTO()
             };
         }

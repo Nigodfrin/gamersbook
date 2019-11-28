@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace prid_1819_g13.Models
 {
@@ -12,7 +13,12 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
         [NotMapped]
-        public IList<Post> CollectionPosts {get;set;}
+        public IEnumerable<Tag> Tags
+        {
+            get => PostTags.Select(f => f.Tag);
+        }
+        public List<PostTag> PostTags { get; set; } =new List<PostTag>();
         
+        // public IList<Post> CollectionPosts {get;set;}
     }
 }

@@ -44,13 +44,13 @@ int main()
 }
 ```
 is it only `b` that considered to be initialized? In other words, does initialization mean declaration and definition in same line?",
-                                    UserId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 30, 0)
+                                    AuthorId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 30, 0)
                                 },
                                 new Post() {
                                     Id = 2,
                                     Body = @"It means exactly what it says. Initialized static storage duration objects will have their init values set before the main function is called. Not initialized will be zeroed. The second part of the statement is actually implementation dependant,  and implementation has the full freedom of the way it will be archived. 
 When you declare the variable without the keyword `extern`  you always define it as well",
-                                    ParentId = 1, UserId = 2, Timestamp = new DateTime(2019, 11, 15, 8, 31, 0)
+                                    ParentId = 1, AuthorId = 2, Timestamp = new DateTime(2019, 11, 15, 8, 31, 0)
                                 },
                                 new Post() {
                                     Id = 3,
@@ -73,7 +73,7 @@ They get [zero initialized][1] or constant initalized (in short: if the right ha
 To sum up, if the implementation cannot constant initialize it, then it must first zero initialize and then initialize it before any dynamic initialization happends.
   [1]: https://en.cppreference.com/w/cpp/language/zero_initialization
 ",
-                                    ParentId = 1, UserId = 3, Timestamp = new DateTime(2019, 11, 15, 8, 32, 0)
+                                    ParentId = 1, AuthorId = 3, Timestamp = new DateTime(2019, 11, 15, 8, 32, 0)
                                 },
                                 new Post() {
                                     Id = 4, Title = "How do I escape characters in an Angular date pipe?",
@@ -88,14 +88,14 @@ When I try a naive approach to this, I get this result:
 This is because, for instance `d` refers to the day.
 How can I escape these characters in an Angular date pipe? I tried `\d` and such, but the result did not change with the added backslashes.
   [1]: https://angular.io/api/common/DatePipe",
-                                    UserId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 33, 0)
+                                    AuthorId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 33, 0)
                                 },
                                 new Post() {
                                     Id = 5,
                                     Body = @"How about this:
     {{today | date:'d \'days so far in\' LLLL'}}
 Anything inside single quotes is ignored. Just don't forget to escape them.",
-                                    ParentId = 4, UserId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 34, 0)
+                                    ParentId = 4, AuthorId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 34, 0)
                                 },
                                 new Post() {
                                     Id = 6,
@@ -115,7 +115,7 @@ And then the calling code:
 For all the format specifiers see the [documentation for format][1]. 
 Keep in mind you do have to import `momentjs` either as an import statement, have it imported in your cli config file, or reference the library from the root HTML page (like index.html).
   [1]: http://momentjs.com/docs/#/displaying/format/",
-                                    ParentId = 4, UserId = 3, Timestamp = new DateTime(2019, 11, 15, 8, 35, 0)
+                                    ParentId = 4, AuthorId = 3, Timestamp = new DateTime(2019, 11, 15, 8, 35, 0)
                                 },
                                 new Post() {
                                     Id = 7,
@@ -123,97 +123,97 @@ Keep in mind you do have to import `momentjs` either as an import statement, hav
     {{today | date:'d'}} days so far in {{today | date:'LLLL'}}
 EDIT:
 After posting this I tried @Gh0sT 's solution and it worked, so I guess there is a way to use one date pipe.",
-                                    ParentId = 4, UserId = 2, Timestamp = new DateTime(2019, 11, 15, 8, 36, 0)
+                                    ParentId = 4, AuthorId = 2, Timestamp = new DateTime(2019, 11, 15, 8, 36, 0)
                                 },
                                 new Post() {
                                     Id = 8,
                                     Title = "Q1",
                                     Body = "Q1",
-                                    UserId = 5,
+                                    AuthorId = 5,
                                     Timestamp = new DateTime(2019, 11, 22, 8, 0, 0)
                                 },
                                 new Post() {
                                     Id = 9,
                                     Body = "R1",
                                     ParentId = 8,
-                                    UserId = 1,
+                                    AuthorId = 1,
                                     Timestamp = new DateTime(2019, 11, 22, 8, 5, 0)
                                 },
                                 new Post() {
                                     Id = 10,
                                     Body = "R2",
                                     ParentId = 8,
-                                    UserId = 2,
+                                    AuthorId = 2,
                                     Timestamp = new DateTime(2019, 11, 22, 8, 3, 0)
                                 },
                                 new Post() {
                                     Id = 11,
                                     Body = "R3",
                                     ParentId = 8,
-                                    UserId = 3,
+                                    AuthorId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 8, 4, 0)
                                 },
                                 new Post() {
                                     Id = 12,
                                     Title = "Q2",
                                     Body = "Q2",
-                                    UserId = 4,
+                                    AuthorId = 4,
                                     Timestamp = new DateTime(2019, 11, 22, 9, 0, 0)
                                 },
                                 new Post() {
                                     Id = 13,
                                     Body = "R4",
                                     ParentId = 12,
-                                    UserId = 5,
+                                    AuthorId = 5,
                                     Timestamp = new DateTime(2019, 11, 22, 9, 1, 0)
                                 },
                                 new Post() {
                                     Id = 14,
                                     Title = "Q3",
                                     Body = "Q3",
-                                    UserId = 1,
+                                    AuthorId = 1,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 0, 0)
                                 },
                                 new Post() {
                                     Id = 15,
                                     Body = "R5",
                                     ParentId = 14,
-                                    UserId = 5,
+                                    AuthorId = 5,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
                                 },
                                 new Post() {
                                     Id = 16,
                                     Body = "R6",
                                     ParentId = 14,
-                                    UserId = 3,
+                                    AuthorId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
                                 },
                                 new Post() {
                                     Id = 17,
                                     Title = "Q4",
                                     Body = "Q4",
-                                    UserId = 2,
+                                    AuthorId = 2,
                                     Timestamp = new DateTime(2019, 11, 22, 11, 0, 0)
                                 },
                                 new Post() {
                                     Id = 18,
                                     Body = "R7",
                                     ParentId = 17,
-                                    UserId = 3,
+                                    AuthorId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
                                 },
                                 new Post() {
                                     Id = 19,
                                     Title = "Q5",
                                     Body = "Q8",
-                                    UserId = 4,
+                                    AuthorId = 4,
                                     Timestamp = new DateTime(2019, 11, 22, 11, 0, 0)
                                 },
                                 new Post() {
                                     Id = 20,
                                     Body = "R8",
                                     ParentId = 19,
-                                    UserId = 3,
+                                    AuthorId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
                                 }
                             );
@@ -227,60 +227,60 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 new Comment() {
                                     Id = 1,
                                     Body = @"Global ""uninitialized"" variables typically end up in a ""bss"" segment, which will be initialized to zero.",
-                                    UserId = 1, PostId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 40, 0)
+                                    AuthorId = 1, PostId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 40, 0)
                                 },
                                 new Comment() {
                                     Id = 2,
                                     Body = @"[stackoverflow.com/questions/1169858/…]() This might help",
-                                    UserId = 2, PostId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 41, 0)
+                                    AuthorId = 2, PostId = 1, Timestamp = new DateTime(2019, 11, 15, 8, 41, 0)
                                 },
                                 new Comment() {
                                     Id = 3,
                                     Body = @"Verified that this works! Pretty cool",
-                                    UserId = 2, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 42, 0)
+                                    AuthorId = 2, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 42, 0)
                                 },
                                 new Comment() {
                                     Id = 4,
                                     Body = @"For me it works with double quotes. `{{today | date:""d \'days so far in\' LLLL""}}`",
-                                    UserId = 3, PostId = 7, Timestamp = new DateTime(2019, 11, 15, 8, 43, 0)
+                                    AuthorId = 3, PostId = 7, Timestamp = new DateTime(2019, 11, 15, 8, 43, 0)
                                 },
                                 new Comment() {
                                     Id = 5,
                                     Body = @"This does not provide an answer to the question. Once you have sufficient reputation you will be able to comment on any post; instead, provide answers that don't require clarification from the asker.",
-                                    UserId = 2, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 44, 0)
+                                    AuthorId = 2, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 44, 0)
                                 },
                                 new Comment() {
                                     Id = 6,
                                     Body = @"Duplicate of [xxx](yyy). Please stop!",
-                                    UserId = 1, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 45, 0)
+                                    AuthorId = 1, PostId = 6, Timestamp = new DateTime(2019, 11, 15, 8, 45, 0)
                                 }
                             );
                             context.SaveChanges();
                         }
                         if (context.Votes.Count() == 0) {
                             context.Votes.AddRange(
-                                new Vote() { UpDown = 1, UserId = 5, PostId = 1 },
-                                new Vote() { UpDown = -1, UserId = 3, PostId = 2 },
-                                new Vote() { UpDown = -1, UserId = 2, PostId = 1 },
-                                new Vote() { UpDown = -1, UserId = 3, PostId = 1 },
-                                new Vote() { UpDown = 1, UserId = 2, PostId = 3 },
-                                new Vote() { UpDown = 1, UserId = 5, PostId = 5 },
-                                new Vote() { UpDown = -1, UserId = 3, PostId = 5 },
-                                new Vote() { UpDown = 1, UserId = 4, PostId = 7 },
-                                new Vote() { UpDown = -1, UserId = 4, PostId = 8 },
-                                new Vote() { UpDown = -1, UserId = 1, PostId = 8 },
-                                new Vote() { UpDown = 1, UserId = 4, PostId = 9 },
-                                new Vote() { UpDown = -1, UserId = 2, PostId = 9 },
-                                new Vote() { UpDown = 1, UserId = 1, PostId = 11 },
-                                new Vote() { UpDown = 1, UserId = 2, PostId = 11 },
-                                new Vote() { UpDown = 1, UserId = 1, PostId = 12 },
-                                new Vote() { UpDown = 1, UserId = 2, PostId = 12 },
-                                new Vote() { UpDown = 1, UserId = 3, PostId = 12 },
-                                new Vote() { UpDown = -1, UserId = 1, PostId = 13 },
-                                new Vote() { UpDown = -1, UserId = 2, PostId = 14 },
-                                new Vote() { UpDown = -1, UserId = 2, PostId = 15 },
-                                new Vote() { UpDown = -1, UserId = 4, PostId = 16 },
-                                new Vote() { UpDown = 1, UserId = 1, PostId = 18 }
+                                new Vote() { UpDown = 1, AuthorId = 5, PostId = 1 },
+                                new Vote() { UpDown = -1, AuthorId = 3, PostId = 2 },
+                                new Vote() { UpDown = -1, AuthorId = 2, PostId = 1 },
+                                new Vote() { UpDown = -1, AuthorId = 3, PostId = 1 },
+                                new Vote() { UpDown = 1, AuthorId = 2, PostId = 3 },
+                                new Vote() { UpDown = 1, AuthorId = 5, PostId = 5 },
+                                new Vote() { UpDown = -1, AuthorId = 3, PostId = 5 },
+                                new Vote() { UpDown = 1, AuthorId = 4, PostId = 7 },
+                                new Vote() { UpDown = -1, AuthorId = 4, PostId = 8 },
+                                new Vote() { UpDown = -1, AuthorId = 1, PostId = 8 },
+                                new Vote() { UpDown = 1, AuthorId = 4, PostId = 9 },
+                                new Vote() { UpDown = -1, AuthorId = 2, PostId = 9 },
+                                new Vote() { UpDown = 1, AuthorId = 1, PostId = 11 },
+                                new Vote() { UpDown = 1, AuthorId = 2, PostId = 11 },
+                                new Vote() { UpDown = 1, AuthorId = 1, PostId = 12 },
+                                new Vote() { UpDown = 1, AuthorId = 2, PostId = 12 },
+                                new Vote() { UpDown = 1, AuthorId = 3, PostId = 12 },
+                                new Vote() { UpDown = -1, AuthorId = 1, PostId = 13 },
+                                new Vote() { UpDown = -1, AuthorId = 2, PostId = 14 },
+                                new Vote() { UpDown = -1, AuthorId = 2, PostId = 15 },
+                                new Vote() { UpDown = -1, AuthorId = 4, PostId = 16 },
+                                new Vote() { UpDown = 1, AuthorId = 1, PostId = 18 }
                             );
                             context.SaveChanges();
                         }
