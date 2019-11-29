@@ -22,6 +22,8 @@ namespace prid_1819_g13.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AuthorId");
+
                     b.Property<string>("Body")
                         .IsRequired();
 
@@ -29,9 +31,11 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Comments");
                 });
@@ -43,6 +47,8 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<int?>("AcceptedPostId");
 
+                    b.Property<int>("AuthorId");
+
                     b.Property<string>("Body")
                         .IsRequired();
 
@@ -52,23 +58,30 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AcceptedPostId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("prid_1819_g13.Models.PostTag", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("PostId");
 
                     b.Property<int>("TagId");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Id");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasAlternateKey("Id");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("PostTags");
                 });
@@ -82,6 +95,9 @@ namespace prid_1819_g13.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
@@ -126,15 +142,73 @@ namespace prid_1819_g13.Migrations
 
             modelBuilder.Entity("prid_1819_g13.Models.Vote", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<int>("AuthorId");
 
                     b.Property<int>("PostId");
 
                     b.Property<int>("UpDown");
 
-                    b.HasKey("UserId", "PostId");
+                    b.HasKey("AuthorId", "PostId");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Votes");
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Models.Comment", b =>
+                {
+                    b.HasOne("prid_1819_g13.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid_1819_g13.Models.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Models.Post", b =>
+                {
+                    b.HasOne("prid_1819_g13.Models.Post", "AcceptedPost")
+                        .WithMany("Reponses")
+                        .HasForeignKey("AcceptedPostId");
+
+                    b.HasOne("prid_1819_g13.Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid_1819_g13.Models.Post", "ParentPost")
+                        .WithMany("Posts")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Models.PostTag", b =>
+                {
+                    b.HasOne("prid_1819_g13.Models.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid_1819_g13.Models.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Models.Vote", b =>
+                {
+                    b.HasOne("prid_1819_g13.Models.User", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("prid_1819_g13.Models.Post", "Post")
+                        .WithMany("Votes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

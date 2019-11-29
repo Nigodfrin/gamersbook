@@ -9,7 +9,7 @@
     <mat-expansion-panel *ngFor="let post of posts">
         <mat-expansion-panel-header class="mat-row">
             <span class="mat-cell">{{post.title}}</span>
-            <span class="mat-cell"><a routerLink='["/readQuestion/"{{ post.id }}"]'>Go to this question</a></span>
+            <span class="mat-cell"><a [routerLink]= "['readquestion',post.id]">Go to this question</a></span>
         </mat-expansion-panel-header>
         <p>{{post.body}}</p>
     </mat-expansion-panel>

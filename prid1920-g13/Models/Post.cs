@@ -30,9 +30,9 @@ namespace prid_1819_g13.Models
             get => PostTags.Select(f => f.Tag);
         }
         [NotMapped]
-        public IEnumerable<Post> Posts
+        public ICollection<Post> Posts
         {
-            get => PostTags.Select(f => f.Post);
+            get => PostTags.Select(f => f.Post).ToList();
         }
         public List<PostTag> PostTags { get; set; } = new List<PostTag>();
 
