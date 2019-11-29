@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20191129012553_test réparation")]
+    partial class testréparation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +77,11 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<int>("TagId");
 
+                    b.Property<int>("Id");
+
                     b.HasKey("PostId", "TagId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("TagId");
 
@@ -183,12 +189,12 @@ namespace prid_1819_g13.Migrations
 
             modelBuilder.Entity("prid_1819_g13.Models.PostTag", b =>
                 {
-                    b.HasOne("prid_1819_g13.Models.Post", "Post")
+                    b.HasOne("prid_1819_g13.Models.Tag", "Tag")
                         .WithMany("PostTags")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("prid_1819_g13.Models.Tag", "Tag")
+                    b.HasOne("prid_1819_g13.Models.Post", "Post")
                         .WithMany("PostTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict);

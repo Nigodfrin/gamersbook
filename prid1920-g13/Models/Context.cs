@@ -74,13 +74,13 @@ namespace prid_1819_g13.Models
             modelBuilder.Entity<PostTag>()
             .HasOne<Post>(pt => pt.Post)
             .WithMany(p => p.PostTags)
-            .HasForeignKey(pt => pt.TagId)
+            .HasForeignKey(pt => pt.PostId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PostTag>()
             .HasOne<Tag>(pt => pt.Tag)
             .WithMany(t => t.PostTags)
-            .HasForeignKey(pt => pt.PostId)
+            .HasForeignKey(pt => pt.TagId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Post>()
