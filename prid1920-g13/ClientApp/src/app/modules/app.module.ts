@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { AppRoutes } from '../routing/app.routing';
 import { AppComponent } from '../components/app/app.component';
 import { JwtInterceptor } from '../interceptors/jwt.interceptor';
@@ -19,6 +19,8 @@ import { SetFocusDirective } from '../directives/setfocus.directive';
 import { SignUpComponent } from '../components/signup/signup.component';
 import { PostListComponent } from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
+import { MarkdownModule } from 'ngx-markdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,8 @@ import {ReadQuestion} from '../components/readquestion/readquestion.component';
     ReactiveFormsModule,
     AppRoutes,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    MarkdownModule.forRoot({ loader: HttpClient })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

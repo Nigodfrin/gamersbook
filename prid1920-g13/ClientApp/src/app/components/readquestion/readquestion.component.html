@@ -1,4 +1,41 @@
-<h1>{{question.id}}</h1>
-<h1>{{question.title}}</h1>
-<h1>{{question.body}}</h1>
-<h1>{{question.timestamp}}</h1>
+<section class="container">
+    <div class="row" style="border-bottom: 4px double black">
+        <h3 class="col-12">{{question.title}}</h3>
+        <span class="col">Asked : {{question.timestamp}}</span>
+    </div>
+    <div class="row" style="border-bottom: 1px solid black">
+        <span class="col-1">{{question.score}}</span>
+        <markdown class="col-10"> {{question.body}}</markdown>
+        <mat-chip-list class="offset-1 col-5">
+            <mat-chip *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
+        </mat-chip-list>
+        <span class="col-2">Posted by {{question.user.pseudo}}</span>
+    </div>
+    <div class="row" style="font-size: 12px">
+        <div class="offset-1">
+            <div class="row" *ngFor="let com of question.comments">
+                <p class=" offset-1 col-10">{{com.body}}</p>
+                <span class="offset-7">commented by {{com.author.pseudo}} </span>7
+                <span class="col-3">Date : {{com.timestamp}}</span>
+                <mat-divider class="col-12"></mat-divider>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="col-12">Réponses</h3>
+        <div class="row" *ngFor="let reponse of question.reponses">
+            <p class="col-1"> {{reponse.score}} </p>
+            <markdown class="col-10">{{reponse.body}}</markdown>
+            <span class="offset-9">Answered by {{reponse.author.pseudo}}</span>
+            <div class="container">
+                <div class="row" style="font-size: 12px" *ngFor="let com of reponse.comments">
+                    <div class=" offset-2 col-10">{{com.body}}</div>
+                    <span class="offset-8">commented by {{com.author.pseudo}} </span>
+                    <span class="col-2">Date : {{com.timestamp}}</span>
+                    <mat-divider class="col-12"></mat-divider>
+                </div>
+            </div>
+            <mat-divider class="col-12"></mat-divider>
+        </div>
+    </div>
+</section>

@@ -17,7 +17,7 @@ namespace prid_1819_g13.Models
         {
             get => PostTags.Select(f => f.Tag);
         }
-        public List<PostTag> PostTags { get; set; } =new List<PostTag>();
+        public virtual List<PostTag> PostTags { get; set; } =new List<PostTag>();
         
         // public IList<Post> CollectionPosts {get;set;}
     }

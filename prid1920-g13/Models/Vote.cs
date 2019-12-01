@@ -12,8 +12,8 @@ namespace prid_1819_g13.Models
         public int UpDown {get; set;}
         public int AuthorId {get;set;}
         public int PostId {get;set;}
-        public User User {get;set;}
-        public Post Post {get;set;}
+        public virtual User User {get;set;}
+        public virtual Post Post {get;set;}
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

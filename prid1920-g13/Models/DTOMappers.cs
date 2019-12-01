@@ -16,8 +16,6 @@ namespace prid_1819_g13.Models {
                 Reputation = user.Reputation,
                 Id = user.Id,
                 Role = user.Role,
-                Votes = user.Votes?.ToDTO(),
-                Comments = user.Comments?.ToDTO()
             };
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
@@ -29,11 +27,14 @@ namespace prid_1819_g13.Models {
                 Title = post.Title,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                UserId = post.AuthorId,
-                Posts = post.Posts?.PostRepToDTO(),
+                Score = post.Score,
+                User = post.User.ToDTO(),
+                Reponses = post.Reponses.PostRepToDTO(),
                 Tags = post.Tags?.ToDTO(),
-                Comments = post.Comments?.ToDTO()
+                Comments = post.Comments?.ToDTO(),
+                Votes = post.Votes?.ToDTO()
             };
+            
         }
         public static List<PostQuestionDTO> PostQuestToDTO(this IEnumerable<Post> posts) {
             return posts.Select(p => p.PostQuestToDTO()).ToList();
@@ -43,8 +44,10 @@ namespace prid_1819_g13.Models {
                 Id = post.Id,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                AuthorId = post.AuthorId,
-                Votes = post.Votes?.ToDTO()
+                Author = post.User.ToDTO(),
+                Score = post.Score,
+                Votes = post.Votes?.ToDTO(),
+                Comments = post.Comments?.ToDTO()
             };
         }
         public static List<PostReponseDTO> PostRepToDTO(this IEnumerable<Post> posts) {
@@ -71,7 +74,9 @@ namespace prid_1819_g13.Models {
             return new CommentDTO{
                 Id = comment.Id,
                 Body = comment.Body,
-                Timestamp = comment.Timestamp
+                Timestamp = comment.Timestamp,
+                Author = comment.User.ToDTO()
+                
             };
         }
          public static List<CommentDTO> ToDTO(this IEnumerable<Comment> comments) {

@@ -85,7 +85,7 @@ namespace prid_1819_g13.Models
 
             modelBuilder.Entity<Post>()
             .HasOne(u => u.ParentPost)
-            .WithMany(p => p.Posts)
+            .WithMany(p => p.Reponses)
             .HasForeignKey(p => p.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
 

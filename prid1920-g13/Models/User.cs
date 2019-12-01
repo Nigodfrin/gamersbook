@@ -35,9 +35,9 @@ namespace prid_1819_g13.Models
         [NotMapped]
         public string Token { get; set; }
         [NotMapped]
-        public IList<Vote> Votes {get;set;}
+        public virtual IList<Vote> Votes {get;set;}
         [NotMapped]
-        public IList<Post> Posts {get;set;}
+        public virtual IList<Post> Posts {get;set;}
         [NotMapped]
         public virtual IList<Comment> Comments {get;set;}
         [NotMapped]
