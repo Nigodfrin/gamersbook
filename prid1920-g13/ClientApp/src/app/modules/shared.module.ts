@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MarkdownModule } from 'ngx-markdown';
+
 import {
   MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,

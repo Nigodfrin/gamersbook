@@ -20,6 +20,8 @@ import { SignUpComponent } from '../components/signup/signup.component';
 import { PostListComponent } from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { SimplemdeModule } from 'ngx-simplemde';
+import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
 
 @NgModule({
   declarations: [
@@ -34,9 +36,10 @@ import { MarkdownModule } from 'ngx-markdown';
     SignUpComponent,
     EditUserComponent,
     PostListComponent,
-    ReadQuestion
+    ReadQuestion,
+    EditCommentComponent
   ],
-  entryComponents: [EditUserComponent],
+  entryComponents: [EditUserComponent,EditCommentComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -45,7 +48,8 @@ import { MarkdownModule } from 'ngx-markdown';
     AppRoutes,
     BrowserAnimationsModule,
     SharedModule,
-    MarkdownModule.forRoot({ loader: HttpClient })
+    MarkdownModule.forRoot({ loader: HttpClient }),
+    SimplemdeModule.forRoot({}),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

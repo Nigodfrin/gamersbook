@@ -1,0 +1,18 @@
+<form id="frm" class="form" [formGroup]="frm" novalidate>
+    <h1 class="header">{{(!isNew ? 'Edit' : 'Add a new') + ' comment'}}</h1>
+    <div class="form">
+        <div class="col-12">
+            <textarea class="col-12" style="min-height: 200px;" placeholder="Your comment" [formControl]="ctlBody" required></textarea>
+        </div>
+    </div>
+    <div class="footer">
+        <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
+        <button type="reset" mat-button (click)="cancel()">Cancel</button>
+    </div>
+</form>
+<!-- <pre>
+{{frm.value | json }}
+{{frm.invalid | json }}
+{{frm.pristine | json }}
+{{frm.pending | json }}
+</pre> -->

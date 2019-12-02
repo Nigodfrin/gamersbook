@@ -32,7 +32,7 @@ const appRoutes: Routes = [
     component: PostListComponent
   },
   {
-    path: 'postlist/readquestion/:id',
+    path: 'readquestion/:id',
     component: ReadQuestion,
 
   }

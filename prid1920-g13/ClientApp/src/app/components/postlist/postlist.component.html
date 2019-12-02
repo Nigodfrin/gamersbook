@@ -7,8 +7,8 @@
 <mat-list>
         <h3 mat-subheader>Questions</h3>
         <mat-list-item *ngFor="let post of posts">
-           <p mat-line> Score :  {{post.score}} </p>
-           <h4 mat-line><a [routerLink]= "['readquestion',post.id]">{{post.title}}</a></h4>
+          <h4 mat-line><a [routerLinkActive]='["link-active"]' [routerLink]= "['/readquestion',post.id]">{{post.title}}</a></h4>
+          <p mat-line> Score :  {{post.score}} </p>
            <mat-divider></mat-divider>
         </mat-list-item>
  </mat-list>

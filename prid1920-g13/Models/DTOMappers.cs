@@ -32,7 +32,8 @@ namespace prid_1819_g13.Models {
                 Reponses = post.Reponses.PostRepToDTO(),
                 Tags = post.Tags?.ToDTO(),
                 Comments = post.Comments?.ToDTO(),
-                Votes = post.Votes?.ToDTO()
+                Votes = post.Votes?.ToDTO(),
+                AcceptedRepId = post.AcceptedPostId
             };
             
         }
