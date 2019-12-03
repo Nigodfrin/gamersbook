@@ -10,6 +10,7 @@ export class Post {
     public user: User;
     public score: any;
     public comments: any;
+    public acceptedPostId: number;
     constructor(data: any) {
         if (data) {
             this.id = data.id,
@@ -20,7 +21,8 @@ export class Post {
             this.tags = data.tags,
             this.user = data.user,
             this.score = data.score,
-            this.comments = data.comments
+            this.comments = data.comments,
+            this.acceptedPostId = data.acceptedRepId
         }
 
     }

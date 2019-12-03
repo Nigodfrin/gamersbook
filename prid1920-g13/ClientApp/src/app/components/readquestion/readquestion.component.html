@@ -1,7 +1,7 @@
-<section class="container" style="padding: 10px;">
+<section *ngIf="question" class="container" style="padding: 10px;">
     <div class="row" style="border-bottom: 4px double black">
         <h3 class="col-12">{{question.title}}</h3>
-        <span class="col-12">Asked : {{question.timestamp}}</span>
+        <span class="col-12">Asked : {{question.timestamp | date:'d MMM, y, h:mm:ss'}}</span>
     </div>
     <div class="row" style="border-bottom: 1px solid black">
         <span class="col-1">{{question.score}}</span>
@@ -16,7 +16,7 @@
             <div class="row" *ngFor="let com of question.comments">
                 <markdown class=" offset-1 col-10">{{com.body}}</markdown>
                 <span class="offset-5 col-2">commented by {{com.author.pseudo}} </span>
-                <span class="col-3">Date : {{com.timestamp}}</span>
+                <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
                 <span class="col-2">
                     <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                     <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
@@ -29,24 +29,53 @@
         </div>
     </div>
     <div class="row">
-        <h3 class="col-12">Answers</h3>
-        <div class="row" *ngFor="let reponse of question.reponses">
-            <p class="col-1"> {{reponse.score}} </p>
-            <markdown class="col-10">{{reponse.body}}</markdown>
-            <span class="offset-9">Answered by {{reponse.author.pseudo}}</span>
-            <div class="container">
-                <div class="row" style="font-size: 12px" *ngFor="let com of reponse.comments; let isLast = last;">
-                    <div class=" offset-2 col-10">{{com.body}}</div>
-                    <span class="offset-5 col-2">commented by {{com.author.pseudo}} </span>
-                    <span class="col-3">Date : {{com.timestamp}}</span>
-                    <span class="col-2">
+        <div class="container">
+            <h3 class="col-12">Answers</h3>
+            <div class="row" *ngIf="acceptedPost">
+                <p class="col-1"> {{acceptedPost.score}}</p>
+                <mat-icon>done_outline</mat-icon>
+                <markdown class="col-10">{{acceptedPost.body}}</markdown>
+                <span class="offset-6 col-3">Answered by {{acceptedPost.user.pseudo}}</span>
+                <span class="col-3">Date : {{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                <mat-divider *ngIf="acceptedPost.comments.length > 0" class="col-12"></mat-divider>
+                <div class="container">
+                    <div class="row" style="font-size: 12px"
+                        *ngFor="let com of acceptedPost.comments; let isLast = last;">
+                        <div class=" offset-2 col-10">{{com.body}}</div>
+                        <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
+                        <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                        <span class="col-2">
                             <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                             <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
                         </span>
-                    <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
+                        <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
+                    </div>
+                </div>
+                <mat-divider class="col-12"></mat-divider>
+            </div>
+            <div *ngFor="let reponse of question.reponses">
+                <div class="row">
+                    <p class="col-1"> {{reponse.score}}</p>
+                    <markdown class="col-10">{{reponse.body}}</markdown>
+                    <span class="offset-6 col-3">Answered by {{reponse.user.pseudo}}</span>
+                    <span class="col-3">Date : {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                    <mat-divider *ngIf="reponse.comments.length > 0" class="col-12"></mat-divider>
+                    <div class="container">
+                        <div class="row" style="font-size: 12px"
+                            *ngFor="let com of reponse.comments; let isLast = last;">
+                            <div class=" offset-2 col-10">{{com.body}}</div>
+                            <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
+                            <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                            <span class="col-2">
+                                <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
+                                <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                            </span>
+                            <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
+                        </div>
+                    </div>
+                    <mat-divider class="col-12"></mat-divider>
                 </div>
             </div>
-            <mat-divider class="col-12"></mat-divider>
         </div>
     </div>
     <div class="row">

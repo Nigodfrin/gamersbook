@@ -22,4 +22,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
         this.isNew = data.isNew;
         this.frm.patchValue(data.comment);
     }
+    update() {
+        this.dialogRef.close(this.frm.value);
+    }
+    cancel() {
+        this.dialogRef.close();
+    }
   }

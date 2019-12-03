@@ -16,6 +16,7 @@ namespace prid_1819_g13.Models {
                 Reputation = user.Reputation,
                 Id = user.Id,
                 Role = user.Role,
+                Token = user.Token
             };
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
@@ -29,11 +30,11 @@ namespace prid_1819_g13.Models {
                 Timestamp = post.Timestamp,
                 Score = post.Score,
                 User = post.User.ToDTO(),
-                Reponses = post.Reponses.PostRepToDTO(),
+                Reponses = post.Reponses.Where(p => p.Id != post.AcceptedPostId).PostRepToDTO(),
                 Tags = post.Tags?.ToDTO(),
                 Comments = post.Comments?.ToDTO(),
                 Votes = post.Votes?.ToDTO(),
-                AcceptedRepId = post.AcceptedPostId
+                AcceptedRepId = post.AcceptedPostId,
             };
             
         }
@@ -45,7 +46,7 @@ namespace prid_1819_g13.Models {
                 Id = post.Id,
                 Body = post.Body,
                 Timestamp = post.Timestamp,
-                Author = post.User.ToDTO(),
+                User = post.User.ToDTO(),
                 Score = post.Score,
                 Votes = post.Votes?.ToDTO(),
                 Comments = post.Comments?.ToDTO()

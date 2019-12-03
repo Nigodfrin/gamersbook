@@ -43,7 +43,6 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
     refresh() {
         this.userService.getAll().subscribe(users => {
-            console.log(users);
             // assigne les données récupérées au datasource
             this.dataSource.data = users;
             // restaure l'état du datasource (tri et pagination) à partir du state

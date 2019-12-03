@@ -31,5 +31,50 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             return post.PostQuestToDTO();
         }
+        [HttpGet("rep/{id}")]
+        public async Task<ActionResult<PostReponseDTO>> GetPostRepById(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post == null)
+                return NotFound();
+            return post.PostRepToDTO();
+        }
+        [HttpGet("newest")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNewest()
+        {
+            return (await _context.Posts
+            .Where(p => p.Title != null)
+            .OrderByDescending(a => a.Timestamp)
+            .ToListAsync())
+            .PostQuestToDTO();
+        }
+        [HttpGet("nonAnswered")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNonAnswered()
+        {
+            return (await _context.Posts
+            .Where(p => p.Title != null && p.AcceptedPost == null)
+            .OrderByDescending(a => a.Timestamp)
+            .ToListAsync())
+            .PostQuestToDTO();
+        }
+        [HttpGet("withTags")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetWithTags()
+        {
+            return (await _context.Posts
+            .Where(p => p.Title != null && p.Tags.Count() > 0)
+            .OrderByDescending(a => a.Timestamp)
+            .ToListAsync())
+            .PostQuestToDTO();
+        }
+        // [HttpGet("votes")]
+        // public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
+        // {
+        //     return (await _context.Posts
+        //     .Where(p => p.Title != null)
+        //     .OrderBy(a => a.Score)
+        //     .ToListAsync())
+        //     .PostQuestToDTO();
+        // }
+        
     }
 }
