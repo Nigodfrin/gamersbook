@@ -44,11 +44,8 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     PostListComponent,
     ReadQuestion,
     EditCommentComponent,
-<<<<<<< HEAD
-    CreateQuestionComponent
-=======
+    CreateQuestionComponent,
     TagListComponent
->>>>>>> e3cd12cbc626c498a752f7e50b8c80bc22e3b186
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent],
   imports: [
