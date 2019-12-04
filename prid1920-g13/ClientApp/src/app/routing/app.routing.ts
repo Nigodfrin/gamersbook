@@ -10,6 +10,8 @@ import { SignUpComponent } from '../components/signup/signup.component';
 import {PostListComponent} from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
+import {TagListComponent} from '../components/taglist/taglist.component';
+
 
 
 const appRoutes: Routes = [
@@ -40,6 +42,10 @@ const appRoutes: Routes = [
   {
     path: 'createquestion',
     component: CreateQuestionComponent
+  },
+  {
+    path: 'taglist',
+    component: TagListComponent
   }
   ,
   { path: 'restricted', component: RestrictedComponent },

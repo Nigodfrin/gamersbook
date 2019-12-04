@@ -20,7 +20,7 @@ export class CreateQuestionComponent {
             title: this.ctlTitle,
             tagsForm: new FormArray([])
         }, {});
-        this.tagService.getAllTags().subscribe(tags => {
+        this.tagService.getAll().subscribe(tags => {
             this.tags = tags;
             this.addTags();
         });

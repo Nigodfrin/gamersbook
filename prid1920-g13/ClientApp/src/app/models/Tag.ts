@@ -1,8 +1,13 @@
 export class Tag {
-    id: number;
-    name:string;
-    constructor(data: any){
-        this.id = data.id,
-        this.name = data.name
+    name: string;
+    id: any;
+    num: number;
+    
+    constructor(data: any) {
+      if (data) {
+        this.name = data.name;
+        this.id = data.id;
+        this.num = data.num;
+      }
     }
-}
+  }

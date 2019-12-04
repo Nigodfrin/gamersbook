@@ -13,6 +13,8 @@ namespace prid_1819_g13.Models
         [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
         [NotMapped]
+        public int num {get => PostTags.Where(x => x.TagId == Id).ToList().Count();} // {get => PostTags.Where(x => x.TagId == Id).ToList().Count();}
+        [NotMapped]
         public IEnumerable<Tag> Tags
         {
             get => PostTags.Select(f => f.Tag);

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using prid_1819_g13.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -123,7 +122,6 @@ namespace prid_1819_g13.Controllers
         [AllowAnonymous]
         [HttpPost("signup")]
         public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
-            Console.Write(data);
             return await CreateUser(data);
         }
         [AllowAnonymous]

@@ -4,5 +4,6 @@ namespace prid_1819_g13.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int num{get;set;}
     }
 }
