@@ -133,7 +133,7 @@ namespace prid_1819_g13.Controllers
                 return BadRequest(new ValidationErrors().Add("User not found", "Pseudo"));
             if (user.Token == null)
                 return BadRequest(new ValidationErrors().Add("Incorrect password", "Password"));
-            return Ok(user);
+            return Ok(user.ToDTO());
         }
         private async Task<User> Authenticate(string pseudo, string password)
         {

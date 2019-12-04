@@ -1,6 +1,7 @@
-import { Component, ɵflushModuleScopingQueueAsMuchAsPossible } from '@angular/core';
+import { Component, ɵflushModuleScopingQueueAsMuchAsPossible,OnInit } from '@angular/core';
 import { PostService } from 'src/app/services/post.service';
 import { SourceListMap } from 'source-list-map';
+import { Post } from 'src/app/models/Post';
 
 /**
  * @title Basic expansion panel
@@ -9,9 +10,11 @@ import { SourceListMap } from 'source-list-map';
   selector: 'postlist-component',
   templateUrl: './postlist.component.html',
 })
-export class PostListComponent {
+
+export class PostListComponent implements OnInit {
   panelOpenState = false;
-  posts = [];
+  posts:any;
+
   constructor(private postService: PostService) { }
   ngOnInit() {
     this.postService.getAll().subscribe(posts => {
@@ -19,16 +22,23 @@ export class PostListComponent {
     })
   }
   newest() {
-
+      this.postService.getNewest().subscribe(posts => {
+        this.posts = posts;
+      })
   }
   unanswered(){
-
+    this.postService.getNonAnswered().subscribe(posts => {
+      this.posts = posts;
+    })
   }
-  votes() {
-
-  }
+  // votes() {
+  //   this.postService.getOrderByVotes().subscribe(posts => {
+  //     this.posts = posts;
+  //   })
+  // }
   withTags(){
-    
+    this.postService.getWithTags().subscribe(posts => {
+      this.posts = posts;
+    })
   }
-  
 }

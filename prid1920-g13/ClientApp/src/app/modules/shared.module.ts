@@ -4,20 +4,23 @@ import {
   MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
   MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule, 
-  MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule
+  MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule,
+  MatButtonToggleModule
 } from '@angular/material';
 @NgModule({
   imports: [
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
-    MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule
+    MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule,
+    MatButtonToggleModule
   ],
   exports: [
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
-    MatSelectModule, MatCardModule,MatExpansionModule,MatListModule,MatChipsModule
+    MatSelectModule, MatCardModule,MatExpansionModule,MatListModule,MatChipsModule,
+    MatButtonToggleModule
   ],
 })
 export class SharedModule { }

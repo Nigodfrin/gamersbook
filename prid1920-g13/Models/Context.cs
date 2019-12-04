@@ -42,25 +42,31 @@ namespace prid_1819_g13.Models
             .HasKey(t => new { t.PostId, t.TagId });
 
             modelBuilder.Entity<Comment>()
-            .HasOne<User>(c => c.User)
+            .HasOne(c => c.User)
             .WithMany(u => u.Comments)
             .HasForeignKey(c => c.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()
-            .HasOne<Post>(c => c.Post)                  // définit la propriété de navigation pour le côté (1) de la relation
-            .WithMany(p => p.Comments)            // définit la propriété de navigation pour le côté (N) de la relation
-            .HasForeignKey(c => c.PostId)         // spécifie que la clé étrangère est Comment.PostId
-            .OnDelete(DeleteBehavior.Restrict);   // spécifie le comportement en cas de delete : ici, un refus
+            .HasOne(c => c.Post)                  
+            .WithMany(p => p.Comments)           
+            .HasForeignKey(c => c.PostId)        
+            .OnDelete(DeleteBehavior.Restrict); 
+            
+            modelBuilder.Entity<Post>()
+            .HasMany(u => u.Comments)
+            .WithOne(u => u.Post)
+            .HasForeignKey(u => u.PostId)
+            .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Vote>()
-            .HasOne<Post>(p => p.Post)
+            .HasOne(p => p.Post)
             .WithMany(p => p.Votes)
             .HasForeignKey(p => p.PostId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Vote>()
-            .HasOne<User>(v => v.User)
+            .HasOne(v => v.User)
             .WithMany(u => u.Votes)
             .HasForeignKey(v => v.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
@@ -72,13 +78,13 @@ namespace prid_1819_g13.Models
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PostTag>()
-            .HasOne<Post>(pt => pt.Post)
+            .HasOne(pt => pt.Post)
             .WithMany(p => p.PostTags)
             .HasForeignKey(pt => pt.PostId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<PostTag>()
-            .HasOne<Tag>(pt => pt.Tag)
+            .HasOne(pt => pt.Tag)
             .WithMany(t => t.PostTags)
             .HasForeignKey(pt => pt.TagId)
             .OnDelete(DeleteBehavior.Restrict);
@@ -88,6 +94,7 @@ namespace prid_1819_g13.Models
             .WithMany(p => p.Reponses)
             .HasForeignKey(p => p.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
+            
 
         }
     }

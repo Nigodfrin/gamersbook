@@ -11,6 +11,6 @@ namespace prid_1819_g13.Models {
         public DateTime? BirthDate { get; set; }
         public int Reputation {get; set;}
         public Role Role { get; set; }
-
+        public string Token {get;set;}
     }
 }
