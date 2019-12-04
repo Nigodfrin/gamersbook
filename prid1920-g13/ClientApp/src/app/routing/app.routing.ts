@@ -9,6 +9,7 @@ import { Role } from '../models/User';
 import { SignUpComponent } from '../components/signup/signup.component';
 import {PostListComponent} from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
+import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
 
 
 const appRoutes: Routes = [
@@ -35,6 +36,10 @@ const appRoutes: Routes = [
     path: 'readquestion/:id',
     component: ReadQuestion,
 
+  },
+  {
+    path: 'createquestion',
+    component: CreateQuestionComponent
   }
   ,
   { path: 'restricted', component: RestrictedComponent },

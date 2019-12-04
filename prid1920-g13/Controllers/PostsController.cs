@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,12 @@ namespace prid_1819_g13.Controllers
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetAll()
         {
             return (await _context.Posts.Where(p => p.Title != null).ToListAsync()).PostQuestToDTO();
+        }
+        [HttpGet("allRep/{id}/{acceptedId}")]
+        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id,int acceptedId)
+        {
+            Console.Write(acceptedId);
+            return (await _context.Posts.Where(p => p.ParentId == id && p.Id != acceptedId).ToListAsync()).PostRepToDTO();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<PostQuestionDTO>> GetPostById(int id)

@@ -22,6 +22,8 @@ import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { SimplemdeModule } from 'ngx-simplemde';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
+import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { EditCommentComponent } from '../components/edit-comment/edit-comment.co
     EditUserComponent,
     PostListComponent,
     ReadQuestion,
-    EditCommentComponent
+    EditCommentComponent,
+    CreateQuestionComponent
   ],
   entryComponents: [EditUserComponent,EditCommentComponent],
   imports: [

@@ -49,7 +49,8 @@ namespace prid_1819_g13.Models {
                 User = post.User.ToDTO(),
                 Score = post.Score,
                 Votes = post.Votes?.ToDTO(),
-                Comments = post.Comments?.ToDTO()
+                Comments = post.Comments?.ToDTO(),
+                ParentId = post.ParentId
             };
         }
         public static List<PostReponseDTO> PostRepToDTO(this IEnumerable<Post> posts) {

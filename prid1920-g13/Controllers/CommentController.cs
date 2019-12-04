@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using prid_1819_g13.Models;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
@@ -34,6 +35,22 @@ namespace prid_1819_g13.Controllers
             comment.Body = data.Body;      
             comment.Timestamp = DateTime.Now;
             _context.Entry(comment).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [Authorized(Role.Admin)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -10,6 +10,19 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
+  addPost(post:Post){
+    return this.http.post<Post>(`${this.baseUrl}api/posts`, post).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  getAllRep(id: number,acceptedId: number) {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/allRep/${id}/${acceptedId}`)
+      .pipe(map(res => res.map(m => new Post(m))));
+  }
   getById(id: any) {
     return this.http.get<Post>(`${this.baseUrl}api/posts/${id}`).pipe(
       map(m => !m ? null : new Post(m)),

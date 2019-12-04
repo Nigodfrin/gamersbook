@@ -53,7 +53,7 @@
                 </div>
                 <mat-divider class="col-12"></mat-divider>
             </div>
-            <div *ngFor="let reponse of question.reponses">
+            <div *ngFor="let reponse of reponses">
                 <div class="row">
                     <p class="col-1"> {{reponse.score}}</p>
                     <markdown class="col-10">{{reponse.body}}</markdown>
@@ -79,15 +79,16 @@
         </div>
     </div>
     <div class="row">
-        <form class="col-12">
+        <form class="col-12" [formGroup]="frm">
             <div class="form-group col-12">
                 <label for="answer" class="col-form-label-lg">Your Answer</label>
-                <simplemde></simplemde>
+                <simplemde id="anwser" [formControl]="ctlAnswer"></simplemde>
             </div>
         </form>
-
-        <div class="offset-11 col-1">
-            <button mat-raised-button color="primary">Send</button>
+        <div class="footer">
+            <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+                (click)="send()">Send</button>
+            <button type="reset" mat-button (click)="cancel()">Cancel</button>
         </div>
     </div>
 </section>

@@ -12,5 +12,6 @@ namespace prid_1819_g13.Models
         public int Score {get;set;}
         public IList<VoteDTO> Votes {get;set;}
         public IList<CommentDTO> Comments {get;set;}
+        public int? ParentId {get;set;}
     }
 }

@@ -14,6 +14,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/postlist"]'>Post list</a>
           </li>
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/createquestion"]'>Create Question</a>
+          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser && isAdmin">
             <a class="nav-link text-dark" [routerLink]='["/users"]'>Users</a>
           </li>

@@ -94,8 +94,6 @@ namespace prid_1819_g13.Models
             .WithMany(p => p.Reponses)
             .HasForeignKey(p => p.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
-            
-
         }
     }
 }
