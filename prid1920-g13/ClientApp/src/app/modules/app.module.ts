@@ -17,17 +17,21 @@ import { EditUserComponent } from '../components/edit-user/edit-user.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SetFocusDirective } from '../directives/setfocus.directive';
 import { SignUpComponent } from '../components/signup/signup.component';
+import { TagListComponent} from '../components/taglist/taglist.component'
 import { PostListComponent } from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { SimplemdeModule } from 'ngx-simplemde';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
+import {MatTableModule} from '@angular/material/table';
+import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    EditTagComponent,
     LoginComponent,
     UserListComponent,
     UnknownComponent,
@@ -37,13 +41,15 @@ import { EditCommentComponent } from '../components/edit-comment/edit-comment.co
     EditUserComponent,
     PostListComponent,
     ReadQuestion,
-    EditCommentComponent
+    EditCommentComponent,
+    TagListComponent
   ],
-  entryComponents: [EditUserComponent,EditCommentComponent],
+  entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    MatTableModule,
     ReactiveFormsModule,
     AppRoutes,
     BrowserAnimationsModule,

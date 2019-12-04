@@ -57,9 +57,14 @@ namespace prid_1819_g13.Models {
         public static TagDTO ToDTO(this Tag tag){
             return new TagDTO{
                 Id = tag.Id,
-                Name = tag.Name
+                Name = tag.Name,
+                num = tag.num
             };
         }
+        // public static int CountA(Tag tag){
+        //     var x = Tag.Tags;
+        //     return 0;
+        // }
         public static List<TagDTO> ToDTO(this IEnumerable<Tag> tags){
             return tags.Select(t =>t.ToDTO()).ToList();
         }

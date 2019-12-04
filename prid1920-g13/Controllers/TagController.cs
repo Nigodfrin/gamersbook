@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using prid_1819_g13.Models;
 using Microsoft.AspNetCore.Authorization;
 using PRID_Framework;
+using System.Linq;
+using System;
 
 
 namespace prid_1819_g13.Controllers
@@ -15,21 +17,30 @@ namespace prid_1819_g13.Controllers
     public class TagController : ControllerBase
     {
         private readonly Context _context;
-        public TagController(Context context){
+        public TagController(Context context)
+        {
             _context = context;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetAll()
         {
-            return (await _context.Tags.ToListAsync()).ToDTO();
+            return (await _context.Tags.ToListAsync()).ToDTO();  
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<int>> GetnumberTag(int id)
+        {
+            var tmp = await _context.PostTags.Where(x => x.TagId == id).ToListAsync();
+            return tmp.Count;
+
         }
         [HttpPost]
-        public async Task<ActionResult<TagDTO>> CreateTag(TagDTO data){
-            var tag = await _context.Tags.FirstOrDefaultAsync ( x => x.Name == data.Name);
-            if(tag != null)
+        public async Task<ActionResult<TagDTO>> CreateTag(TagDTO data)
+        {
+            var tag = await _context.Tags.FirstOrDefaultAsync(x => x.Name == data.Name);
+            if (tag != null)
             {
                 var err = new ValidationErrors().Add("Tag already exist", nameof(tag.Name));
-                return BadRequest(err);    
+                return BadRequest(err);
             }
             var newTag = new Tag()
             {
@@ -68,16 +79,21 @@ namespace prid_1819_g13.Controllers
         public async Task<IActionResult> UpdateTag(int id, TagDTO data)
         {
             var tag = await _context.Tags.FindAsync(id);
-            if( tag == null )
+            if (tag == null)
             {
                 return BadRequest();
             }
             tag.Name = data.Name;
             _context.Entry(tag).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            
+
             return NoContent();
         }
+        [HttpGet("available/{name}")]
+        public async Task<ActionResult<bool>> IsAvailable(string name) {
+            var tag = await _context.Tags.FirstOrDefaultAsync( x => x.Name == name);
+            return tag == null;
+        }
     }
-    
+
 }
