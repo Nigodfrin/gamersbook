@@ -25,7 +25,6 @@ import { SimplemdeModule } from 'ngx-simplemde';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
 
-import {MatTableModule} from '@angular/material/table';
 import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
 
 @NgModule({
@@ -52,7 +51,6 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    MatTableModule,
     ReactiveFormsModule,
     AppRoutes,
     BrowserAnimationsModule,

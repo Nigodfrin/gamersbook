@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
-import { Tag } from '../../models/tag';
+import { Tag } from '../../models/Tag';
 import { TagService } from '../../services/tag.service';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { MatTableState } from 'src/app/helpers/mattable.state';

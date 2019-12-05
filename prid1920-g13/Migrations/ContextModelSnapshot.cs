@@ -90,14 +90,10 @@ namespace prid_1819_g13.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("PostId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("Tags");
                 });
@@ -196,13 +192,6 @@ namespace prid_1819_g13.Migrations
                         .WithMany("PostTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("prid_1819_g13.Models.Tag", b =>
-                {
-                    b.HasOne("prid_1819_g13.Models.Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("prid_1819_g13.Models.Vote", b =>

@@ -31,11 +31,11 @@ export class PostListComponent implements OnInit {
       this.posts = posts;
     })
   }
-  // votes() {
-  //   this.postService.getOrderByVotes().subscribe(posts => {
-  //     this.posts = posts;
-  //   })
-  // }
+  votes() {
+    this.postService.getOrderByVotes().subscribe(posts => {
+      this.posts = posts;
+    })
+  }
   withTags(){
     this.postService.getWithTags().subscribe(posts => {
       this.posts = posts;

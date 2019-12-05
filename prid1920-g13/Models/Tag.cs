@@ -14,13 +14,11 @@ namespace prid_1819_g13.Models
         public string Name { get; set; }
         [NotMapped]
         public int num {get => PostTags.Where(x => x.TagId == Id).ToList().Count();} // {get => PostTags.Where(x => x.TagId == Id).ToList().Count();}
-        [NotMapped]
-        public IEnumerable<Tag> Tags
-        {
-            get => PostTags.Select(f => f.Tag);
-        }
         public virtual List<PostTag> PostTags { get; set; } =new List<PostTag>();
-        
-        // public IList<Post> CollectionPosts {get;set;}
+        [NotMapped]
+        public IEnumerable<Post> Posts
+        {
+            get => PostTags.Select(f => f.Post);
+        }
     }
 }

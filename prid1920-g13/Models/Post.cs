@@ -23,21 +23,18 @@ namespace prid_1819_g13.Models
         public virtual Post AcceptedPost { get; set; }
         public virtual IList<Vote> Votes { get; set; } = new List<Vote>();
         public virtual IList<Post> Reponses { get; set; } = new List<Post>();
+        public virtual List<PostTag> PostTags { get; set; } = new List<PostTag>();
         public virtual IList<Comment> Comments { get; set; } = new List<Comment>();
-        private ICollection<Tag> tags;
         [NotMapped]
         public int Score 
         {
-            get => Votes.Sum(v => v.UpDown);
+            get => (Votes.Count() != 0) ? Votes.Sum(v => v.UpDown):0;
         }
-        public virtual ICollection<Tag> Tags
+        [NotMapped]
+        public IEnumerable<Tag> Tags
         {
-            get =>PostTags.Select(f => f.Tag).ToList();
-            
-
-            set => this.Tags = value;
+            get =>PostTags.Select(f => f.Tag);
         }
-        public virtual List<PostTag> PostTags { get; set; } = new List<PostTag>();
 
     }
 }

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, FormControl, FormArray } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn } from "@angular/forms";
 import { TagService } from "src/app/services/tag.service";
 import { Tag } from "src/app/models/Tag";
 
@@ -7,14 +7,15 @@ import { Tag } from "src/app/models/Tag";
     templateUrl: './createquestion.component.html',
   })
 export class CreateQuestionComponent {
+  
     public frm: FormGroup;
     public ctlBody: FormControl;
     public ctlTitle: FormControl;
     public tags: Tag[];
     
     constructor(private fb: FormBuilder,private tagService: TagService){
-        this.ctlBody = this.fb.control('');
-        this.ctlTitle = this.fb.control('');
+        this.ctlBody = this.fb.control('',[]);
+        this.ctlTitle = this.fb.control('',[]);
         this.frm = this.fb.group({
             body: this.ctlBody,
             title: this.ctlTitle,
@@ -27,7 +28,7 @@ export class CreateQuestionComponent {
     }
     addTags() {
         this.tags.forEach((o, i) => {
-            const control = new FormControl(i === 0);
+            const control = new FormControl();
             (this.frm.controls.tagsForm as FormArray).push(control);
           });
     }

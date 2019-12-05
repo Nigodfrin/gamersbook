@@ -47,8 +47,8 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/withTags`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
-  // getOrderByVotes(){
-  //     return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
-  //       .pipe(map(res => res.map(m => new Post(m))));
-  //   }
+  getOrderByVotes(){
+      return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
+        .pipe(map(res => res.map(m => new Post(m))));
+    }
 }

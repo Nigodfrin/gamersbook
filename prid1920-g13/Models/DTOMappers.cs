@@ -31,7 +31,7 @@ namespace prid_1819_g13.Models {
                 Score = post.Score,
                 User = post.User.ToDTO(),
                 Reponses = post.Reponses.Where(p => p.Id != post.AcceptedPostId).PostRepToDTO(),
-                Tags = post.Tags?.ToDTO(),
+                Tags = post.Tags.ToDTO(),
                 Comments = post.Comments?.ToDTO(),
                 Votes = post.Votes?.ToDTO(),
                 AcceptedRepId = post.AcceptedPostId,
@@ -63,10 +63,6 @@ namespace prid_1819_g13.Models {
                 num = tag.num
             };
         }
-        // public static int CountA(Tag tag){
-        //     var x = Tag.Tags;
-        //     return 0;
-        // }
         public static List<TagDTO> ToDTO(this IEnumerable<Tag> tags){
             return tags.Select(t =>t.ToDTO()).ToList();
         }

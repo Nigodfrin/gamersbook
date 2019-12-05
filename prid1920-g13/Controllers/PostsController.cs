@@ -22,7 +22,8 @@ namespace prid_1819_g13.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetAll()
         {
-            return (await _context.Posts.Where(p => p.Title != null).ToListAsync()).PostQuestToDTO();
+            var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
+            return posts.PostQuestToDTO();
         }
         [HttpGet("allRep/{id}/{acceptedId}")]
         public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id,int acceptedId)
@@ -67,21 +68,20 @@ namespace prid_1819_g13.Controllers
         [HttpGet("withTags")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetWithTags()
         {
+            var posts = await _context.Posts.
+            Where(p => p.Title != null && p.Tags.Count() > 0)
+            .ToListAsync();
+            return Ok(posts.PostQuestToDTO());
+        }
+        [HttpGet("votes")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
+        {
             return (await _context.Posts
-            .Where(p => p.Title != null && p.Tags.Count() > 0)
-            .OrderByDescending(a => a.Timestamp)
+            .Where(p => p.Title != null)
+            .OrderBy(a => a.Score)
             .ToListAsync())
             .PostQuestToDTO();
         }
-        // [HttpGet("votes")]
-        // public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
-        // {
-        //     return (await _context.Posts
-        //     .Where(p => p.Title != null)
-        //     .OrderBy(a => a.Score)
-        //     .ToListAsync())
-        //     .PostQuestToDTO();
-        // }
         
     }
 }
