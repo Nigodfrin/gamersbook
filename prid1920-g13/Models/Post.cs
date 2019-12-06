@@ -28,7 +28,7 @@ namespace prid_1819_g13.Models
         [NotMapped]
         public int Score 
         {
-            get => (Votes.Count() != 0) ? Votes.Sum(v => v.UpDown):0;
+            get => Votes.Sum(v => v.UpDown);
         }
         [NotMapped]
         public IEnumerable<Tag> Tags

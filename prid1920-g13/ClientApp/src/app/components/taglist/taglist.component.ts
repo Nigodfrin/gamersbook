@@ -84,8 +84,10 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
         this.dataSource.data = _.filter(this.dataSource.data, m => m.name !== tag.name);
         const snackBarRef = this.snackBar.open(`Tag '${tag.name}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
-            if (!res.dismissedByAction)
+            if (!res.dismissedByAction){
+
                 this.tagService.delete(tag).subscribe();
+            }
             else
                 this.dataSource.data = backup;
         });
@@ -96,6 +98,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
         const dlg = this.dialog.open(EditTagComponent, { data: { tag, isNew: true } });
         dlg.beforeClose().subscribe(res => {
             if (res) {
+                console.log(res);
                 this.dataSource.data = [...this.dataSource.data, new Tag(res)];
                 this.tagService.add(res).subscribe(res => {
                     if (!res) {

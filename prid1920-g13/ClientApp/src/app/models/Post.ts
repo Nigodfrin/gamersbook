@@ -8,7 +8,7 @@ export class Post {
     public reponses: any;
     public tags: any;
     public user: User;
-    public score: any;
+    public score: number;
     public comments: any;
     public acceptedPostId: number;
     public parentId: number;

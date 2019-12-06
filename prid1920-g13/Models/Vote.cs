@@ -19,7 +19,7 @@ namespace prid_1819_g13.Models
         {
             var currContext = validationContext.GetService(typeof(DbContext));
             Debug.Assert(currContext != null);
-            if(UpDown != -1 || UpDown != 1){
+            if(UpDown != -1 && UpDown != 1){
                 yield return new ValidationResult("UpDown ne peut être égal que à 1 ou -1", new[] { nameof(UpDown) });
             }
         }

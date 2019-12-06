@@ -4,7 +4,11 @@
         <span class="col-12">Asked : {{question.timestamp | date:'d MMM, y, h:mm:ss'}}</span>
     </div>
     <div class="row" style="border-bottom: 1px solid black">
-        <span class="col-1">{{question.score}}</span>
+        <div class="col-1">
+            <mat-icon> <a style="cursor: pointer;" (click)="addVote(question.id,1)">keyboard_arrow_up</a></mat-icon>
+            <p>{{question.score}}</p>
+            <mat-icon> <a style="cursor: pointer;" (click)="addVote(question.id,-1)">keyboard_arrow_down</a></mat-icon>
+        </div>
         <markdown class="col-10"> {{question.body}}</markdown>
         <mat-chip-list class="offset-1 col-5">
             <mat-chip *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
@@ -32,7 +36,13 @@
         <div class="container">
             <h3 class="col-12">Answers</h3>
             <div class="row" *ngIf="acceptedPost">
-                <p class="col-1"> {{acceptedPost.score}}</p>
+                <div class="col-1" style="justify-content: center">
+                    <mat-icon> <a style="cursor: pointer;" (click)="addVote(acceptedPost.id,1)">keyboard_arrow_up</a>
+                    </mat-icon>
+                    <p> {{acceptedPost.score}}</p>
+                    <mat-icon> <a style="cursor: pointer;" (click)="addVote(acceptedPost.id,-1)">keyboard_arrow_down</a>
+                    </mat-icon>
+                </div>
                 <mat-icon>done_outline</mat-icon>
                 <markdown class="col-10">{{acceptedPost.body}}</markdown>
                 <span class="offset-6 col-3">Answered by {{acceptedPost.user.pseudo}}</span>
@@ -55,7 +65,11 @@
             </div>
             <div *ngFor="let reponse of reponses">
                 <div class="row">
-                    <p class="col-1"> {{reponse.score}}</p>
+                    <div class="col-1">
+                            <mat-icon> <a style="cursor: pointer;" (click)="addVote(reponse.id,1)">keyboard_arrow_up</a></mat-icon>
+                            <p> {{reponse.score}}</p>
+                            <mat-icon> <a style="cursor: pointer;" (click)="addVote(reponse.id,-1)">keyboard_arrow_down</a></mat-icon>
+                            </div>
                     <markdown class="col-10">{{reponse.body}}</markdown>
                     <span class="offset-6 col-3">Answered by {{reponse.user.pseudo}}</span>
                     <span class="col-3">Date : {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>

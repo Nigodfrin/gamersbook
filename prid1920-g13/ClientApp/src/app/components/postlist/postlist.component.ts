@@ -13,7 +13,7 @@ import { Post } from 'src/app/models/Post';
 
 export class PostListComponent implements OnInit {
   panelOpenState = false;
-  posts:any;
+  posts: Post[];
 
   constructor(private postService: PostService) { }
   ngOnInit() {
@@ -32,7 +32,7 @@ export class PostListComponent implements OnInit {
     })
   }
   votes() {
-    this.postService.getOrderByVotes().subscribe(posts => {
+    this.postService.getOrderByVotes().subscribe(posts  => {
       this.posts = posts;
     })
   }

@@ -28,8 +28,11 @@ namespace prid_1819_g13.Controllers
         [HttpGet("allRep/{id}/{acceptedId}")]
         public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id,int acceptedId)
         {
-            Console.Write(acceptedId);
-            return (await _context.Posts.Where(p => p.ParentId == id && p.Id != acceptedId).ToListAsync()).PostRepToDTO();
+            return (await _context.Posts
+            .Where(p => p.ParentId == id && p.Id != acceptedId)
+            .OrderByDescending(p => p.Votes.Sum(v => v.UpDown))
+            .ToListAsync())
+            .PostRepToDTO();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<PostQuestionDTO>> GetPostById(int id)
@@ -69,7 +72,8 @@ namespace prid_1819_g13.Controllers
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetWithTags()
         {
             var posts = await _context.Posts.
-            Where(p => p.Title != null && p.Tags.Count() > 0)
+            Where(p => p.Title != null && p.PostTags.Count() > 0)
+            .OrderByDescending(a => a.Timestamp)
             .ToListAsync();
             return Ok(posts.PostQuestToDTO());
         }
@@ -78,7 +82,7 @@ namespace prid_1819_g13.Controllers
         {
             return (await _context.Posts
             .Where(p => p.Title != null)
-            .OrderBy(a => a.Score)
+            .OrderByDescending(a => a.Votes.Sum(v => v.UpDown))
             .ToListAsync())
             .PostQuestToDTO();
         }

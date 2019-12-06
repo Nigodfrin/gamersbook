@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Vote } from 'src/app/models/Vote';
+import { VoteService } from '../../services/vote.service';
 
 
 
@@ -31,7 +33,8 @@ export class ReadQuestion implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public comservice: commentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private voteService: VoteService
   ) {
     this.ctlAnswer = this.fb.control('');
     this.frm = this.fb.group({
@@ -120,6 +123,20 @@ export class ReadQuestion implements OnInit {
       if (!res) {
           this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
           this.refresh();
+      }
+  });
+  }
+  addVote(id: number,upVote: number) {
+    console.log(id,upVote);
+    const vote = new Vote({authorId: this.authService.currentUser.id,postId:id,upDown:upVote});
+    this.voteService.add(vote).subscribe(res => {
+      if (!res) {
+        this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+        this.refresh();
+      }
+      else {
+        this.refresh();
+
       }
   });
   }
