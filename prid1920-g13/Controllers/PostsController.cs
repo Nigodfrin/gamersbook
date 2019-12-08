@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prid_1819_g13.Models;
+using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
@@ -26,7 +27,7 @@ namespace prid_1819_g13.Controllers
             return posts.PostQuestToDTO();
         }
         [HttpGet("allRep/{id}/{acceptedId}")]
-        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id,int acceptedId)
+        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id, int acceptedId)
         {
             return (await _context.Posts
             .Where(p => p.ParentId == id && p.Id != acceptedId)
@@ -86,6 +87,34 @@ namespace prid_1819_g13.Controllers
             .ToListAsync())
             .PostQuestToDTO();
         }
-        
+        [HttpPost("add")]
+        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostQuestionDTO data)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var newQuestion = new Post()
+            {
+                AuthorId = user.Id,
+                ParentId = null,
+                Title = data.Title,
+                Body = data.Body,
+                Timestamp = DateTime.Now
+            };
+            _context.Posts.Add(newQuestion);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return NoContent();
+           //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
+
+    }
+     [HttpGet("{id}")]
+        public async Task<ActionResult<PostQuestionDTO>> GetQuest(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post == null)
+                return NotFound();
+            return post.PostQuestToDTO();
+        }
     }
 }

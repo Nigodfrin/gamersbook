@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
-import { of } from "rxjs";
+import { of, Observable } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class PostService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
@@ -10,7 +10,7 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
-  addPost(post:Post){
+  addPost(post: Post) {
     return this.http.post<Post>(`${this.baseUrl}api/posts`, post).pipe(
       map(res => true),
       catchError(err => {
@@ -19,7 +19,16 @@ export class PostService {
       })
     );
   }
-  getAllRep(id: number,acceptedId: number) {
+  addQuestion(title: string, body: string): Observable<boolean> {
+    return this.http.post<Post>(`${this.baseUrl}api/posts/add`, { title: title, body: body }).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  getAllRep(id: number, acceptedId: number) {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/allRep/${id}/${acceptedId}`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
@@ -29,7 +38,7 @@ export class PostService {
       catchError(err => of(null))
     );
   }
-  getRepById(id: number){
+  getRepById(id: number) {
     return this.http.get<Post>(`${this.baseUrl}api/posts/rep/${id}`).pipe(
       map(m => !m ? null : new Post(m)),
       catchError(err => of(null))
@@ -47,8 +56,8 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/withTags`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
-  getOrderByVotes(){
-      return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
-        .pipe(map(res => res.map(m => new Post(m))));
-    }
+  getOrderByVotes() {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
+      .pipe(map(res => res.map(m => new Post(m))));
+  }
 }

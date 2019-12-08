@@ -1,7 +1,11 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn } from "@angular/forms";
-import { TagService } from "src/app/services/tag.service";
+import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn, Validators } from "@angular/forms";
 import { Tag } from "src/app/models/Tag";
+import { TagService } from "src/app/services/tag.service";
+import { PostService } from "src/app/services/post.service";
+import { InjectSetupWrapper } from "@angular/core/testing";
+import { Post } from "src/app/models/Post";
+import { User } from "src/app/models/User";
 
 @Component({
     templateUrl: './createquestion.component.html',
@@ -13,9 +17,9 @@ export class CreateQuestionComponent {
     public ctlTitle: FormControl;
     public tags: Tag[];
     
-    constructor(private fb: FormBuilder,private tagService: TagService){
-        this.ctlBody = this.fb.control('',[]);
-        this.ctlTitle = this.fb.control('',[]);
+    constructor( private fb: FormBuilder,private tagService: TagService, private postService: PostService){
+        this.ctlBody = this.fb.control('',[Validators.required]);
+        this.ctlTitle = this.fb.control('',[Validators.required]);
         this.frm = this.fb.group({
             body: this.ctlBody,
             title: this.ctlTitle,
@@ -38,5 +42,9 @@ export class CreateQuestionComponent {
           .filter(v => v !== null);
         console.log(selectedOrderIds);
       }
+      add(){
+        this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value).subscribe();             
+      }
+
 
 }
