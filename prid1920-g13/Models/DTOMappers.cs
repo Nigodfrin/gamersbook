@@ -68,7 +68,9 @@ namespace prid_1819_g13.Models {
         }
         public static VoteDTO ToDTO(this Vote vote){
             return new VoteDTO{
-                UpDown = vote.UpDown
+                UpDown = vote.UpDown,
+                AuthorId = vote.AuthorId,
+                PostId = vote.PostId
             };
         }
         public static List<VoteDTO> ToDTO(this IEnumerable<Vote> votes) {
