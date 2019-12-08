@@ -80,12 +80,34 @@ namespace prid_1819_g13.Controllers
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
-            return (await _context.Posts
-            .Where(p => p.Title != null)
-            .OrderByDescending(a => a.Votes.Sum(v => v.UpDown))
-            .ToListAsync())
-            .PostQuestToDTO();
+            const string rawSQL = @"
+            SELECT posts.*, MaxScore FROM posts, 
+            (SELECT parentid, max(Score) MaxScore 
+            FROM (
+                SELECT posts.Id, ifnull(posts.ParentId, posts.id) ParentId, ifnull(sum(votes.UpDown), 0) Score 
+                FROM posts LEFT JOIN votes ON votes.PostId = posts.Id 
+                GROUP BY posts.Id,ParentId
+                ) as tbl1 
+                GROUP by parentid
+                ) as q1 
+                WHERE posts.id = q1.parentid
+                ORDER By q1.MaxScore desc, Timestamp desc;";
+            var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
+            return q.PostQuestToDTO();
         }
-        
+        [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
+         public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId,int acceptedPostId){
+            var question = await _context.Posts.FindAsync(questionId); 
+            if (questionId != question.Id)
+            {
+                return BadRequest();
+            }
+            question.AcceptedPostId = acceptedPostId;
+
+            _context.Entry(question).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+         }
     }
 }

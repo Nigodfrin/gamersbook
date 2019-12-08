@@ -2,9 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
-import { of } from "rxjs";
+import { of, Observable } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class PostService {
+
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
   getAll() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
@@ -50,5 +51,14 @@ export class PostService {
   getOrderByVotes(){
       return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
         .pipe(map(res => res.map(m => new Post(m))));
+    }
+    putAcceptedPost(question:Post,acceptedPostId: number): Observable<boolean> {
+      return this.http.get<Post>(`${this.baseUrl}api/posts/putAccepted/${question.id}/${acceptedPostId}`)
+      .pipe(map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+      );
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +50,28 @@ namespace prid_1819_g13.Controllers
             if (vote == null)
                 return NotFound();
             return vote.ToDTO();
+        }
+        [HttpGet("{postid}")]
+        public async Task<ActionResult<IEnumerable<VoteDTO>>> getVotesByPost(int postid){
+            var votes = await _context.Votes.Where(v => v.PostId == postid).ToListAsync() ;
+            if(votes == null)
+                return NotFound();
+            return votes.ToDTO();
+        }
+        [HttpDelete("{authorid}/{postid}")]
+        public async Task<IActionResult> Delete(int authorid,int postid)
+        {
+            var vote = await _context.Votes.FindAsync(authorid,postid);
+
+            if (vote == null)
+            {
+                return NotFound();
+            }
+
+            _context.Votes.Remove(vote);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
