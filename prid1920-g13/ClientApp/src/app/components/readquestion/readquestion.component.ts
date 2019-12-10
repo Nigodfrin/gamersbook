@@ -131,8 +131,8 @@ export class ReadQuestion implements OnInit {
   addVote(postid: number, upVote: number) {
     if(this.currentUser != undefined){
     let err = false;
-    this.voteService.getVotes(postid).subscribe(res => {
-      res.forEach(vote => {
+    this.voteService.getVotes(postid).subscribe(votes => {
+      votes.forEach(vote => {
         if (vote.upDown == upVote && vote.postId == postid && vote.authorId == this.authService.currentUser.id) {
           const snackBarData = this.snackBar.open(`You're about to cancel your vote`, 'Undo', { duration: 5000 });
           snackBarData.afterDismissed().subscribe(res => {
@@ -158,7 +158,9 @@ export class ReadQuestion implements OnInit {
   }
 }
   acceptAnswer(question: Post, acceptedPost: Post) {
+    this.acceptedPost = null;
     this.service.putAcceptedPost(question,acceptedPost.id).subscribe(res => {
+      this.acceptedPost = acceptedPost;
       this.refresh();
     });
   }

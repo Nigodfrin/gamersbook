@@ -127,8 +127,12 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 },
                                 new Post() {
                                     Id = 8,
-                                    Title = "Q1",
-                                    Body = "Q1",
+                                    Title = "Keep bluetooth service running for all fragments",
+                                    Body = @"I'm stuck and can't find a way to restart or reconnect the Bluetooth service in my app.
+                                     The app has 3 fragments, tabs managed by FragmentPagerAdapter. 
+                                     In the first fragment you can discover, associate and communicate with the BT device. 
+                                     In the second and third card it is necessary to interact with the device, 
+                                     it is not possible to get the connection or keep the service connected.",
                                     AuthorId = 5,
                                     Timestamp = new DateTime(2019, 11, 22, 8, 0, 0)
                                 },

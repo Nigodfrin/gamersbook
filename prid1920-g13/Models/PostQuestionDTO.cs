@@ -16,6 +16,7 @@ namespace prid_1819_g13.Models
         public IEnumerable<TagDTO> Tags { get; set; }
         public IList<CommentDTO> Comments {get;set;}
         public IList<VoteDTO> Votes {get;set;}
+        public int MaxScore {get;set;}
         
     }
 }

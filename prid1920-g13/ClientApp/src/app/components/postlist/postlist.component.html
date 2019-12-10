@@ -1,18 +1,45 @@
-<div class="example-button-row">
-<mat-button-toggle-group>
-  <mat-button-toggle mat-raised-button color="primary"(click)="newest()">Newest</mat-button-toggle>
-  <mat-button-toggle mat-raised-button color="accent" (click)="votes()">Votes</mat-button-toggle>
-  <mat-button-toggle mat-raised-button color="warn" (click)="unanswered()">Unanswered</mat-button-toggle>
-  <mat-button-toggle mat-raised-button (click)="withTags()" >Tags</mat-button-toggle>
-</mat-button-toggle-group>
+<section class="container">
+<div class="row">
+  <h2 class="col-10">All Questions</h2>
+  <span class="col-2">
+<a class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</a>
+  </span>
+  <mat-button-toggle-group class="offset-7">
+    <mat-button-toggle (click)="newest()">Newest</mat-button-toggle>
+    <mat-button-toggle (click)="votes()">Votes</mat-button-toggle>
+    <mat-button-toggle (click)="unanswered()">Unanswered</mat-button-toggle>
+    <mat-button-toggle (click)="withTags()">Tags</mat-button-toggle>
+  </mat-button-toggle-group>
 </div>
-<mat-list>
-        <h3 mat-subheader>Questions</h3>
-        <mat-list-item *ngFor="let post of posts">
-          <h4 mat-line><a [routerLinkActive]='["link-active"]' [routerLink]= "['/readquestion',post.id]">{{post.title}}</a></h4>
-          <p mat-line> Score :  {{post.score}} </p>
-           <mat-divider></mat-divider>
-        </mat-list-item>
- </mat-list>
-<mat-accordion>
-<a class="btn-warning" [routerLink]='["/newQuestion"]'>New question</a>
+<div class="row">
+<mat-card class="col-12" style="margin: 10px 0px;" *ngFor="let post of posts">
+  <mat-card-header>
+    <mat-card-title style="font-size: 16px;"> Score : {{post.score}}</mat-card-title>
+    <mat-card-title style="font-size: 16px;">MaxScore : {{post.maxScore}}</mat-card-title>
+    <mat-card-title-group>
+      <mat-card-title>
+        <h4><a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a></h4>
+      </mat-card-title>
+      <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}}</mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      {{(post.body.length>300)? (post.body | slice:0:300)+'..':(post.body)}}
+    </p>
+    <p>
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of post.tags"> {{tag.name}}</mat-chip>
+      </mat-chip-list>
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <span [ngClass]="(post.acceptedPostId == null) ? 'notHere' : 'isHere'">Answer : {{post.reponses.length}}
+        <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline</mat-icon>
+    </span>
+    <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
+      [routerLink]="['/readquestion',post.id]">See</button>
+  </mat-card-actions>
+</mat-card>
+</div>
+</section>

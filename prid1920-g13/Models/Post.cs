@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace prid_1819_g13.Models
 {
+    
     public class Post
     {
         [Key]
@@ -34,6 +35,11 @@ namespace prid_1819_g13.Models
         public IEnumerable<Tag> Tags
         {
             get =>PostTags.Select(f => f.Tag);
+        }
+        [NotMapped]
+        public int MaxScore 
+        {
+            get => Reponses.Max(p => p.Score) > this.Score ?  Reponses.Max(p => p.Score) : this.Score ;
         }
 
     }

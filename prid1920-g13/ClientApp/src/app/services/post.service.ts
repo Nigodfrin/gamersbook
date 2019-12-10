@@ -3,6 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
 import { of, Observable } from "rxjs";
+import { ReccordQuestion } from "../models/reccordQuestion";
 @Injectable({ providedIn: 'root' })
 export class PostService {
 
@@ -58,8 +59,8 @@ export class PostService {
       .pipe(map(res => res.map(m => new Post(m))));
   }
   getOrderByVotes() {
-    return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
-      .pipe(map(res => res.map(m => new Post(m))));
+    return this.http.get<ReccordQuestion[]>(`${this.baseUrl}api/posts/votes`)
+      .pipe(map(res => res.map((m) => new Post(m))));
   }
     putAcceptedPost(question:Post,acceptedPostId: number): Observable<boolean> {
       return this.http.get<Post>(`${this.baseUrl}api/posts/putAccepted/${question.id}/${acceptedPostId}`)

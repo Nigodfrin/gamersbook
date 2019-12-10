@@ -20,7 +20,7 @@ namespace prid_1819_g13.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<VoteDTO>> CreateUser(VoteDTO data)
+        public async Task<ActionResult<VoteDTO>> CreateVote(VoteDTO data)
         {
             var vote = await _context.Votes.FindAsync(data.AuthorId,data.PostId);
             if (vote != null && vote.UpDown == data.UpDown)

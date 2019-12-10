@@ -5,7 +5,7 @@ export class Post {
     public title: string;
     public body: string;
     public timestamp: Date;
-    public reponses: any;
+    public reponses: Post[];
     public tags: any;
     public user: User;
     public score: number;
@@ -13,6 +13,7 @@ export class Post {
     public acceptedPostId: number;
     public parentId: number;
     public votes: any;
+    public maxScore: any;
     constructor(data: any) {
         if (data) {
             this.id = data.id,
@@ -26,7 +27,8 @@ export class Post {
             this.comments = data.comments,
             this.acceptedPostId = data.acceptedRepId
             this.parentId = data.parentId,
-            this.votes = data.votes
+            this.votes = data.votes,
+            this.maxScore = data.maxScore
         }
     }
 }
