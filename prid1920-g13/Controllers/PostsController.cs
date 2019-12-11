@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using prid_1819_g13.Helpers;
 using prid_1819_g13.Models;
 using PRID_Framework;
 
@@ -106,6 +107,37 @@ namespace prid_1819_g13.Controllers
             var q =  _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
             return q.PostQuestToDTO();
         }
+         [HttpPost]
+        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
+        {
+            var post = await _context.Posts.FindAsync(data.Id);
+            if(post != null){
+                if(data.Id != post.Id){
+                    return BadRequest();
+                }
+                post.Body = data.Body;
+                post.Timestamp = DateTime.Now;
+                _context.Entry(post).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            else{
+                post = new Post()
+                {
+                    AuthorId = data.User.Id,
+                    ParentId = data.ParentId ,
+                    Body = data.Body,
+                    Timestamp = DateTime.Now
+                };
+            _context.Posts.Add(post);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return NoContent();
+            }
+
+        }
         [HttpPost("add")]
         public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostQuestionDTO data)
         {
@@ -127,14 +159,6 @@ namespace prid_1819_g13.Controllers
             //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
 
         }
-        //  [HttpGet("{id}")]
-        //     public async Task<ActionResult<PostQuestionDTO>> GetQuest(int id)
-        //     {
-        //         var post = await _context.Posts.FindAsync(id);
-        //         if (post == null)
-        //             return NotFound();
-        //         return post.PostQuestToDTO();
-        //     }
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
         public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId, int acceptedPostId)
         {
@@ -148,6 +172,26 @@ namespace prid_1819_g13.Controllers
             _context.Entry(question).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+            return NoContent();
+        }
+        [Authorized(Role.Admin)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            var question = await _context.Posts.FindAsync(post.ParentId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            if(question.AcceptedPostId == post.Id){
+                question.AcceptedPostId = null;
+                 _context.Entry(question).State = EntityState.Modified;                
+            }
+            _context.Votes.RemoveRange(post.Votes);
+            _context.Comments.RemoveRange(post.Comments);
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

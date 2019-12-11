@@ -5,6 +5,7 @@ export class Comment {
     public author: User;
     public body: string;
     public timestamp: Date;
+    public postId: number;
     constructor(data: any){
         this.timestamp = data.timestamp,
         this.id = data.id,

@@ -3,17 +3,25 @@ import { Inject, Injectable } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
 import { of, Observable } from "rxjs";
-import { ReccordQuestion } from "../models/reccordQuestion";
 @Injectable({ providedIn: 'root' })
 export class PostService {
-
+  
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
   getAll() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
-      .pipe(map(res => res.map(m => new Post(m))));
+    .pipe(map(res => res.map(m => new Post(m))));
   }
   addPost(post: Post) {
     return this.http.post<Post>(`${this.baseUrl}api/posts`, post).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  delete(response: Post) {
+    return this.http.delete<boolean>(`${this.baseUrl}api/posts/${response.id}`).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -59,7 +67,7 @@ export class PostService {
       .pipe(map(res => res.map(m => new Post(m))));
   }
   getOrderByVotes() {
-    return this.http.get<ReccordQuestion[]>(`${this.baseUrl}api/posts/votes`)
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
       .pipe(map(res => res.map((m) => new Post(m))));
   }
     putAcceptedPost(question:Post,acceptedPostId: number): Observable<boolean> {

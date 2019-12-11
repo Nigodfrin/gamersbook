@@ -82,8 +82,8 @@ namespace prid_1819_g13.Models {
                 Id = reccord.Id,
                 Body = reccord.Body,
                 Timestamp = reccord.Timestamp,
-                Author = reccord.User.ToDTO()
-                
+                Author = reccord.User.ToDTO(),
+                PostId = reccord.PostId
             };
         }
          public static List<CommentDTO> ToDTO(this IEnumerable<Comment> comments) {

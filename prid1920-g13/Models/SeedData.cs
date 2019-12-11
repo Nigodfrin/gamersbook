@@ -159,8 +159,12 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 },
                                 new Post() {
                                     Id = 12,
-                                    Title = "Q2",
-                                    Body = "Q2",
+                                    Title = "What is a NullReferenceException, and how do I fix it?",
+                                    Body = @"I have some code and when it executes, it throws a NullReferenceException, saying:
+
+Object reference not set to an instance of an object.
+
+What does this mean, and what can I do to fix this error?",
                                     AuthorId = 4,
                                     Timestamp = new DateTime(2019, 11, 22, 9, 0, 0)
                                 },
@@ -173,8 +177,18 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 },
                                 new Post() {
                                     Id = 14,
-                                    Title = "Q3",
-                                    Body = "Q3",
+                                    Title = "Passing path like string in hug server",
+                                    Body = @"Is there any way to pass a string with slashes in hug, for example with this function:
+```
+import hug
+
+@hug.get('/returnfilecontent/{path}'')
+def doubles(path):
+    return open(path, 'r').read()
+```
+It seems hug does not [behave well][1] with paths?
+[1]:https://stackoverflow.com/questions/59193963/passing-parameters-in-hug-server-as-foo-something-in-double-number-function/59210515?noredirect=1#comment104655558_59210515"
+,
                                     AuthorId = 1,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 0, 0)
                                 },
@@ -194,8 +208,10 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 },
                                 new Post() {
                                     Id = 17,
-                                    Title = "Q4",
-                                    Body = "Q4",
+                                    Title = "How to setup ICC and Bazel on Windows",
+                                    Body = @"I setup my bazel environment on Windows, which uses clang by default. I found that CROSSTOOL allows me to set a compiler, but the documentation is very poor on this. Is there any resource available that explains how I can change the default compiler of Bazel to ICC on Windows?
+
+The most promising solution I found is simply setting CC but CC=icc.exe doesn't invoke the compiler as expected and still uses clang. Any help is highly appreciated!",
                                     AuthorId = 2,
                                     Timestamp = new DateTime(2019, 11, 22, 11, 0, 0)
                                 },
@@ -208,14 +224,17 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 },
                                 new Post() {
                                     Id = 19,
-                                    Title = "Q5",
-                                    Body = "Q8",
+                                    Title = "How do you make multiple animations start from clicking one object?",
+                                    Body = @"I've started learning a-frame recently and I'm trying to create a domino effect type thing. 
+                                    I want all of my animations to start after I click on the first object.
+                                     I've tried using delay but the delay starts immediately instead of after I start the animation. 
+                                    How do I make it so after someone clicks object 1, object 2's animation would start shortly after?",
                                     AuthorId = 4,
                                     Timestamp = new DateTime(2019, 11, 22, 11, 0, 0)
                                 },
                                 new Post() {
                                     Id = 20,
-                                    Body = "R8",
+                                    Body = "Let's try the delay approach - with a custom component for some managment :)",
                                     ParentId = 19,
                                     AuthorId = 3,
                                     Timestamp = new DateTime(2019, 11, 22, 10, 2, 0)
@@ -295,7 +314,11 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                                 new Tag() { Id = 3, Name = "csharp" },
                                 new Tag() { Id = 4, Name = "EntityFramework Core" },
                                 new Tag() { Id = 5, Name = "dotnet core" },
-                                new Tag() { Id = 6, Name = "mysql" }
+                                new Tag() { Id = 6, Name = "mysql" },
+                                new Tag() { Id = 7, Name = "routing" },
+                                new Tag() { Id = 8, Name = "hug" },
+                                new Tag() { Id = 9, Name = ".net" },
+                                new Tag() { Id = 10, Name = "windows" }
                             );
                             context.SaveChanges();
                         }
@@ -303,7 +326,12 @@ After posting this I tried @Gh0sT 's solution and it worked, so I guess there is
                             context.PostTags.AddRange(
                                 new PostTag() { PostId = 1, TagId = 1 },
                                 new PostTag() { PostId = 1, TagId = 3 },
-                                new PostTag() { PostId = 4, TagId = 2 }
+                                new PostTag() { PostId = 4, TagId = 2 },
+                                new PostTag() { PostId = 14, TagId = 7 },
+                                new PostTag() { PostId = 14, TagId = 8 },
+                                new PostTag() { PostId = 12, TagId = 3 },
+                                new PostTag() { PostId = 12, TagId = 9 },
+                                new PostTag() { PostId = 17, TagId = 10 }
                             );
                             context.SaveChanges();
                         }

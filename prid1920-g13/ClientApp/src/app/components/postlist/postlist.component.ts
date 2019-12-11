@@ -2,7 +2,6 @@ import { Component, ɵflushModuleScopingQueueAsMuchAsPossible,OnInit } from '@an
 import { PostService } from 'src/app/services/post.service';
 import { SourceListMap } from 'source-list-map';
 import { Post } from 'src/app/models/Post';
-import { ReccordQuestion } from 'src/app/models/reccordQuestion';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { User } from 'src/app/models/User';
 

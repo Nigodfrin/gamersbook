@@ -1,6 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 import { PostService } from 'src/app/services/post.service';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Comment } from '../../models/Comment';
@@ -8,14 +7,11 @@ import { EditCommentComponent } from '../edit-comment/edit-comment.component';
 import { Post } from 'src/app/models/Post';
 import { commentService } from 'src/app/services/comment.service';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Vote } from 'src/app/models/Vote';
 import { VoteService } from '../../services/vote.service';
 import { User } from 'src/app/models/User';
-import { AttachSession } from 'protractor/built/driverProviders';
-
+import { UserService } from 'src/app/services/user.service';
 
 
 
@@ -26,10 +22,10 @@ export class ReadQuestion implements OnInit {
   question: Post;
   reponses: Post[];
   acceptedPost: Post;
-  ctlAnswer: FormControl;
-  frm: FormGroup;
+  Answer: string = "";
   votes: Vote[];
   currentUser: User;
+  postInEdit: Post;
   constructor(
     private route: ActivatedRoute,
     private authService: AuthenticationService,
@@ -37,16 +33,8 @@ export class ReadQuestion implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public comservice: commentService,
-    private fb: FormBuilder,
     private voteService: VoteService
-  ) {
-    this.ctlAnswer = this.fb.control('');
-    this.frm = this.fb.group({
-      body: this.ctlAnswer,
-      timestamp: Date.now(),
-      user: authService.currentUser
-    }, {});
-  }
+  ) {}
 
   ngOnInit() {
     let id = this.route.snapshot.paramMap.get('id');
@@ -71,12 +59,11 @@ export class ReadQuestion implements OnInit {
   refresh() {
     let id = this.route.snapshot.paramMap.get('id');
     this.service.getById(id).subscribe(post => {
-      console.log(post);
       this.question = post;
+      console.log(post);
       if (this.question.acceptedPostId != null) {
         this.service.getRepById(this.question.acceptedPostId).subscribe(post => {
           this.acceptedPost = post;
-          console.log(this.acceptedPost);
           this.service.getAllRep(this.question.id, this.acceptedPost.id).subscribe(posts => {
             this.reponses = posts;
           })
@@ -90,12 +77,15 @@ export class ReadQuestion implements OnInit {
   edit(comment: Comment) {
     const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false }, height: '800px', width: '600px', });
     dlg.beforeClose().subscribe(res => {
-      console.log(res);
       if (res) {
         _.assign(comment, res);
         this.comservice.update(comment).subscribe(res => {
           if (!res) {
             this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.refresh();
+            this.question.acceptedPostId = null;
+          }
+          else {
             this.refresh();
           }
         });
@@ -115,18 +105,55 @@ export class ReadQuestion implements OnInit {
         this.refresh();
     });
   }
+  deleteRep(response: Post) {
+    const snackBarRef = this.snackBar.open(` Response will be deleted`, 'Undo', { duration: 5000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+      if (!res.dismissedByAction){
+        this.service.delete(response).subscribe();
+        this.refresh();
+      }
+      else
+        this.refresh();
+    });
+  }
   cancel() {
-    this.ctlAnswer.setValue("");
+    this.Answer = "";
   }
   send() {
-    const answer = new Post(this.frm.value);
-    this.reponses.push(answer);
+    var answer: Post;
+    // dans le cas où on ajoute un post
+    console.log(this.postInEdit);
+    if(this.postInEdit == null && this.postInEdit == undefined){
+     answer = new Post(
+        {
+          body: this.Answer,
+          parentId: this.question.id,
+          user: this.currentUser,
+          timestamp: new Date(Date.now()),
+        }
+        );
+    }
+    else{
+      // si on veut update
+      answer = this.postInEdit;
+      answer.body = this.Answer;
+      this.postInEdit = null;
+    } 
     this.service.addPost(answer).subscribe(res => {
       if (!res) {
         this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
         this.refresh();
       }
+      else {
+        this.refresh();
+        this.Answer = '';
+      }
     });
+  }
+  editAnswer(post: Post){
+    this.postInEdit = post;
+    this.Answer = post.body;
+    window.scrollTo(0,document.body.scrollHeight);
   }
   addVote(postid: number, upVote: number) {
     if(this.currentUser != undefined){
@@ -162,6 +189,27 @@ export class ReadQuestion implements OnInit {
     this.service.putAcceptedPost(question,acceptedPost.id).subscribe(res => {
       this.acceptedPost = acceptedPost;
       this.refresh();
+    });
+  }
+  addComment(postId: number){
+    const comment = new Comment({});
+    const dlg = this.dialog.open(EditCommentComponent, { data: { comment,isNew: true }, height: '600px', width: '600px', });
+    dlg.beforeClose().subscribe(res => {
+      if (res) {
+        _.assign(comment, res);
+        comment.author = this.currentUser;
+        comment.postId = postId;
+        comment.timestamp = new Date(Date.now());
+        this.comservice.addComment(comment).subscribe(res => {
+          if (!res) {
+            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.refresh();
+          }
+          else {
+            this.refresh();
+          }
+        });
+      }
     });
   }
 }

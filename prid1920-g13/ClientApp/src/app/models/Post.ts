@@ -13,7 +13,7 @@ export class Post {
     public acceptedPostId: number;
     public parentId: number;
     public votes: any;
-    public maxScore: any;
+    public maxScore: number;
     constructor(data: any) {
         if (data) {
             this.id = data.id,
