@@ -35,6 +35,7 @@ namespace prid_1819_g13.Models {
                 Comments = post.Comments?.ToDTO(),
                 Votes = post.Votes?.ToDTO(),
                 AcceptedRepId = post.AcceptedPostId,
+                MaxScore = post.MaxScore
             };
             
         }
@@ -82,13 +83,13 @@ namespace prid_1819_g13.Models {
         public static List<VoteDTO> ToDTO(this IEnumerable<Vote> votes) {
             return votes.Select(c => c.ToDTO()).ToList();
         }
-        public static CommentDTO ToDTO(this Comment comment){
+        public static CommentDTO ToDTO(this Comment reccord){
             return new CommentDTO{
-                Id = comment.Id,
-                Body = comment.Body,
-                Timestamp = comment.Timestamp,
-                Author = comment.User.ToDTO()
-                
+                Id = reccord.Id,
+                Body = reccord.Body,
+                Timestamp = reccord.Timestamp,
+                Author = reccord.User.ToDTO(),
+                PostId = reccord.PostId
             };
         }
          public static List<CommentDTO> ToDTO(this IEnumerable<Comment> comments) {

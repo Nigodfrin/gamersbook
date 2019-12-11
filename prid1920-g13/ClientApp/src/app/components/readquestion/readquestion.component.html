@@ -18,7 +18,7 @@
     <div class="row" style="font-size: 12px">
         <div class="offset-1">
             <div class="row" *ngFor="let com of question.comments">
-                <markdown class=" offset-1 col-10">{{com.body}}</markdown>
+                <markdown class=" offset-1 col-11">{{com.body}}</markdown>
                 <span class="offset-5 col-2">commented by {{com.author.pseudo}} </span>
                 <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
                 <span class="col-2">
@@ -28,7 +28,7 @@
                 <mat-divider class="col-12"></mat-divider>
             </div>
             <div class="col-1">
-                <mat-icon aria-label="New comment"><a style="cursor: pointer;">add</a></mat-icon>
+                <mat-icon aria-label="New comment"><a (click)="addComment(question.id)" style="cursor: pointer;">add</a></mat-icon>
             </div>
         </div>
     </div>
@@ -45,15 +45,19 @@
                 </div>
                 <mat-icon>done_outline</mat-icon>
                 <markdown class="col-10">{{acceptedPost.body}}</markdown>
-                <span class="offset-6 col-3">Answered by {{acceptedPost.user.pseudo}}</span>
-                <span class="col-3">Date : {{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                <span class="offset-5 col-2">Answered by {{acceptedPost.user.pseudo}}</span>
+                <span class="col-3">{{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                <span class="col-2">
+                        <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(acceptedPost)">edit</a></mat-icon>
+                        <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(acceptedPost)">delete</a></mat-icon>
+                    </span>
                 <mat-divider *ngIf="acceptedPost.comments.length > 0" class="col-12"></mat-divider>
                 <div class="container">
                     <div class="row" style="font-size: 12px"
                         *ngFor="let com of acceptedPost.comments; let isLast = last;">
                         <div class=" offset-2 col-10">{{com.body}}</div>
                         <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
-                        <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                        <span class="col-3">{{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
                         <span class="col-2">
                             <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                             <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
@@ -71,18 +75,22 @@
                         <mat-icon style="color:red;"> <a style="cursor: pointer;" (click)="addVote(reponse.id,-1)">thumb_down</a>
                         </mat-icon>
                     </div>
-                    <markdown class="col-10">{{reponse.body}}</markdown>
+                    <markdown class="col-10" style="word-wrap: break-word;">{{reponse.body}}</markdown>
                     <a *ngIf="currentUser != undefined && currentUser.id == question.user.id" class="offset-1 btn btn-success"
                         (click)="acceptAnswer(question,reponse)">Accept Answer</a>
-                    <span class="offset-5 col-3">Answered by {{reponse.user.pseudo}}</span>
-                    <span class="col-3">Date : {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                    <span class="offset-5 col-2">Answered by {{reponse.user.pseudo}}</span>
+                    <span class="col-3">{{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                    <span class="col-2">
+                            <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(reponse)">edit</a></mat-icon>
+                            <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(reponse)">delete</a></mat-icon>
+                        </span>
                     <mat-divider *ngIf="reponse.comments.length > 0" class="col-12"></mat-divider>
                     <div class="container">
                         <div class="row" style="font-size: 12px"
                             *ngFor="let com of reponse.comments; let isLast = last;">
                             <div class=" offset-2 col-10">{{com.body}}</div>
                             <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
-                            <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
+                            <span class="col-3">{{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
                             <span class="col-2">
                                 <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                                 <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
@@ -96,16 +104,12 @@
         </div>
     </div>
     <div class="row">
-        <form class="col-12" [formGroup]="frm">
-            <div class="form-group col-12">
-                <label for="answer" class="col-form-label-lg">Your Answer</label>
-                <simplemde id="anwser" [formControl]="ctlAnswer"></simplemde>
-            </div>
-        </form>
-        <div class="footer">
-            <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+                <label class="col-12" for="answer" class="col-form-label-lg">Your Answer</label>
+                <simplemde  class="col-12" id="anwser" [(ngModel)]="Answer"></simplemde>
+                <div class="offset-9">
+            <button type="submit" mat-raised-button color="primary" [disabled]="Answer == null || Answer == '' || Answer == undefined"
                 (click)="send()">Send</button>
-            <button type="reset" mat-button (click)="cancel()">Cancel</button>
+            <button type="reset" style="margin-left: 10px;" mat-raised-button color="warn" (click)="cancel()">Cancel</button>
         </div>
     </div>
 </section>

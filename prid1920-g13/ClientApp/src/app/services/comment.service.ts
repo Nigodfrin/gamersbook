@@ -13,8 +13,18 @@ export class commentService {
       catchError(err => {
         return of(false);
       })
-    );
-  }
+      );
+    }
+    addComment(comment: Comment) {
+      console.log(comment);
+      return this.http.post<Comment>(`${this.baseUrl}api/comments`, comment).pipe(
+        map(res => true),
+        catchError(err => {
+          console.error(err);
+          return of(false);
+        })
+      );
+    }
   public delete(m: Comment): Observable<boolean> {
     return this.http.delete<boolean>(`${this.baseUrl}api/comments/${m.id}`).pipe(
       map(res => true),

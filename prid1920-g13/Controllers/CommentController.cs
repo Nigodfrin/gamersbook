@@ -6,6 +6,7 @@ using prid_1819_g13.Models;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using prid_1819_g13.Helpers;
+using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
@@ -52,6 +53,23 @@ namespace prid_1819_g13.Controllers
 
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+         [HttpPost]
+        public async Task<ActionResult<VoteDTO>> CreateComment(CommentDTO data)
+        {
+            var newComment = new Comment()
+            {             
+                Body = data.Body,
+                AuthorId = data.Author.Id,
+                PostId = data.PostId,
+                Timestamp = data.Timestamp
+            };
+            _context.Comments.Add(newComment);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
 
             return NoContent();
         }
