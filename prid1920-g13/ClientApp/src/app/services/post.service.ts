@@ -11,6 +11,10 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
+  // getLast(){
+  //   return this.http.get<Post>(`${this.baseUrl}api/posts/last`)
+  //   .pipe();
+  // }
   addPost(post: Post) {
     return this.http.post<Post>(`${this.baseUrl}api/posts`, post).pipe(
       map(res => true),

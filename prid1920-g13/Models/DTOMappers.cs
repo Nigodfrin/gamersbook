@@ -66,6 +66,12 @@ namespace prid_1819_g13.Models {
         public static List<TagDTO> ToDTO(this IEnumerable<Tag> tags){
             return tags.Select(t =>t.ToDTO()).ToList();
         }
+        public static PostTagDTO ToDTO(this PostTag postTag){
+            return new PostTagDTO{
+                PostId = postTag.PostId,
+                TagId = postTag.TagId
+            };
+        }
         public static VoteDTO ToDTO(this Vote vote){
             return new VoteDTO{
                 UpDown = vote.UpDown,

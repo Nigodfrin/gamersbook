@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn, Validators
 import { Tag } from "src/app/models/Tag";
 import { TagService } from "src/app/services/tag.service";
 import { PostService } from "src/app/services/post.service";
-import { InjectSetupWrapper } from "@angular/core/testing";
+import { PostTagService } from "src/app/services/posttag.service";
 import { Post } from "src/app/models/Post";
 import { User } from "src/app/models/User";
 
@@ -16,8 +16,9 @@ export class CreateQuestionComponent {
     public ctlBody: FormControl;
     public ctlTitle: FormControl;
     public tags: Tag[];
+    public post: Post;
     
-    constructor( private fb: FormBuilder,private tagService: TagService, private postService: PostService){
+    constructor( private fb: FormBuilder,private tagService: TagService, private postService: PostService, private postTagService: PostTagService){
         this.ctlBody = this.fb.control('',[Validators.required]);
         this.ctlTitle = this.fb.control('',[Validators.required]);
         this.frm = this.fb.group({
@@ -36,14 +37,18 @@ export class CreateQuestionComponent {
             (this.frm.controls.tagsForm as FormArray).push(control);
           });
     }
-    submit() {
-        const selectedOrderIds = this.frm.value.tags
+    submit(): any {
+        const selectedOrderIds = this.frm.value.tagsForm
           .map((v, i) => v ? this.tags[i].id : null)
           .filter(v => v !== null);
-        console.log(selectedOrderIds);
+        return selectedOrderIds;
       }
       add(){
-        this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value).subscribe();             
+         this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value).subscribe();  
+        // this.postService.getLast().subscribe(post => {
+        //  this.post = post;
+        //})       
+        this.postTagService.addPostTag(this.submit());
       }
 
 

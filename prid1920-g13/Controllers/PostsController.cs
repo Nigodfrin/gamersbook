@@ -26,6 +26,12 @@ namespace prid_1819_g13.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             return posts.PostQuestToDTO();
         }
+        // [HttpGet("last")]
+        // public async Task<ActionResult<PostQuestionDTO>> GetLast()
+        // {
+        //     var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
+        //     return posts.Last().PostQuestToDTO();
+        // }
         [HttpGet("allRep/{id}/{acceptedId}")]
         public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id, int acceptedId)
         {
@@ -117,14 +123,7 @@ namespace prid_1819_g13.Controllers
            //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
 
     }
-     [HttpGet("{id}")]
-        public async Task<ActionResult<PostQuestionDTO>> GetQuest(int id)
-        {
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
-                return NotFound();
-            return post.PostQuestToDTO();
-        }
+
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
          public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId,int acceptedPostId){
             var question = await _context.Posts.FindAsync(questionId); 
