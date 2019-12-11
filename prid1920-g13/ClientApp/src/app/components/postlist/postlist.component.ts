@@ -1,9 +1,11 @@
 import { Component, ɵflushModuleScopingQueueAsMuchAsPossible,OnInit } from '@angular/core';
 import { PostService } from 'src/app/services/post.service';
-import { SourceListMap } from 'source-list-map';
 import { Post } from 'src/app/models/Post';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { User } from 'src/app/models/User';
+import { MatSnackBar } from '@angular/material';
+import * as _ from 'lodash';
+
 
 
 /**
@@ -21,7 +23,7 @@ export class PostListComponent implements OnInit {
   oneRepInQuestion: boolean;
   CurrentUser: User;
 
-  constructor(private postService: PostService, private authService: AuthenticationService) { }
+  constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
     this.postService.getAll().subscribe(posts => {
       this.posts = posts;
@@ -61,5 +63,22 @@ export class PostListComponent implements OnInit {
         }
       });
     return false;
+  }
+  delete(post: Post){
+    const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+      if (!res.dismissedByAction){
+        this.postService.deletePost(post).subscribe();
+        this.refresh();
+      }
+      else
+        this.refresh();
+    });
+  }
+  refresh(){
+    this.postService.getAll().subscribe(posts => {
+      this.posts = posts;
+      this.CurrentUser = this.authService.currentUser;
+    })
   }
 }

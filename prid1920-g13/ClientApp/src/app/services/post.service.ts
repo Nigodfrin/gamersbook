@@ -33,8 +33,26 @@ export class PostService {
       })
     );
   }
+  deletePost(question: Post) {
+    return this.http.delete<boolean>(`${this.baseUrl}api/posts/delete/${question.id}`).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  update(title: string, body: string, id: number): Observable<boolean> {
+    return this.http.put<Post>(`${this.baseUrl}api/posts`, { title: title, body: body, id: id}).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
   addQuestion(title: string, body: string): Observable<boolean> {
-    return this.http.post<Post>(`${this.baseUrl}api/posts/add`, { title: title, body: body }).pipe(
+    return this.http.post<Post>(`${this.baseUrl}api/posts`, { title: title, body: body }).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);

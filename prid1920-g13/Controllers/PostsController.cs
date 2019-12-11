@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prid_1819_g13.Models;
 using PRID_Framework;
+using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
@@ -102,31 +103,45 @@ namespace prid_1819_g13.Controllers
             var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
             return q.PostQuestToDTO();
         }
-        [HttpPost("add")]
-        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostQuestionDTO data)
+        [HttpPost]
+        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
         {
-            var pseudo = User.Identity.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
-            var newQuestion = new Post()
+            var post = await _context.Posts.FindAsync(data.Id);
+            if (post != null)
             {
-                AuthorId = user.Id,
-                ParentId = null,
-                Title = data.Title,
-                Body = data.Body,
-                Timestamp = DateTime.Now
-            };
-            _context.Posts.Add(newQuestion);
-            var res = await _context.SaveChangesAsyncWithValidation();
-            if (!res.IsEmpty)
-                return BadRequest(res);
-            return NoContent();
-           //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
+                if (data.Id != post.Id)
+                {
+                    return BadRequest();
+                }
+                post.Body = data.Body;
+                post.Timestamp = DateTime.Now;
+                _context.Entry(post).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
 
-    }
+                return NoContent();
+            }
+            else
+            {
+                post = new Post()
+                {
+                    AuthorId = data.User.Id,
+                    ParentId = data.ParentId,
+                    Body = data.Body,
+                    Timestamp = DateTime.Now
+                };
+                _context.Posts.Add(post);
+                var res = await _context.SaveChangesAsyncWithValidation();
+                if (!res.IsEmpty)
+                    return BadRequest(res);
+                return NoContent();
+            }
+
+        }
 
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
-         public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId,int acceptedPostId){
-            var question = await _context.Posts.FindAsync(questionId); 
+        public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId, int acceptedPostId)
+        {
+            var question = await _context.Posts.FindAsync(questionId);
             if (questionId != question.Id)
             {
                 return BadRequest();
@@ -137,6 +152,67 @@ namespace prid_1819_g13.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-         }
+        }
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteQuestion(int id)
+        {
+            var question = await _context.Posts.FindAsync(id);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
+            {
+                var res = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
+                _context.Posts.Remove(res);
+                await _context.SaveChangesAsync();
+            }
+            _context.Posts.Remove(question);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [Authorized(Role.Admin)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            var question = await _context.Posts.FindAsync(post.ParentId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            if (question.AcceptedPostId == post.Id)
+            {
+                question.AcceptedPostId = null;
+                _context.Entry(question).State = EntityState.Modified;
+            }
+            _context.Votes.RemoveRange(post.Votes);
+            _context.Comments.RemoveRange(post.Comments);
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> updatePost(string title, string body, int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post == null)
+            {
+                return BadRequest();
+            }
+            post.Title = title;
+            post.Body = body;
+            _context.Entry(post).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
+
     }
 }

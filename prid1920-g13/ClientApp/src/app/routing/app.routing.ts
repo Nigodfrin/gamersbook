@@ -44,6 +44,10 @@ const appRoutes: Routes = [
     component: CreateQuestionComponent
   },
   {
+    path: 'createquestion/:id',
+    component: CreateQuestionComponent
+  },
+  {
     path: 'taglist',
     component: TagListComponent
   }

@@ -39,6 +39,13 @@
     </span>
     <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
       [routerLink]="['/readquestion',post.id]">See</button>
+      <button mat-icon-button tabindex="-1">
+        <mat-icon (click)="delete(post)">delete</mat-icon>
+    </button>
+    <button mat-icon-button tabindex="-1">
+      <mat-icon [routerLinkActive]='["link-active"]'
+      [routerLink]="['/createquestion',post.id]">edit</mat-icon>
+  </button>
   </mat-card-actions>
 </mat-card>
 </div>
