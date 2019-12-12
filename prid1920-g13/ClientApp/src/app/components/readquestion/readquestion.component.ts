@@ -64,6 +64,7 @@ export class ReadQuestion implements OnInit {
       if (this.question.acceptedPostId != null) {
         this.service.getRepById(this.question.acceptedPostId).subscribe(post => {
           this.acceptedPost = post;
+          console.log(post);
           this.service.getAllRep(this.question.id, this.acceptedPost.id).subscribe(posts => {
             this.reponses = posts;
           })
@@ -109,8 +110,9 @@ export class ReadQuestion implements OnInit {
     const snackBarRef = this.snackBar.open(` Response will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction){
-        this.service.delete(response).subscribe();
-        this.refresh();
+        this.service.delete(response).subscribe(res => {
+          this.refresh();
+        });
       }
       else
         this.refresh();
@@ -122,7 +124,6 @@ export class ReadQuestion implements OnInit {
   send() {
     var answer: Post;
     // dans le cas où on ajoute un post
-    console.log(this.postInEdit);
     if(this.postInEdit == null && this.postInEdit == undefined){
      answer = new Post(
         {
@@ -138,6 +139,7 @@ export class ReadQuestion implements OnInit {
       answer = this.postInEdit;
       answer.body = this.Answer;
       this.postInEdit = null;
+      this.acceptedPost = null;
     } 
     this.service.addPost(answer).subscribe(res => {
       if (!res) {

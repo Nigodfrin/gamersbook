@@ -103,7 +103,19 @@ namespace prid_1819_g13.Controllers
             var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
             return q.PostQuestToDTO();
         }
+        [HttpGet("filter/{filter}")]
         [HttpPost]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string filter)
+        {
+            var posts = _context.Posts.Select(p => new {
+                                         p.Id,
+                                         ParentId = p.ParentId == null ? p.Id : p.ParentId,
+                                     })
+                                     .GroupBy(p => new { p.Id, p.ParentId })
+                                     .ToListAsync();
+
+            return null;
+        }
         public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
         {
             var post = await _context.Posts.FindAsync(data.Id);

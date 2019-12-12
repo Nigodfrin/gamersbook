@@ -73,6 +73,7 @@ export class CreateQuestionComponent implements OnInit {
     return selectedOrderIds;
   }
   add() {
+    console.log(this.ctlTitle.value + " - "+ this.ctlBody.value);
     this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value).subscribe();
     // this.postService.getLast().subscribe(post => {
     //  this.post = post;
