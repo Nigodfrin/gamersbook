@@ -200,7 +200,7 @@ export class ReadQuestion implements OnInit {
       if (res) {
         _.assign(comment, res);
         comment.author = this.currentUser;
-        comment.id = postId;
+        comment.postId = postId;
         comment.timestamp = new Date(Date.now());
         this.comservice.addComment(comment).subscribe(res => {
           if (!res) {

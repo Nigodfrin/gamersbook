@@ -23,41 +23,52 @@ export class PostListComponent implements OnInit {
   oneRepInQuestion: boolean;
   CurrentUser: User;
   test: string;
+  selectedValue: string = "all";
+  filter: string = "";
 
   constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
     this.postService.getAll().subscribe(posts => {
       this.posts = posts;
-      console.log(posts);
       this.CurrentUser = this.authService.currentUser;
     })
 
   }
+  public onValChange(val: string) {
+    this.selectedValue = val;
+  }
+  getAll(){
+    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
+      this.posts = posts;
+      this.CurrentUser = this.authService.currentUser;
+    })
+  }
   newest() {
-      this.postService.getNewest().subscribe(posts => {
+      this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
         this.posts = posts;
       })
   }
   unanswered(){
-    this.postService.getNonAnswered().subscribe(posts => {
+    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
     })
   }
   onChange(filter: string) {
-    this.postService.filter(filter).subscribe(posts => {
-      console.log(posts);
+    this.filter = filter;
+    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
+      this.posts = posts;
     });
 
 }
   votes() {
     var s : number;
-    this.postService.getOrderByVotes().subscribe((posts)  => {
+    this.postService.filter(this.selectedValue,this.filter).subscribe((posts)  => {
       this.posts = posts
       console.log(posts);
     });
   }
   withTags(){
-    this.postService.getWithTags().subscribe(posts => {
+    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
     })
   }

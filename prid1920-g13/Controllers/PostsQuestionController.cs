@@ -11,13 +11,13 @@ using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
-    [Route("api/posts")]
+    [Route("api/postsQuestion")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsQuestionController : ControllerBase
     {
         private readonly Context _context;
 
-        public PostsController(Context context)
+        public PostsQuestionController(Context context)
         {
             _context = context;
         }
@@ -27,21 +27,7 @@ namespace prid_1819_g13.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             return posts.PostQuestToDTO();
         }
-        // [HttpGet("last")]
-        // public async Task<ActionResult<PostQuestionDTO>> GetLast()
-        // {
-        //     var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
-        //     return posts.Last().PostQuestToDTO();
-        // }
-        [HttpGet("allRep/{id}/{acceptedId}")]
-        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id, int acceptedId)
-        {
-            return (await _context.Posts
-            .Where(p => p.ParentId == id && p.Id != acceptedId)
-            .OrderByDescending(p => p.Votes.Sum(v => v.UpDown))
-            .ToListAsync())
-            .PostRepToDTO();
-        }
+ 
         [HttpGet("{id}")]
         public async Task<ActionResult<PostQuestionDTO>> GetPostById(int id)
         {
@@ -50,14 +36,7 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             return post.PostQuestToDTO();
         }
-        [HttpGet("rep/{id}")]
-        public async Task<ActionResult<PostReponseDTO>> GetPostRepById(int id)
-        {
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
-                return NotFound();
-            return post.PostRepToDTO();
-        }
+
         [HttpGet("newest")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNewest()
         {
@@ -67,6 +46,7 @@ namespace prid_1819_g13.Controllers
             .ToListAsync())
             .PostQuestToDTO();
         }
+
         [HttpGet("nonAnswered")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNonAnswered()
         {
@@ -76,6 +56,7 @@ namespace prid_1819_g13.Controllers
             .ToListAsync())
             .PostQuestToDTO();
         }
+
         [HttpGet("withTags")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetWithTags()
         {
@@ -85,6 +66,7 @@ namespace prid_1819_g13.Controllers
             .ToListAsync();
             return Ok(posts.PostQuestToDTO());
         }
+
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
@@ -103,69 +85,38 @@ namespace prid_1819_g13.Controllers
             var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
             return q.PostQuestToDTO();
         }
+
         [HttpGet("filter/{filter}")]
-        [HttpPost]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string filter)
         {
-            var posts = _context.Posts.Select(p => new {
-                                         p.Id,
-                                         ParentId = p.ParentId == null ? p.Id : p.ParentId,
-                                     })
-                                     .GroupBy(p => new { p.Id, p.ParentId })
-                                     .ToListAsync();
+            var questions = await _context.Posts.Where(p => p.Title != null).ToListAsync();
+            if(!string.IsNullOrWhiteSpace(filter)){
+                StringComparison comp = StringComparison.OrdinalIgnoreCase;
+                questions = questions.Where(
+                    question => 
+                        question.Body.Contains(filter, comp) ||
+                        question.User.Pseudo.Contains(filter, comp) ||
+                        (
+                            question.Title != null && question.Title.Contains(filter,comp)
+                        )
+                        || 
+                        (
+                            question.Comments != null && question.Comments.Any(comment => comment.Body.Contains(filter,comp))
+                        )
+                        ||
+                        (
+                            question.Reponses != null && question.Reponses.Any(reponse => reponse.Body.Contains(filter,comp))
+                        )
+                        || 
+                        (
+                            question.Tags != null && question.Tags.Any(tag => tag.Name.Contains(filter,comp))
+                        )
 
-            return null;
-        }
-        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
-        {
-            var post = await _context.Posts.FindAsync(data.Id);
-            if (post != null)
-            {
-                if (data.Id != post.Id)
-                {
-                    return BadRequest();
-                }
-                post.Body = data.Body;
-                post.Timestamp = DateTime.Now;
-                _context.Entry(post).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                ).ToList();
             }
-            else
-            {
-                post = new Post()
-                {
-                    AuthorId = data.User.Id,
-                    ParentId = data.ParentId,
-                    Body = data.Body,
-                    Timestamp = DateTime.Now
-                };
-                _context.Posts.Add(post);
-                var res = await _context.SaveChangesAsyncWithValidation();
-                if (!res.IsEmpty)
-                    return BadRequest(res);
-                return NoContent();
-            }
-
+            return questions.PostQuestToDTO();
         }
-
-        [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
-        public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId, int acceptedPostId)
-        {
-            var question = await _context.Posts.FindAsync(questionId);
-            if (questionId != question.Id)
-            {
-                return BadRequest();
-            }
-            question.AcceptedPostId = acceptedPostId;
-
-            _context.Entry(question).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
             var question = await _context.Posts.FindAsync(id);
@@ -186,29 +137,6 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-        [Authorized(Role.Admin)]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var post = await _context.Posts.FindAsync(id);
-            var question = await _context.Posts.FindAsync(post.ParentId);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            if (question.AcceptedPostId == post.Id)
-            {
-                question.AcceptedPostId = null;
-                _context.Entry(question).State = EntityState.Modified;
-            }
-            _context.Votes.RemoveRange(post.Votes);
-            _context.Comments.RemoveRange(post.Comments);
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-
         [HttpPut]
         public async Task<IActionResult> updatePost(string title, string body, int id)
         {
