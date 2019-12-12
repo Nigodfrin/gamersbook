@@ -77,7 +77,11 @@ export class CreateQuestionComponent implements OnInit {
   }
   update() {
     var id = +this.route.snapshot.paramMap.get('id');
-    this.postService.update(this.ctlTitle.value, this.ctlBody.value, id );
+    var post: Post = new Post({body: this.ctlBody.value , title: this.ctlTitle.value,id: id });
+    this.postService.update( post ).subscribe();
+  }
+  checked(){
+
   }
 
 

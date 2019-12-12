@@ -82,7 +82,7 @@ namespace prid_1819_g13.Controllers
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
-            //  var q =  _context.Posts
+             // var q =  _context.Posts
             //     .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
             //     {
             //         p.Id,
@@ -108,19 +108,7 @@ namespace prid_1819_g13.Controllers
              return q.PostQuestToDTO();
          
         }
-        [HttpGet("filter/{filter}")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string filter)
-        {
-            var posts = _context.Posts.Select(p => new {
-                                         p.Id,
-                                         ParentId = p.ParentId == null ? p.Id : p.ParentId,
-                                     })
-                                     .GroupBy(p => new { p.Id, p.ParentId })
-                                     .ToListAsync();
-
-            return null;
-        }
         public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
         {
             var post = await _context.Posts.FindAsync(data.Id);
@@ -238,15 +226,15 @@ namespace prid_1819_g13.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> updatePost(string title, string body, int id)
+        public async Task<IActionResult> updatePost(PostQuestionDTO data)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.FindAsync(data.Id);
             if (post == null)
             {
                 return BadRequest();
             }
-            post.Title = title;
-            post.Body = body;
+            post.Title = data.Title;
+            post.Body = data.Body;
             _context.Entry(post).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
