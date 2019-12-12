@@ -27,12 +27,6 @@ namespace prid_1819_g13.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             return posts.PostQuestToDTO();
         }
-        // [HttpGet("last")]
-        // public async Task<ActionResult<PostQuestionDTO>> GetLast()
-        // {
-        //     var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
-        //     return posts.Last().PostQuestToDTO();
-        // }
         [HttpGet("allRep/{id}/{acceptedId}")]
         public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id, int acceptedId)
         {
@@ -88,20 +82,31 @@ namespace prid_1819_g13.Controllers
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
-            const string rawSQL = @"
-            SELECT posts.*, MaxScore FROM posts, 
-            (SELECT parentid, max(Score) MaxScore 
-            FROM (
-                SELECT posts.Id, ifnull(posts.ParentId, posts.id) ParentId, ifnull(sum(votes.UpDown), 0) Score 
-                FROM posts LEFT JOIN votes ON votes.PostId = posts.Id 
-                GROUP BY posts.Id,ParentId
-                ) as tbl1 
-                GROUP by parentid
-                ) as q1 
-                WHERE posts.id = q1.parentid
-                ORDER By q1.MaxScore desc, Timestamp desc;";
-            var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
-            return q.PostQuestToDTO();
+            //  var q =  _context.Posts
+            //     .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+            //     {
+            //         p.Id,
+            //         ParentId = p.ParentId == null ? p.Id : p.ParentId,
+            //         UpDown = v == null ? 0 : v.UpDown,
+            //     })
+            //     .GroupBy(pv => new { pv.Id, pv.ParentId })
+            //     .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+            //     .AsEnumerable()   // obligé de ramener les données et de faire le reste en mémoire car EF n'accepte pas 2 GroupBy
+            //     .GroupBy(p => p.ParentId)
+            //     .Select(g => new { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+            //     .OrderByDescending(r => r.MaxScore)
+                
+            //     ;
+            //     var posts = new List<Post>();
+            //     foreach (var item in q)
+            //     {
+            //         item.Post.MaxScore = item.MaxScore;
+            //         posts.Add(item.Post);
+            //     };
+            // return posts.PostQuestToDTO();
+            var q =  _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
+             return q.PostQuestToDTO();
+         
         }
         [HttpPost]
         public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
@@ -137,7 +142,30 @@ namespace prid_1819_g13.Controllers
             }
 
         }
+        [HttpPost("add")]
+        public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var newQuestion = new Post()
+            {
+                AuthorId = user.Id,
+                ParentId = null,
+                Title = data.Title,
+                Body = data.Body,
+            };
+            if(data.Tags != null){
+                var postTag = data.Tags.Select( x => new PostTag { TagId = x.Id});
+                newQuestion.PostTags.AddRange(postTag);
+            }
 
+            _context.Posts.Add(newQuestion);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return NoContent();
+           //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
+        }
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
         public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId, int acceptedPostId)
         {

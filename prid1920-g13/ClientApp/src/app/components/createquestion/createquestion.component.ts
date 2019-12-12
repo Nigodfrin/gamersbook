@@ -68,20 +68,15 @@ export class CreateQuestionComponent implements OnInit {
   }
   submit(): any {
     const selectedOrderIds = this.frm.value.tagsForm
-      .map((v, i) => v ? this.tags[i].id : null)
+      .map((v, i) => v ? this.tags[i] : null)
       .filter(v => v !== null);
     return selectedOrderIds;
   }
   add() {
-    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value).subscribe();
-    // this.postService.getLast().subscribe(post => {
-    //  this.post = post;
-    //})       
-    this.postTagService.addPostTag(this.submit());
+    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.submit() ).subscribe();      
   }
   update() {
     var id = +this.route.snapshot.paramMap.get('id');
-    console.log(id);
     this.postService.update(this.ctlTitle.value, this.ctlBody.value, id );
   }
 
