@@ -70,20 +70,31 @@ namespace prid_1819_g13.Controllers
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
-            const string rawSQL = @"
-            SELECT posts.*, MaxScore FROM posts, 
-            (SELECT parentid, max(Score) MaxScore 
-            FROM (
-                SELECT posts.Id, ifnull(posts.ParentId, posts.id) ParentId, ifnull(sum(votes.UpDown), 0) Score 
-                FROM posts LEFT JOIN votes ON votes.PostId = posts.Id 
-                GROUP BY posts.Id,ParentId
-                ) as tbl1 
-                GROUP by parentid
-                ) as q1 
-                WHERE posts.id = q1.parentid
-                ORDER By q1.MaxScore desc, Timestamp desc;";
-            var q = await _context.Posts.FromSql(rawSQL).ToListAsync();
-            return q.PostQuestToDTO();
+             // var q =  _context.Posts
+            //     .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
+            //     {
+            //         p.Id,
+            //         ParentId = p.ParentId == null ? p.Id : p.ParentId,
+            //         UpDown = v == null ? 0 : v.UpDown,
+            //     })
+            //     .GroupBy(pv => new { pv.Id, pv.ParentId })
+            //     .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
+            //     .AsEnumerable()   // obligé de ramener les données et de faire le reste en mémoire car EF n'accepte pas 2 GroupBy
+            //     .GroupBy(p => p.ParentId)
+            //     .Select(g => new { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
+            //     .OrderByDescending(r => r.MaxScore)
+                
+            //     ;
+            //     var posts = new List<Post>();
+            //     foreach (var item in q)
+            //     {
+            //         item.Post.MaxScore = item.MaxScore;
+            //         posts.Add(item.Post);
+            //     };
+            // return posts.PostQuestToDTO();
+            var q =  _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
+             return q.PostQuestToDTO();
+         
         }
 
         [HttpGet("filter/{filter}")]
@@ -116,6 +127,64 @@ namespace prid_1819_g13.Controllers
             }
             return questions.PostQuestToDTO();
         }
+        [HttpPost]
+        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
+        {
+            var post = await _context.Posts.FindAsync(data.Id);
+            if (post != null)
+            {
+                if (data.Id != post.Id)
+                {
+                    return BadRequest();
+                }
+                post.Body = data.Body;
+                post.Timestamp = DateTime.Now;
+                _context.Entry(post).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            else
+            {
+                post = new Post()
+                {
+                    AuthorId = data.User.Id,
+                    ParentId = data.ParentId,
+                    Body = data.Body,
+                    Timestamp = DateTime.Now
+                };
+                _context.Posts.Add(post);
+                var res = await _context.SaveChangesAsyncWithValidation();
+                if (!res.IsEmpty)
+                    return BadRequest(res);
+                return NoContent();
+            }
+
+        }
+        [HttpPost("add")]
+        public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var newQuestion = new Post()
+            {
+                AuthorId = user.Id,
+                ParentId = null,
+                Title = data.Title,
+                Body = data.Body,
+            };
+            if(data.Tags != null){
+                var postTag = data.Tags.Select( x => new PostTag { TagId = x.Id});
+                newQuestion.PostTags.AddRange(postTag);
+            }
+
+            _context.Posts.Add(newQuestion);
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
+            return NoContent();
+           //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
@@ -138,15 +207,15 @@ namespace prid_1819_g13.Controllers
             return NoContent();
         }
         [HttpPut]
-        public async Task<IActionResult> updatePost(string title, string body, int id)
+        public async Task<IActionResult> updatePost(PostQuestionDTO data)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.FindAsync(data.Id);
             if (post == null)
             {
                 return BadRequest();
             }
-            post.Title = title;
-            post.Body = body;
+            post.Title = data.Title;
+            post.Body = data.Body;
             _context.Entry(post).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 

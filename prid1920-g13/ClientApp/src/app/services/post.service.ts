@@ -3,6 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
 import { of, Observable } from "rxjs";
+import { Tag } from "../models/Tag";
 @Injectable({ providedIn: 'root' })
 export class PostService {
 
@@ -26,8 +27,9 @@ export class PostService {
       })
     );
   }
-  update(title: string, body: string, id: number): Observable<boolean> {
-    return this.http.put<Post>(`${this.baseUrl}api/postsQuestion`, { title: title, body: body, id: id }).pipe(
+  update(post: Post): Observable<boolean> {
+    console.log(post);
+    return this.http.put<Post>(`${this.baseUrl}api/postsQuestion`, post).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -35,8 +37,8 @@ export class PostService {
       })
     );
   }
-  addQuestion(title: string, body: string): Observable<boolean> {
-    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion`, new Post({ title: title, body: body })).pipe(
+  addQuestion(title: string, body: string, tags: Tag[]): Observable<boolean> {
+    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion`, new Post({ title: title, body: body, tags: tags })).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
