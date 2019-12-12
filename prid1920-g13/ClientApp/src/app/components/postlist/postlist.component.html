@@ -4,6 +4,7 @@
   <span class="col-2">
 <a class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</a>
   </span>
+  <input [(ngModel)]="test" placeholder="Search" (ngModelChange)="onChange($event)" type="text">
   <mat-button-toggle-group class="offset-7">
     <mat-button-toggle (click)="newest()">Newest</mat-button-toggle>
     <mat-button-toggle (click)="votes()">Votes</mat-button-toggle>

@@ -76,7 +76,7 @@
                         </mat-icon>
                     </div>
                     <markdown class="col-10" style="word-wrap: break-word;">{{reponse.body}}</markdown>
-                    <a *ngIf="currentUser != undefined && currentUser.id == question.user.id" class="offset-1 btn btn-success"
+                    <a  class="offset-1 btn btn-success"
                         (click)="acceptAnswer(question,reponse)">Accept Answer</a>
                     <span class="offset-5 col-2">Answered by {{reponse.user.pseudo}}</span>
                     <span class="col-3">{{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>

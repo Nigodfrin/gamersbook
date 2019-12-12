@@ -39,7 +39,7 @@ namespace prid_1819_g13.Models
         [NotMapped]
         public int MaxScore 
         {
-            get => Reponses.Max(p => p.Score) > this.Score ?  Reponses.Max(p => p.Score) : this.Score ;
+            get => Reponses.Count() > 0 ? Reponses.Max(p => p.Score) > this.Score ?  Reponses.Max(p => p.Score) : this.Score : 0 ;
         }
 
     }

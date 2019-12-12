@@ -73,7 +73,7 @@ export class CreateQuestionComponent implements OnInit {
     return selectedOrderIds;
   }
   add() {
-    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.submit() ).subscribe();      
+    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.submit()).subscribe();      
   }
   update() {
     var id = +this.route.snapshot.paramMap.get('id');

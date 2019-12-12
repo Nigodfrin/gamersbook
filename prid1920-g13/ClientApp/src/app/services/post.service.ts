@@ -6,14 +6,23 @@ import { of, Observable } from "rxjs";
 import { Tag } from "../models/Tag";
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  
+
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
   getAll() {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts`)
-    .pipe(map(res => res.map(m => new Post(m))));
+      .pipe(map(res => res.map(m => new Post(m))));
   }
   addPost(post: Post) {
     return this.http.post<Post>(`${this.baseUrl}api/posts`, post).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  filter(filter: string) {
+    return this.http.get<Post[]>(`${this.baseUrl}api/posts/filter/${filter}`).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -40,7 +49,7 @@ export class PostService {
     );
   }
   update(title: string, body: string, id: number): Observable<boolean> {
-    return this.http.put<Post>(`${this.baseUrl}api/posts`, { title: title, body: body, id: id}).pipe(
+    return this.http.put<Post>(`${this.baseUrl}api/posts`, { title: title, body: body, id: id }).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -49,7 +58,7 @@ export class PostService {
     );
   }
   addQuestion(title: string, body: string, tags: Tag[]): Observable<boolean> {
-    return this.http.post<Post>(`${this.baseUrl}api/posts/add`, { title: title, body: body, tags: tags }).pipe(
+    return this.http.post<Post>(`${this.baseUrl}api/posts`, new Post({ title: title, body: body, tags: tags })).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -89,13 +98,13 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}api/posts/votes`)
       .pipe(map(res => res.map((m) => new Post(m))));
   }
-    putAcceptedPost(question:Post,acceptedPostId: number): Observable<boolean> {
-      return this.http.get<Post>(`${this.baseUrl}api/posts/putAccepted/${question.id}/${acceptedPostId}`)
+  putAcceptedPost(question: Post, acceptedPostId: number): Observable<boolean> {
+    return this.http.get<Post>(`${this.baseUrl}api/posts/putAccepted/${question.id}/${acceptedPostId}`)
       .pipe(map(res => true),
-      catchError(err => {
-        console.error(err);
-        return of(false);
-      })
+        catchError(err => {
+          console.error(err);
+          return of(false);
+        })
       );
-    }
+  }
 }

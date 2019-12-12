@@ -22,6 +22,7 @@ export class PostListComponent implements OnInit {
   posts: Post[];
   oneRepInQuestion: boolean;
   CurrentUser: User;
+  test: string;
 
   constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
@@ -42,6 +43,12 @@ export class PostListComponent implements OnInit {
       this.posts = posts;
     })
   }
+  onChange(filter: string) {
+    this.postService.filter(filter).subscribe(posts => {
+      console.log(posts);
+    });
+
+}
   votes() {
     var s : number;
     this.postService.getOrderByVotes().subscribe((posts)  => {
