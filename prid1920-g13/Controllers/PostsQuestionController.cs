@@ -11,6 +11,7 @@ using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
+     [Authorize]
     [Route("api/postsQuestion")]
     [ApiController]
     public class PostsQuestionController : ControllerBase
@@ -21,6 +22,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetAll()
         {
@@ -37,68 +39,41 @@ namespace prid_1819_g13.Controllers
             return post.PostQuestToDTO();
         }
 
-        [HttpGet("newest")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNewest()
+
+        public List<Post> GetNewest(List<Post> questions)
         {
-            return (await _context.Posts
-            .Where(p => p.Title != null)
+            return (questions
             .OrderByDescending(a => a.Timestamp)
-            .ToListAsync())
-            .PostQuestToDTO();
+            .ToList());
         }
 
-        [HttpGet("nonAnswered")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetNonAnswered()
+
+        public List<Post> GetNonAnswered(List<Post> questions)
         {
-            return (await _context.Posts
-            .Where(p => p.Title != null && p.AcceptedPost == null)
+            return ( questions
+            .Where(p => p.AcceptedPost == null)
             .OrderByDescending(a => a.Timestamp)
-            .ToListAsync())
-            .PostQuestToDTO();
+            .ToList());
         }
 
-        [HttpGet("withTags")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetWithTags()
+        public List<Post> GetWithTags(List<Post> questions)
         {
-            var posts = await _context.Posts.
-            Where(p => p.Title != null && p.PostTags.Count() > 0)
+            var posts =  questions.
+            Where(p =>p.PostTags.Count() > 0)
             .OrderByDescending(a => a.Timestamp)
-            .ToListAsync();
-            return Ok(posts.PostQuestToDTO());
+            .ToList();
+            return posts;
         }
-
-        [HttpGet("votes")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
+        public List<Post> GetOrderByVotes(List<Post> questions)
         {
-             // var q =  _context.Posts
-            //     .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
-            //     {
-            //         p.Id,
-            //         ParentId = p.ParentId == null ? p.Id : p.ParentId,
-            //         UpDown = v == null ? 0 : v.UpDown,
-            //     })
-            //     .GroupBy(pv => new { pv.Id, pv.ParentId })
-            //     .Select(g => new { g.Key.Id, g.Key.ParentId, Score = g.Sum(pv => pv.UpDown) })
-            //     .AsEnumerable()   // obligé de ramener les données et de faire le reste en mémoire car EF n'accepte pas 2 GroupBy
-            //     .GroupBy(p => p.ParentId)
-            //     .Select(g => new { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
-            //     .OrderByDescending(r => r.MaxScore)
-                
-            //     ;
-            //     var posts = new List<Post>();
-            //     foreach (var item in q)
-            //     {
-            //         item.Post.MaxScore = item.MaxScore;
-            //         posts.Add(item.Post);
-            //     };
-            // return posts.PostQuestToDTO();
-            var q =  _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
-             return q.PostQuestToDTO();
+            var q =  questions.AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
+             return q;
          
         }
-
-        [HttpGet("filter/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string filter)
+        [AllowAnonymous]
+        [HttpGet("filter/{selectedVal}")]
+        [HttpGet("filter/{selectedVal}/{filter}")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string selectedVal,string filter = "")
         {
             var questions = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             if(!string.IsNullOrWhiteSpace(filter)){
@@ -125,43 +100,21 @@ namespace prid_1819_g13.Controllers
 
                 ).ToList();
             }
+                if(selectedVal == "newest"){
+                    questions = this.GetNewest(questions);
+                }
+                if(selectedVal == "votes"){
+                    questions = GetOrderByVotes(questions);
+                }
+                if(selectedVal == "tags"){
+                    questions = this.GetWithTags(questions);
+                }
+                if(selectedVal == "unanswered"){
+                    questions = this.GetNonAnswered(questions);
+                }
             return questions.PostQuestToDTO();
         }
         [HttpPost]
-        public async Task<ActionResult<PostQuestionDTO>> CreatePost(PostReponseDTO data)
-        {
-            var post = await _context.Posts.FindAsync(data.Id);
-            if (post != null)
-            {
-                if (data.Id != post.Id)
-                {
-                    return BadRequest();
-                }
-                post.Body = data.Body;
-                post.Timestamp = DateTime.Now;
-                _context.Entry(post).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            else
-            {
-                post = new Post()
-                {
-                    AuthorId = data.User.Id,
-                    ParentId = data.ParentId,
-                    Body = data.Body,
-                    Timestamp = DateTime.Now
-                };
-                _context.Posts.Add(post);
-                var res = await _context.SaveChangesAsyncWithValidation();
-                if (!res.IsEmpty)
-                    return BadRequest(res);
-                return NoContent();
-            }
-
-        }
-        [HttpPost("add")]
         public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
         {
             var pseudo = User.Identity.Name;

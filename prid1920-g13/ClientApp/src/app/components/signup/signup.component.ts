@@ -17,6 +17,7 @@ export class SignUpComponent {
     public ctlPasswordConfirm: FormControl;
     public ctlEmail: FormControl;
     public ctlBirthdate: FormControl;
+    pseudoPattern = "^[a-zA-Z][a-zA-Z0-9_]*";
 
     constructor(
         public authService: AuthenticationService,  // pour pouvoir faire le login
@@ -24,7 +25,7 @@ export class SignUpComponent {
         private fb: FormBuilder                     // pour construire le formulaire, du côté TypeScript
     ) 
     {
-        this.ctlPseudo = this.fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)], [this.pseudoUsed()]);
+        this.ctlPseudo = this.fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(10),Validators.pattern(this.pseudoPattern)], [this.pseudoUsed()]);
         this.ctlPassword = this.fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]);
         this.ctlFirstname = this.fb.control('', [Validators.minLength(3), Validators.maxLength(50)]);
         this.ctlLastname = this.fb.control('', [Validators.minLength(3), Validators.maxLength(50)]);
@@ -89,8 +90,8 @@ export class SignUpComponent {
         let firstname: string = group.value.firstname;
         if (lastname == "" && firstname != "") {
             return { lastnameError: true };
-
-        } else if (firstname == "" && lastname != "") {
+        }
+        if (firstname == "" && lastname != "") {
             return { firstnameError: true };
         }
         return group.value.password === group.value.passwordConfirm ? null : { passwordNotConfirmed: true };

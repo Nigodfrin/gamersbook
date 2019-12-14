@@ -2,7 +2,7 @@
   <div class="row">
     <h2 class="col-10">All Questions</h2>
     <span class="col-2">
-      <a class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</a>
+      <button [disabled]="isDisabled" class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</button>
     </span>
     <input [(ngModel)]="test" placeholder="Search" class="col-3" (ngModelChange)="onChange($event)" type="text">
     <mat-button-toggle-group #group="matButtonToggleGroup" class="offset-5" [value]="selectedValue" (change)="onValChange(group.value)">
@@ -20,7 +20,10 @@
         <mat-card-title style="font-size: 16px;">MaxScore : {{post.maxScore}}</mat-card-title>
         <mat-card-title-group>
           <mat-card-title>
-            <h4><a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a></h4>
+            <h4>
+              <span *ngIf="isDisabled">{{post.title}}</span>
+              <a *ngIf="!isDisabled" [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
+            </h4>
           </mat-card-title>
           <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}}</mat-card-subtitle>
         </mat-card-title-group>
@@ -40,7 +43,7 @@
           <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline
           </mat-icon>
         </span>
-        <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
+        <button [disabled]="isDisabled" class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
           [routerLink]="['/readquestion',post.id]">See</button>
         <button mat-icon-button tabindex="-1">
           <mat-icon (click)="delete(post)">delete</mat-icon>

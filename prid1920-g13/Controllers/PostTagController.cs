@@ -11,7 +11,7 @@ using System;
 
 namespace prid_1819_g13.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/posttags")]
     [ApiController]
     public class PostTagController : ControllerBase
@@ -21,6 +21,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
+        
         [HttpPost("add")]
         public async Task<ActionResult<PostTagDTO>> CreatePostTag(int[] tagid)
         {

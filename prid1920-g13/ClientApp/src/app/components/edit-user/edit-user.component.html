@@ -4,22 +4,28 @@
         <mat-form-field>
             <input matInput placeholder="Pseudo" [formControl]="ctlPseudo" required>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('required')">Required</mat-error>
+            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('maxlength')">Maximum letter is {{ctlPseudo.errors['maxlength'].requiredLength}} </mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('minlength')">Minimum length is {{ctlPseudo.errors['minlength'].requiredLength}}</mat-error>
             <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pseudoUsed')">Pseudo already in use</mat-error>
-            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('forbiddenValue')">Forbiddent value 'abc'</mat-error>
+            <mat-error class="field-error" *ngIf="ctlPseudo.hasError('pattern')"> Doit commencer par une lettre, ne peut contenir que chiffres et _</mat-error>
         </mat-form-field>
         <mat-form-field>
             <input matInput [placeholder]="'Password ' + (isNew ? '' : ' (leave blank if no change)')" [formControl]="ctlPassword" type="password" [required]="isNew" autocomplete="new-password">
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('required')">Required</mat-error>
             <mat-error class="field-error" *ngIf="ctlPassword.hasError('minlength')">Minimum length is {{ctlPassword.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="field-error" *ngIf="ctlPassword.hasError('maxlength')">Maximum length is {{ctlPassword.errors['maxlength'].requiredLength}}</mat-error>
         </mat-form-field>
         <mat-form-field>
             <input matInput placeholder="First name" [formControl]="ctlFirstname">
-            <mat-error class="field-error" *ngIf="frm.hasError('firstnameError')">First name error</mat-error>
+            <mat-error class="field-error" *ngIf="frm.hasError('firstnameError')">Can't exist without last name</mat-error>
+            <mat-error class="field-error" *ngIf="ctlFirstname.hasError('minlength')">Minimum length is {{ctlFirstname.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="field-error" *ngIf="ctlFirstname.hasError('maxlength')">Maximum length is {{ctlFirstname.errors['maxlength'].requiredLength}}</mat-error>
         </mat-form-field>
         <mat-form-field>
             <input matInput placeholder="Last name" [formControl]="ctlLastname">
-            <mat-error class="field-error" *ngIf="frm.hasError('lastnameError')">Last name error</mat-error>
+            <mat-error class="field-error" *ngIf="frm.hasError('lastnameError')">Can't exist without first name</mat-error>
+            <mat-error class="field-error" *ngIf="ctlLastname.hasError('minlength')">Minimum length is {{ctlLastname.errors['minlength'].requiredLength}}</mat-error>
+            <mat-error class="field-error" *ngIf="ctlLastname.hasError('maxlength')">Minimum length is {{ctlLastname.errors['maxlength'].requiredLength}}</mat-error>
         </mat-form-field>
         <mat-form-field>
             <input matInput placeholder="Email" [formControl]="ctlEmail">
@@ -41,6 +47,8 @@
         </mat-form-field>
     </div>
     <div class="footer">
+            <mat-error class="float-left" *ngIf="frm.hasError('lastnameError')">The lastname error</mat-error>
+            <mat-error class="float-left" *ngIf="frm.hasError('firstnameError')">The firstname error</mat-error>
         <button type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">{{!isNew ? 'Update' : 'Add'}}</button>
         <button type="reset" mat-button (click)="cancel()">Cancel</button>
     </div>

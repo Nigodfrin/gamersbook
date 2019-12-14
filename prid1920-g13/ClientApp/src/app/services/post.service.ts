@@ -14,6 +14,7 @@ export class PostService {
   }
 
   filter(selectedVal: string,filter: string) {
+
     return this.http.get<Post[]>(`${this.baseUrl}api/postsQuestion/filter/${selectedVal}/${filter}`)
       .pipe(map(res => res.map(m => new Post(m))));
 
@@ -52,22 +53,7 @@ export class PostService {
       catchError(err => of(null))
     );
   }
-  // getNewest() {
-  //   return this.http.get<Post[]>(`${this.baseUrl}api/postsQuestion/newest`)
-  //     .pipe(map(res => res.map(m => new Post(m))));
-  // }
-  // getNonAnswered() {
-  //   return this.http.get<Post[]>(`${this.baseUrl}api/postsQuestion/nonAnswered`)
-  //     .pipe(map(res => res.map(m => new Post(m))));
-  // }
-  // getWithTags() {
-  //   return this.http.get<Post[]>(`${this.baseUrl}api/postsQuestion/withTags`)
-  //     .pipe(map(res => res.map(m => new Post(m))));
-  // }
-  // getOrderByVotes() {
-  //   return this.http.get<Post[]>(`${this.baseUrl}api/postsQuestion/votes`)
-  //     .pipe(map(res => res.map((m) => new Post(m))));
-  // }
+
   addPost(post: Post) {
     return this.http.post<Post>(`${this.baseUrl}api/postRep`, post).pipe(
       map(res => true),

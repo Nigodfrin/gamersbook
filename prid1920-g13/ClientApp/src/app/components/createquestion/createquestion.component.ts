@@ -8,6 +8,7 @@ import { Post } from "src/app/models/Post";
 import { User } from "src/app/models/User";
 import { ActivatedRoute } from "@angular/router";
 import { post } from "selenium-webdriver/http";
+import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
   templateUrl: './createquestion.component.html',
@@ -25,8 +26,13 @@ export class CreateQuestionComponent implements OnInit {
     private tagService: TagService,
     private postService: PostService,
     private postTagService: PostTagService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router,
+    private authenticationService: AuthenticationService) { }
   ngOnInit() {
+    if (!-this.authenticationService.currentUser) {
+      this.router.navigate(['/']);
+  }
     let id = this.route.snapshot.paramMap.get('id');
     this.isNew = false;
     if (id != null) {

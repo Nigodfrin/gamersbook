@@ -25,17 +25,17 @@ export class EditUserComponent {
     public ctlRole: FormControl;
     public ctlEmail: FormControl;
     public isNew: boolean;
+    pseudoPattern = "^[a-zA-Z][a-zA-Z0-9_]*";
     constructor(public dialogRef: MatDialogRef<EditUserComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { user: User; isNew: boolean; },
         private fb: FormBuilder,
         private userService: UserService,
         private authService: AuthenticationService
     ) {
-        this.ctlPseudo = this.fb.control('', [Validators.required,Validators.minLength(3),this.forbiddenValue('abc')], [this.pseudoUsed()]);
-        this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3)] : []);
+        this.ctlPseudo = this.fb.control('', [Validators.required,Validators.minLength(3),Validators.maxLength(10), Validators.pattern(this.pseudoPattern)], [this.pseudoUsed()]);
+        this.ctlPassword = this.fb.control('', data.isNew ? [Validators.required, Validators.minLength(3),Validators.maxLength(10)] : [Validators.minLength(3),Validators.maxLength(10)]);
         this.ctlFirstname = this.fb.control('', [Validators.minLength(3),Validators.maxLength(50)]);
         this.ctlLastname = this.fb.control('',[Validators.minLength(3),Validators.maxLength(50)]);
-        // this.ctlBirthDate = this.fb.control('', []);
         this.ctlBirthDate = this.fb.control('', [this.validateBirthDate()]);
         this.ctlRole = this.fb.control(Role.Member, []);
         this.ctlEmail = this.fb.control('',[Validators.email,Validators.required],[this.isEmailExist()]);
@@ -51,15 +51,6 @@ export class EditUserComponent {
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.user);
-    }
-    // Validateur bidon qui vérifie que la valeur est différente
-    forbiddenValue(val: string): any {
-        return (ctl: FormControl) => {
-            if (ctl.value === val) {
-                return { forbiddenValue: { currentValue: ctl.value, forbiddenValue: val } };
-            }
-            return null;
-        };
     }
     isEmailExist(): AsyncValidatorFn {
         let timeout: NodeJS.Timer;
@@ -119,10 +110,11 @@ export class EditUserComponent {
     }
     crossValidations(group: FormGroup): ValidationErrors{
         if (!group.value) { return null; }
-        let lastname: string = group.value.lastname;
-        let firstname: string = group.value.firstname;
+        let lastname: string = group.value.lastName;
+        let firstname: string = group.value.firstName;
         if (lastname == "" && firstname != "") {
-            return { lastnameError: true };
+            console.log("test");
+                        return { lastnameError: true };
 
         } else if (firstname == "" && lastname != "") {
             return { firstnameError: true };

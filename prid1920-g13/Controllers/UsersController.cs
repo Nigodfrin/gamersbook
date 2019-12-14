@@ -16,7 +16,7 @@ using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
-
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -27,7 +27,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
-       //  [Authorized(Role.Admin)]
+        [Authorized(Role.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {

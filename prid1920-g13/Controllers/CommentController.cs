@@ -40,7 +40,6 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-        [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

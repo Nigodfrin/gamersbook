@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using PRID_Framework;
 using System.Linq;
 using System;
-
+using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/tags")]
     [ApiController]
     public class TagController : ControllerBase
@@ -21,6 +21,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDTO>>> GetAll()
         {
@@ -33,6 +34,7 @@ namespace prid_1819_g13.Controllers
             return tmp.Count;
 
         }
+        [Authorized(Role.Admin)]
         [HttpPost]
         public async Task<ActionResult<TagDTO>> CreateTag(TagDTO data)
         {
@@ -52,6 +54,7 @@ namespace prid_1819_g13.Controllers
                 return BadRequest(res);
             return CreatedAtAction(nameof(GetOneTag), new { name = newTag.Name }, newTag.ToDTO());
         }
+        [Authorized(Role.Admin)]
         [HttpGet("{name}")]
         public async Task<ActionResult<TagDTO>> GetOneTag(string name)
         {
@@ -60,6 +63,7 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             return tag.ToDTO();
         }
+        [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
         {
@@ -75,6 +79,7 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
+        [Authorized(Role.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTag(int id, TagDTO data)
         {
@@ -89,6 +94,7 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
+        [Authorized(Role.Admin)]
         [HttpGet("available/{name}")]
         public async Task<ActionResult<bool>> IsAvailable(string name) {
             var tag = await _context.Tags.FirstOrDefaultAsync( x => x.Name == name);
