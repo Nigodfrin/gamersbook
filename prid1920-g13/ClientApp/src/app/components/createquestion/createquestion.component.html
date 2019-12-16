@@ -10,15 +10,15 @@
         </div>
         <div class="row">
             <label class="col-12">Tags</label>
-            <div class="form-control" class="col-lg-3 col-md-4 col-sm-6" formArrayName="tagsForm" *ngFor="let tag of frm.controls.tagsForm.controls; let i = index">
-                <mat-checkbox [formControlName]="i">{{tags[i].name}}</mat-checkbox>
+            <div class="form-control" class="col-lg-3 col-md-4 col-sm-6"  formArrayName="tagsForm" *ngFor="let tag of frm.controls.tagsForm.controls; let i = index">
+                <mat-checkbox    [formControlName]="i">{{tags[i].name}}</mat-checkbox>
             </div>
         </div>
     <div class="footer">
         <button *ngIf="isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="add()">Add</button>
-        <button *ngIf="!isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">Update</button>
+        <button *ngIf="!isNew"   type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">Update</button>
         <button type="reset" mat-button (click)="cancel()">Cancel</button>
         <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
-      [routerLink]="['/postlist']">Back</button>
+      [routerLink]="['/postlist']">Back To Question List</button>
     </div>
 </form>

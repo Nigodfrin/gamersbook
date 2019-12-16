@@ -5,6 +5,8 @@ import { TagService } from "src/app/services/tag.service";
 import { PostService } from "src/app/services/post.service";
 import { Post } from "src/app/models/Post";
 import { ActivatedRoute, Router } from "@angular/router";
+import { User } from "src/app/models/User";
+import { post } from "selenium-webdriver/http";
 import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
@@ -18,6 +20,8 @@ export class CreateQuestionComponent implements OnInit {
   public tags: Tag[];
   public question: Post;
   public isNew: boolean;
+  public tmpBody: string;
+  public tmpTitle: string;
 
   constructor(private fb: FormBuilder,
     private tagService: TagService,
@@ -35,7 +39,10 @@ export class CreateQuestionComponent implements OnInit {
       this.postService.getById(id).subscribe(post => {
       this.question = post,
         this.ctlBody = this.fb.control(post.body, [Validators.required]);
-        this.ctlTitle = this.fb.control(post.title, [Validators.required]);; this.frm = this.fb.group({
+        this.ctlTitle = this.fb.control(post.title, [Validators.required]);;
+        this.tmpBody = post.body;
+        this.tmpTitle = post.title;
+        this.frm = this.fb.group({
           body: this.ctlBody,
           title: this.ctlTitle,
           tagsForm: new FormArray([])
@@ -43,6 +50,15 @@ export class CreateQuestionComponent implements OnInit {
         this.tagService.getAll().subscribe(tags => {
           this.tags = tags;
           this.addTags();
+          this.question.tags.forEach( x => {
+            this.tags.forEach( (y , i)=> {
+              if (x.name == y.name){
+                console.log( this.frm.controls.tagsForm[i]);
+                // this.frm.controls.tagsForm[i].setValue(true);
+                
+              }
+            })
+          })
         });
       });
 
@@ -63,8 +79,12 @@ export class CreateQuestionComponent implements OnInit {
     }
   }
   addTags() {
-    this.tags.forEach((o, i) => {
+    this.tags.forEach((o, i) => { this.tags.forEach
       const control = new FormControl();
+      if(this.question){
+        control.setValue(this.question.tags.find(p => p.id == o.id) ? true : false);
+        
+      }
       (this.frm.controls.tagsForm as FormArray).push(control);
     });
   }
@@ -75,11 +95,29 @@ export class CreateQuestionComponent implements OnInit {
     return selectedOrderIds;
   }
   add() {
-    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.submit()).subscribe();      
+    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.submit()).subscribe( res => {
+      this.router.navigate(['/postlist']);
+    });      
   }
   update() {
-    var id = +this.route.snapshot.paramMap.get('id');
-    var post: Post = new Post({body: this.ctlBody.value , title: this.ctlTitle.value,id: id });
-    this.postService.update(post).subscribe();
+    var id =+this.route.snapshot.paramMap.get('id');
+    var post: Post = new Post({id: id,body: this.ctlBody.value , title: this.ctlTitle.value,tags: this.submit() });
+    this.postService.update( post ).subscribe(res => {
+      this.router.navigate(['/postlist']);
+    });
   }
+  cancel(){
+    if(this.isNew){
+      console.log("1");
+      this.ctlBody.setValue('');
+      this.ctlTitle.setValue('');
+    }
+    else{
+      console.log("2");
+      this.ctlTitle.setValue(this.tmpTitle);
+      this.ctlBody.setValue(this.tmpBody);
+    }
+  }
+
+
 }

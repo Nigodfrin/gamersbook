@@ -84,7 +84,7 @@ export class PostListComponent implements OnInit {
     return false;
   }
   delete(post: Post){
-    const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
+    const snackBarRef = this.snackBar.open(` Post will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction){
         this.postService.deletePost(post).subscribe();
