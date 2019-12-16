@@ -1,12 +1,13 @@
 import { User } from "./User";
 import {UserService} from '../services/user.service';
+import { Tag } from "./Tag";
 export class Post {
     public id: any;
     public title: string;
     public body: string;
     public timestamp: Date;
     public reponses: Post[];
-    public tags: any;
+    public tags: Tag[];
     public user: User;
     public score: number;
     public comments: any;

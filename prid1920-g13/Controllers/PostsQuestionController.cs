@@ -27,7 +27,7 @@ namespace prid_1819_g13.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             return posts.PostQuestToDTO();
         }
- 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PostQuestionDTO>> GetPostById(int id)
         {
@@ -70,7 +70,7 @@ namespace prid_1819_g13.Controllers
         [HttpGet("votes")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> GetOrderByVotes()
         {
-             // var q =  _context.Posts
+            // var q =  _context.Posts
             //     .SelectMany(p => p.Votes.DefaultIfEmpty(), (p, v) => new
             //     {
             //         p.Id,
@@ -83,7 +83,7 @@ namespace prid_1819_g13.Controllers
             //     .GroupBy(p => p.ParentId)
             //     .Select(g => new { Post = _context.Posts.Where(p => p.Id == g.Key).SingleOrDefault(), MaxScore = g.Max(p => p.Score) })
             //     .OrderByDescending(r => r.MaxScore)
-                
+
             //     ;
             //     var posts = new List<Post>();
             //     foreach (var item in q)
@@ -92,35 +92,36 @@ namespace prid_1819_g13.Controllers
             //         posts.Add(item.Post);
             //     };
             // return posts.PostQuestToDTO();
-            var q =  _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
-             return q.PostQuestToDTO();
-         
+            var q = _context.Posts.Where(p => p.Title != null).AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
+            return q.PostQuestToDTO();
+
         }
 
         [HttpGet("filter/{filter}")]
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string filter)
         {
             var questions = await _context.Posts.Where(p => p.Title != null).ToListAsync();
-            if(!string.IsNullOrWhiteSpace(filter)){
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
                 StringComparison comp = StringComparison.OrdinalIgnoreCase;
                 questions = questions.Where(
-                    question => 
+                    question =>
                         question.Body.Contains(filter, comp) ||
                         question.User.Pseudo.Contains(filter, comp) ||
                         (
-                            question.Title != null && question.Title.Contains(filter,comp)
-                        )
-                        || 
-                        (
-                            question.Comments != null && question.Comments.Any(comment => comment.Body.Contains(filter,comp))
+                            question.Title != null && question.Title.Contains(filter, comp)
                         )
                         ||
                         (
-                            question.Reponses != null && question.Reponses.Any(reponse => reponse.Body.Contains(filter,comp))
+                            question.Comments != null && question.Comments.Any(comment => comment.Body.Contains(filter, comp))
                         )
-                        || 
+                        ||
                         (
-                            question.Tags != null && question.Tags.Any(tag => tag.Name.Contains(filter,comp))
+                            question.Reponses != null && question.Reponses.Any(reponse => reponse.Body.Contains(filter, comp))
+                        )
+                        ||
+                        (
+                            question.Tags != null && question.Tags.Any(tag => tag.Name.Contains(filter, comp))
                         )
 
                 ).ToList();
@@ -173,8 +174,9 @@ namespace prid_1819_g13.Controllers
                 Title = data.Title,
                 Body = data.Body,
             };
-            if(data.Tags != null){
-                var postTag = data.Tags.Select( x => new PostTag { TagId = x.Id});
+            if (data.Tags != null)
+            {
+                var postTag = data.Tags.Select(x => new PostTag { TagId = x.Id });
                 newQuestion.PostTags.AddRange(postTag);
             }
 
@@ -183,7 +185,7 @@ namespace prid_1819_g13.Controllers
             if (!res.IsEmpty)
                 return BadRequest(res);
             return NoContent();
-           //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
+            //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
@@ -194,17 +196,24 @@ namespace prid_1819_g13.Controllers
             {
                 return NotFound();
             }
-
+            while (_context.PostTags.Where(x => x.PostId == id).Count() != 0)
+            {
+                var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == id);
+                _context.PostTags.Remove(postTag);
+                await _context.SaveChangesAsync();
+            }
             while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
             {
-                var res = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
-                _context.Posts.Remove(res);
+                var comment = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
+                _context.Posts.Remove(comment);
                 await _context.SaveChangesAsync();
             }
             _context.Posts.Remove(question);
-            await _context.SaveChangesAsync();
-
+            var res = await _context.SaveChangesAsyncWithValidation();
+            if (!res.IsEmpty)
+                return BadRequest(res);
             return NoContent();
+
         }
         [HttpPut]
         public async Task<IActionResult> updatePost(PostQuestionDTO data)
@@ -216,6 +225,18 @@ namespace prid_1819_g13.Controllers
             }
             post.Title = data.Title;
             post.Body = data.Body;
+            if (data.Tags != null)
+            {
+                while (_context.PostTags.Where(x => x.PostId == data.Id).Count() != 0)
+                {
+                    var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == data.Id);
+                    _context.PostTags.Remove(postTag);
+                    await _context.SaveChangesAsync();
+                }
+                var newpostTag = data.Tags.Select(x => new PostTag { TagId = x.Id });
+                post.PostTags.AddRange(newpostTag);
+
+            }
             _context.Entry(post).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 

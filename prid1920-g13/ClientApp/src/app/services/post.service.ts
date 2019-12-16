@@ -38,7 +38,7 @@ export class PostService {
     );
   }
   addQuestion(title: string, body: string, tags: Tag[]): Observable<boolean> {
-    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion`, new Post({ title: title, body: body, tags: tags })).pipe(
+    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion/add`, new Post({ title: title, body: body, tags: tags })).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);

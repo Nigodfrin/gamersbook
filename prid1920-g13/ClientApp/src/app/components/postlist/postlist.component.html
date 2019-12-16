@@ -27,7 +27,7 @@
       </mat-card-header>
       <mat-card-content>
         <p>
-          {{(post.body.length>300)? (post.body | slice:0:300)+'..':(post.body)}}
+          {{(post.body.length>300)? (post.body | slice:0:300)+'...':(post.body)}}
         </p>
         <p>
           <mat-chip-list>
