@@ -39,6 +39,7 @@ export class ReadQuestion implements OnInit {
   ngOnInit() {
     let id = this.route.snapshot.paramMap.get('id');
     this.currentUser = this.authService.currentUser;
+    console.log(this.currentUser);
     this.service.getById(id).subscribe(post => {
       this.question = post;
       if (this.question.acceptedPostId != null) {
@@ -98,6 +99,7 @@ export class ReadQuestion implements OnInit {
     this.reponses.forEach(post => {
       post.comments = _.filter(post.comments, m => m.id !== comment.id);
     })
+    this.acceptedPost.comments = _.filter(this.acceptedPost.comments, c => c.id !== comment.id);
     const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction)

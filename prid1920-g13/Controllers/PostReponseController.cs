@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using prid_1819_g13.Models;
 using PRID_Framework;
 using prid_1819_g13.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace prid_1819_g13.Controllers
 {
+    [Authorize]
     [Route("api/postRep")]
     [ApiController]
     public class PostReponseController : ControllerBase
@@ -48,7 +50,6 @@ namespace prid_1819_g13.Controllers
                     return BadRequest();
                 }
                 post.Body = data.Body;
-                post.Timestamp = DateTime.Now;
                 _context.Entry(post).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
@@ -61,7 +62,6 @@ namespace prid_1819_g13.Controllers
                     AuthorId = data.User.Id,
                     ParentId = data.ParentId,
                     Body = data.Body,
-                    Timestamp = DateTime.Now
                 };
                 _context.Posts.Add(post);
                 var res = await _context.SaveChangesAsyncWithValidation();
@@ -86,7 +86,6 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-        [Authorized(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

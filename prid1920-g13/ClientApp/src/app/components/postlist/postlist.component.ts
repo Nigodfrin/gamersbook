@@ -25,14 +25,17 @@ export class PostListComponent implements OnInit {
   test: string;
   selectedValue: string = "all";
   filter: string = "";
+  isDisabled: boolean = false;
 
   constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
     this.postService.getAll().subscribe(posts => {
       this.posts = posts;
       this.CurrentUser = this.authService.currentUser;
+          if(this.CurrentUser == undefined){
+            this.isDisabled = true;
+          }
     })
-
   }
   public onValChange(val: string) {
     this.selectedValue = val;
@@ -61,7 +64,6 @@ export class PostListComponent implements OnInit {
 
 }
   votes() {
-    var s : number;
     this.postService.filter(this.selectedValue,this.filter).subscribe((posts)  => {
       this.posts = posts
       console.log(posts);

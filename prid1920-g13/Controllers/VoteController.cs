@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prid_1819_g13.Models;
 using PRID_Framework;
+using Microsoft.AspNetCore.Authorization;
 
 namespace prid_1819_g13.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/votes")]
     [ApiController]
     public class VoteController : ControllerBase
