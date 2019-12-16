@@ -6,6 +6,10 @@ import { of, Observable } from "rxjs";
 import { Tag } from "../models/Tag";
 @Injectable({ providedIn: 'root' })
 export class PostService {
+  removeAcceptAnswer(question: Post) {
+    return this.http.put<Post>(`${this.baseUrl}api/postsQuestion/removeAcceptAnswer/`,question)
+    .pipe(map((m => new Post(m))));
+  }
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
   getAll() {
@@ -72,8 +76,8 @@ export class PostService {
       })
     );
   }
-  getAllRep(id: number, acceptedId: number) {
-    return this.http.get<Post[]>(`${this.baseUrl}api/postRep/${id}/${acceptedId}`)
+  getAllRep(id: number) {
+    return this.http.get<Post[]>(`${this.baseUrl}api/postRep/${id}`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
   getRepById(id: number) {

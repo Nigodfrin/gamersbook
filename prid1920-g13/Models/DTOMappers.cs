@@ -30,7 +30,7 @@ namespace prid_1819_g13.Models {
                 Timestamp = post.Timestamp,
                 Score = post.Score,
                 User = post.User.ToDTO(),
-                Reponses = post.Reponses.Where(p => p.Id != post.AcceptedPostId).PostRepToDTO(),
+                Reponses = post.Reponses.PostRepToDTO(),
                 Tags = post.Tags.ToDTO(),
                 Comments = post.Comments?.ToDTO(),
                 Votes = post.Votes?.ToDTO(),

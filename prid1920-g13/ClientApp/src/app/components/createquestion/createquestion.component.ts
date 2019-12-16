@@ -3,11 +3,8 @@ import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn, Validators
 import { Tag } from "src/app/models/Tag";
 import { TagService } from "src/app/services/tag.service";
 import { PostService } from "src/app/services/post.service";
-import { PostTagService } from "src/app/services/posttag.service";
 import { Post } from "src/app/models/Post";
-import { User } from "src/app/models/User";
-import { ActivatedRoute } from "@angular/router";
-import { post } from "selenium-webdriver/http";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
@@ -25,12 +22,11 @@ export class CreateQuestionComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private tagService: TagService,
     private postService: PostService,
-    private postTagService: PostTagService,
     private route: ActivatedRoute,
-    private router,
+    private router: Router,
     private authenticationService: AuthenticationService) { }
   ngOnInit() {
-    if (!-this.authenticationService.currentUser) {
+    if (!this.authenticationService.currentUser) {
       this.router.navigate(['/']);
   }
     let id = this.route.snapshot.paramMap.get('id');
@@ -84,11 +80,6 @@ export class CreateQuestionComponent implements OnInit {
   update() {
     var id = +this.route.snapshot.paramMap.get('id');
     var post: Post = new Post({body: this.ctlBody.value , title: this.ctlTitle.value,id: id });
-    this.postService.update( post ).subscribe();
+    this.postService.update(post).subscribe();
   }
-  checked(){
-
-  }
-
-
 }

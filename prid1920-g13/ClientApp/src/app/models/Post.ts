@@ -1,7 +1,7 @@
 import { User } from "./User";
 import {UserService} from '../services/user.service';
 export class Post {
-    public id: any;
+    public id: number;
     public title: string;
     public body: string;
     public timestamp: Date;

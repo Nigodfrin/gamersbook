@@ -22,11 +22,11 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
-         [HttpGet("{id}/{acceptedId}")]
-        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id, int acceptedId)
+         [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> GetAllRep(int id)
         {
             return (await _context.Posts
-            .Where(p => p.ParentId == id && p.Id != acceptedId)
+            .Where(p => p.ParentId == id)
             .OrderByDescending(p => p.Votes.Sum(v => v.UpDown))
             .ToListAsync())
             .PostRepToDTO();

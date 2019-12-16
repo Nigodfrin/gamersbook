@@ -26,7 +26,7 @@ export class PostListComponent implements OnInit {
   selectedValue: string = "all";
   filter: string = "";
   isDisabled: boolean = false;
-
+  
   constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
     this.postService.getAll().subscribe(posts => {
@@ -78,7 +78,6 @@ export class PostListComponent implements OnInit {
     console.log(question);
       question.reponses.forEach(response => {
         if(response.user.id == this.CurrentUser.id){
-          console.log("test");
           return true;
         }
       });

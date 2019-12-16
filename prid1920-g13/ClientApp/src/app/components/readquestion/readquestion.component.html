@@ -20,14 +20,24 @@
     <div class="row" style="font-size: 12px">
         <div class="offset-1 col-11">
             <div class="row" *ngFor="let com of question.comments">
-                <markdown class=" offset-1 col-11">{{com.body}}</markdown>
-                <span class="offset-5 col-2">commented by {{com.author.pseudo}} </span>
-                <span class="col-3">Date : {{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
-                <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
-                    <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
-                    <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
-                </span>
-                <mat-divider class="col-12"></mat-divider>
+                <div class="container">
+                    <div class="row">
+                        <markdown class="offset-1 col-11">{{com.body}}</markdown>
+                    </div>
+                    <div class="row">
+                        <div class="offset-7 col-3">
+                            <p style="width: 100%;">
+                                Commented by {{com.author.pseudo}} <br />
+                                {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
+                            </p>
+                        </div>
+                        <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                            <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
+                            <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                        </span>
+                    </div>
+                    <mat-divider class="col-12"></mat-divider>
+                </div>
             </div>
             <div class="col-1">
                 <mat-icon aria-label="New comment"><a (click)="addComment(question.id)" style="cursor: pointer;">add</a>
@@ -47,34 +57,61 @@
                     <mat-icon style="color:red;"> <a style="cursor: pointer;"
                             (click)="addVote(acceptedPost.id,-1)">thumb_down</a>
                     </mat-icon>
+                    <br />
+                    <mat-icon style="color: darkred"><a title="Remove accepted answer" style="cursor: pointer"
+                            (click)="removeAcceptAnswer(question)">close</a></mat-icon>
                 </div>
                 <mat-icon>done_outline</mat-icon>
-                <markdown class="col-10">{{acceptedPost.body}}</markdown>
-                <span class="offset-5 col-2">Answered by {{acceptedPost.user.pseudo}}</span>
-                <span class="col-3">{{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
-                <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == acceptedPost.user.id">
-                    <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(acceptedPost)">edit</a></mat-icon>
-                    <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(acceptedPost)">delete</a></mat-icon>
-                </span>
-                <mat-divider *ngIf="acceptedPost.comments.length > 0" class="col-12"></mat-divider>
-                <div class="container">
-                        <div class="row" style="font-size: 12px"
-                            *ngFor="let com of acceptedPost.comments; let isLast = last;">
-                            <div class=" offset-2 col-11">{{com.body}}</div>
-                            <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
-                            <span class="col-3">{{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
-                            <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
-                                <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
-                                <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                <br />
+                <div class="col-10">
+                    <div class="container">
+                        <div class="row">
+                            <markdown>{{acceptedPost.body}}</markdown>
+                        </div>
+                        <div class="row">
+                            <div class="offset-7 col-3" style="vertical-align: text-bottom;">
+                                Answered by {{acceptedPost.user.pseudo}} <br />
+                                {{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}
+                            </div>
+                            <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == acceptedPost.user.id">
+                                <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(acceptedPost)">edit</a>
+                                </mat-icon>
+                                <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(acceptedPost)">delete</a>
+                                </mat-icon>
                             </span>
-                            <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
                         </div>
-                        <div class="offset-11 col-1">
-                            <mat-icon aria-label="New comment"><a (click)="addComment(acceptedPost.id)"
-                                    style="cursor: pointer;">add</a></mat-icon>
-                        </div>
+                    </div>
+                    <mat-divider *ngIf="acceptedPost.comments.length > 0" class="col-12"></mat-divider>
                 </div>
-
+                <div class="container">
+                    <div class="row" style="font-size: 12px"
+                        *ngFor="let com of acceptedPost.comments; let isLast = last;">
+                        <div class="container">
+                            <div class="row">
+                                <markdown class="offset-2 col-8">{{com.body}}</markdown>
+                            </div>
+                            <div class="row">
+                                <div class="offset-7 col-3">
+                                    <p style="width: 100%;">
+                                        Commented by {{com.author.pseudo}} <br />
+                                        {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
+                                    </p>
+                                </div>
+                                <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                                    <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
+                                    <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                                </span>
+                                <div class="offset-1 col-11">
+                                    <mat-divider *ngIf="!isLast"></mat-divider>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="offset-11 col-1">
+                        <mat-icon aria-label="New comment"><a (click)="addComment(acceptedPost.id)"
+                                style="cursor: pointer;">add</a></mat-icon>
+                    </div>
+                </div>
                 <mat-divider class="col-12"></mat-divider>
             </div>
         </div>
@@ -88,33 +125,57 @@
                 <mat-icon style="color:red;"> <a style="cursor: pointer;"
                         (click)="addVote(reponse.id,-1)">thumb_down</a>
                 </mat-icon>
+                <br />
+                <mat-icon style="color: green"><a title="Accept answer" style="cursor: pointer"
+                        (click)="acceptAnswer(reponse)">done</a></mat-icon>
             </div>
-            <markdown class="col-10" style="word-wrap: break-word;">{{reponse.body}}</markdown>
-            <a class="offset-1 btn btn-success" (click)="acceptAnswer(question,reponse)">Accept Answer</a>
-            <span class="offset-5 col-2">Answered by {{reponse.user.pseudo}}</span>
-            <span class="col-3">{{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
-            <span class="col-2">
-                <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(reponse)">edit</a></mat-icon>
-                <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(reponse)">delete</a></mat-icon>
-            </span>
+            <div class="col-10">
+                <div class="container">
+                    <div class="row">
+                        <markdown>{{reponse.body}}</markdown>
+                    </div>
+                    <div class="row">
+                        <div class="offset-7 col-3" style="vertical-align: text-bottom;">
+                            Answered by {{reponse.user.pseudo}} <br />
+                            {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}
+                        </div>
+                        <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == reponse.user.id">
+                            <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(reponse)">edit</a></mat-icon>
+                            <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(reponse)">delete</a></mat-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <mat-divider *ngIf="reponse.comments.length > 0" class="col-12"></mat-divider>
             <div class="container">
-                    <div class="row" style="font-size: 12px" *ngFor="let com of reponse.comments; let isLast = last;">
-                        <div class="offset-2 col-11">{{com.body}}</div>
-                        <span class="offset-5 col-2">Commented by {{com.author.pseudo}} </span>
-                        <span class="col-3">{{com.timestamp | date :'d MMM, y, h:mm:ss'}}</span>
-                        <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
-                            <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
-                            <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
-                        </span>
-                        <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
+                <div class="row" style="font-size: 12px" *ngFor="let com of reponse.comments; let isLast = last;">
+                    <div class="container">
+                        <div class="row">
+                            <markdown class="offset-2 col-8">{{com.body}}</markdown>
+                        </div>
+                        <div class="row">
+                            <div class="offset-7 col-3">
+                                <p style="width: 100%;">
+                                    Commented by {{com.author.pseudo}} <br />
+                                    {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
+                                </p>
+                            </div>
+                            <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                                <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
+                                <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                            </span>
+                        </div>
+                        <div class="offset-1 col-11">
+                            <mat-divider></mat-divider>
+                        </div>
                     </div>
-                    <div class="offset-11 col-1">
-                        <mat-icon aria-label="New comment"><a (click)="addComment(reponse.id)"
-                                style="cursor: pointer;">add</a></mat-icon>
-                    </div>
+                    <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
+                </div>
+                <div class="offset-11 col-1">
+                    <mat-icon aria-label="New comment"><a (click)="addComment(reponse.id)"
+                            style="cursor: pointer;">add</a></mat-icon>
+                </div>
             </div>
-            <mat-divider class="col-12"></mat-divider>
         </div>
     </div>
     <div class="row">

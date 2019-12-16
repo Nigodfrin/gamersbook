@@ -39,16 +39,13 @@ export class ReadQuestion implements OnInit {
   ngOnInit() {
     let id = this.route.snapshot.paramMap.get('id');
     this.currentUser = this.authService.currentUser;
-    console.log(this.currentUser);
     this.service.getById(id).subscribe(post => {
       this.question = post;
       if (this.question.acceptedPostId != null) {
-        this.service.getRepById(this.question.acceptedPostId).subscribe(post => {
-          this.acceptedPost = post;
-          this.service.getAllRep(this.question.id, this.acceptedPost.id).subscribe(posts => {
-            this.reponses = posts;
-          });
-        });
+        console.log(this.question.reponses);
+          this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
+          console.log(this.acceptedPost);
+          this.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
       }
       else {
         this.reponses = this.question.reponses;
@@ -57,19 +54,25 @@ export class ReadQuestion implements OnInit {
     });
     ;
   }
+  removeAcceptAnswer(question: Post){
+    this.acceptedPost = null;
+    this.reponses = this.question.reponses;
+    const snackBarRef = this.snackBar.open(` This accepted answer will be deleted`, 'Undo', { duration: 5000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+      if (!res.dismissedByAction){
+        this.service.removeAcceptAnswer(question).subscribe();
+      }
+      else
+        this.refresh();
+    });
+  }
   refresh() {
     let id = this.route.snapshot.paramMap.get('id');
     this.service.getById(id).subscribe(post => {
       this.question = post;
-      console.log(post);
       if (this.question.acceptedPostId != null) {
-        this.service.getRepById(this.question.acceptedPostId).subscribe(post => {
-          this.acceptedPost = post;
-          console.log(post);
-          this.service.getAllRep(this.question.id, this.acceptedPost.id).subscribe(posts => {
-            this.reponses = posts;
-          })
-        });
+          this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);          
+          this.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);          
       }
       else {
         this.reponses = this.question.reponses;
@@ -188,9 +191,9 @@ export class ReadQuestion implements OnInit {
     });
   }
 }
-  acceptAnswer(question: Post, acceptedPost: Post) {
+  acceptAnswer(acceptedPost: Post) {
     this.acceptedPost = null;
-    this.service.putAcceptedPost(question,acceptedPost.id).subscribe(res => {
+    this.service.putAcceptedPost(this.question,acceptedPost.id).subscribe(res => {
       this.acceptedPost = acceptedPost;
       this.refresh();
     });

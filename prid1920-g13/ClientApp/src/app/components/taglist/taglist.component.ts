@@ -6,6 +6,7 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
 import { StateService } from 'src/app/services/state.service';
 import { EditTagComponent} from '../edit-tag/edit-tag.component';
 import * as _ from 'lodash';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
   selector: 'app-taglist',
   templateUrl: './taglist.component.html'
@@ -20,6 +21,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     constructor(
         private tagService: TagService,
         private stateService: StateService,
+        private authService: AuthenticationService,
         public dialog: MatDialog,
         public snackBar: MatSnackBar
     ) {
@@ -112,15 +114,4 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.snackBar.dismiss();
     }
-    // {
-    // tags: Tag[] = [];
-    // tableColumns  :  string[] = ['name', 'number'];
-    // dataSource: MatTableDataSource<Tag> = new MatTableDataSource();
-    // filter: string;
-
-    // constructor(private tagService:TagService) {
-    //     tagService.getAll().subscribe(tags => {
-    //         this.tags = tags;
-    //     })
-    // }
   }

@@ -175,6 +175,17 @@ namespace prid_1819_g13.Controllers
             return NoContent();
 
         }
+        [HttpPut("removeAcceptAnswer")]
+        public async Task<ActionResult<PostQuestionDTO>> removeAcceptAnswer(PostQuestionDTO data){
+            var question = await _context.Posts.FindAsync(data.Id);
+            if(question == null){
+                return BadRequest();
+            }
+            question.AcceptedPostId = null;
+            _context.Entry(question).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return question.PostQuestToDTO();
+        }
 
     }
 }
