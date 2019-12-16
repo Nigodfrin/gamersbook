@@ -35,19 +35,20 @@ namespace prid_1819_g13.Controllers
         }
         [Authorized(Role.Admin)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id ,UserDTO data)
+        public async Task<IActionResult> UpdateUser(int id, UserDTO data)
         {
-             var user = await _context.Users.FindAsync(id);
-             
+            var user = await _context.Users.FindAsync(id);
+
             if (id != user.Id)
             {
                 return BadRequest();
             }
             user.Pseudo = data.Pseudo;
             user.LastName = data.LastName;
-            if (data.Password != null){
+            if (data.Password != null)
+            {
                 user.Password = data.Password;
-            }           
+            }
             user.BirthDate = data.BirthDate;
             user.Email = data.Email;
             user.FirstName = data.FirstName;
@@ -60,7 +61,7 @@ namespace prid_1819_g13.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
         {
-            var user = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == data.Pseudo);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == data.Pseudo);
             if (user != null)
             {
                 var err = new ValidationErrors().Add("Pseudo already in use", nameof(user.Pseudo));
@@ -109,19 +110,22 @@ namespace prid_1819_g13.Controllers
         }
         [AllowAnonymous]
         [HttpGet("available/{pseudo}")]
-        public async Task<ActionResult<bool>> IsAvailable(string pseudo) {
-            var member = await _context.Users.FirstOrDefaultAsync( x => x.Pseudo == pseudo);
+        public async Task<ActionResult<bool>> IsAvailable(string pseudo)
+        {
+            var member = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
             return member == null;
         }
         [AllowAnonymous]
         [HttpGet("verif/{email}")]
-        public async Task<ActionResult<bool>> IsAvailableEmail(string email) {
-            var e = await _context.Users.FirstOrDefaultAsync( x => x.Email == email);
+        public async Task<ActionResult<bool>> IsAvailableEmail(string email)
+        {
+            var e = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             return e == null;
         }
         [AllowAnonymous]
         [HttpPost("signup")]
-        public async Task<ActionResult<UserDTO>> SignUp(UserDTO data) {
+        public async Task<ActionResult<UserDTO>> SignUp(UserDTO data)
+        {
             return await CreateUser(data);
         }
         [AllowAnonymous]
@@ -164,5 +168,52 @@ namespace prid_1819_g13.Controllers
             user.Password = null;
             return user;
         }
+        [HttpPut("reput/{authorid}/{id}")]
+        public async Task<IActionResult> UpdateReputaion(int authorid, int id)
+        {
+            var user = await _context.Users.FindAsync(authorid);
+            var createurquestion = await _context.Users.FindAsync(id);
+
+            if (authorid != user.Id || id != createurquestion.Id)
+            {
+                return BadRequest();
+            }
+            user.Reputation += 15;
+            createurquestion.Reputation += 2;
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("reputation/{id}/{valeur}")]
+        public async Task<IActionResult> UpdateReputaionVote(int id, int valeur)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            var user = await _context.Users.FindAsync(post.AuthorId);
+            var pseudo = User.Identity.Name;
+            var currentuser = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+
+            if (user.Id != post.AuthorId)
+            {
+                return BadRequest();
+            }
+            if (valeur == 1)
+            {
+                user.Reputation += 10;
+            }
+            else
+            {
+                user.Reputation -= 2;
+                currentuser.Reputation -= 1;
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
+
 }

@@ -33,6 +33,7 @@ export class ReadQuestion implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public comservice: commentService,
+    public userservice: UserService,
     private voteService: VoteService
   ) {}
 
@@ -175,7 +176,6 @@ export class ReadQuestion implements OnInit {
               this.refresh();
             }
             else {
-              console.log(10);
               this.refresh();
             }
           });
@@ -185,6 +185,7 @@ export class ReadQuestion implements OnInit {
       if (!err) {
         const vote = new Vote({ authorId: this.authService.currentUser.id, postId: postid, upDown: upVote });
         this.voteService.add(vote).subscribe(res => {
+          this.userservice.changeReputVote( vote.postId, vote.upDown).subscribe();
           this.refresh();
         });
       }
@@ -195,6 +196,7 @@ export class ReadQuestion implements OnInit {
     this.acceptedPost = null;
     this.service.putAcceptedPost(this.question,acceptedPost.id).subscribe(res => {
       this.acceptedPost = acceptedPost;
+      this.userservice.changeReput(this.acceptedPost.user.id, this.question.user.id).subscribe();
       this.refresh();
     });
   }

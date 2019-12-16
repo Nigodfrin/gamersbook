@@ -50,15 +50,6 @@ export class CreateQuestionComponent implements OnInit {
         this.tagService.getAll().subscribe(tags => {
           this.tags = tags;
           this.addTags();
-          this.question.tags.forEach( x => {
-            this.tags.forEach( (y , i)=> {
-              if (x.name == y.name){
-                console.log( this.frm.controls.tagsForm[i]);
-                // this.frm.controls.tagsForm[i].setValue(true);
-                
-              }
-            })
-          })
         });
       });
 
@@ -108,15 +99,15 @@ export class CreateQuestionComponent implements OnInit {
   }
   cancel(){
     if(this.isNew){
-      console.log("1");
       this.ctlBody.setValue('');
       this.ctlTitle.setValue('');
     }
     else{
-      console.log("2");
       this.ctlTitle.setValue(this.tmpTitle);
       this.ctlBody.setValue(this.tmpBody);
     }
+    // if(this.frm.valid)
+    // this.frm.reset();
   }
 
 

@@ -5,10 +5,10 @@
     </div>
     <div class="row" style="border-bottom: 1px solid black">
         <div class="col-1">
-            <mat-icon style="color:green;"> <a style="cursor: pointer;" (click)="addVote(question.id,1)">thumb_up</a>
+            <mat-icon style="color:green;"> <a *ngIf = "currentUser.reputation > 14" style="cursor: pointer;" (click)="addVote(question.id,1)">thumb_up</a>
             </mat-icon>
             <p>{{question.score}}</p>
-            <mat-icon style="color:red;"> <a style="cursor: pointer;" (click)="addVote(question.id,-1)">thumb_down</a>
+            <mat-icon style="color:red;"> <a *ngIf = "currentUser.reputation > 29" style="cursor: pointer;" (click)="addVote(question.id,-1)">thumb_down</a>
             </mat-icon>
         </div>
         <markdown class="col-10"> {{question.body}}</markdown>
@@ -50,11 +50,11 @@
             <h3 class="col-12">Answers</h3>
             <div class="row" *ngIf="acceptedPost">
                 <div class="col-1" style="justify-content: center">
-                    <mat-icon style="color:green;"> <a style="cursor: pointer;"
+                    <mat-icon style="color:green;"> <a *ngIf = "currentUser.reputation > 14" style="cursor: pointer;"
                             (click)="addVote(acceptedPost.id,1)">thumb_up</a>
                     </mat-icon>
                     <p> {{acceptedPost.score}}</p>
-                    <mat-icon style="color:red;"> <a style="cursor: pointer;"
+                    <mat-icon style="color:red;"> <a *ngIf = "currentUser.reputation > 29" style="cursor: pointer;"
                             (click)="addVote(acceptedPost.id,-1)">thumb_down</a>
                     </mat-icon>
                     <br />
@@ -119,10 +119,10 @@
     <div *ngFor="let reponse of reponses">
         <div class="row">
             <div class="col-1">
-                <mat-icon style="color:green;"> <a style="cursor: pointer;" (click)="addVote(reponse.id,1)">thumb_up</a>
+                <mat-icon style="color:green;"> <a *ngIf = "currentUser.reputation > 14" style="cursor: pointer;" (click)="addVote(reponse.id,1)">thumb_up</a>
                 </mat-icon>
                 <p> {{reponse.score}}</p>
-                <mat-icon style="color:red;"> <a style="cursor: pointer;"
+                <mat-icon style="color:red;"> <a *ngIf = "currentUser.reputation > 29" style="cursor: pointer;"
                         (click)="addVote(reponse.id,-1)">thumb_down</a>
                 </mat-icon>
                 <br />
