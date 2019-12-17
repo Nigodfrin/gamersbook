@@ -28,7 +28,7 @@ namespace prid_1819_g13.Models {
                                     Id = 1, Title = "What does 'initialization' exactly mean?",
                                     Body = @"My csapp book says that if global and static variables are initialized, than they are contained in .data section in ELF relocatable object file.
 So my question is that if some `foo.c` code contains 
-```
+```csharp
 int a;
 int main()
 {
@@ -36,7 +36,7 @@ int main()
 }`
 ```
 and `example.c` contains,
-```
+```csharp
 int b = 3;
 int main()
 {

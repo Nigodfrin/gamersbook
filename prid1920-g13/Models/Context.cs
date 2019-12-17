@@ -1,14 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Text;
-using System.Security.Claims;
-//using prid1920_tuto.Helpers;
-using System;
-using PRID_Framework;
 
 namespace prid_1819_g13.Models
 {

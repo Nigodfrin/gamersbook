@@ -69,12 +69,11 @@ namespace prid_1819_g13.Controllers
             var newUser = new User()
             {
                 Pseudo = data.Pseudo,
-                Password = data.Password,
+                Password = TokenHelper.GetPasswordHash(data.Password),
                 LastName = data.LastName,
                 FirstName = data.FirstName,
                 BirthDate = data.BirthDate,
                 Email = data.Email,
-                Role = data.Role
             };
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -102,6 +101,10 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             }
 
+            _context.Votes.RemoveRange(user.Votes);
+            // _context.PostTags.RemoveRange(user.Posts)
+            _context.Posts.RemoveRange(user.Posts);
+            _context.Comments.RemoveRange(user.Comments);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 

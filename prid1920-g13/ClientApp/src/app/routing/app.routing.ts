@@ -11,6 +11,7 @@ import {PostListComponent} from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
 import {TagListComponent} from '../components/taglist/taglist.component';
+import { AuthGuardAuthor } from '../services/authAuthor.guard';
 
 
 
@@ -35,21 +36,30 @@ const appRoutes: Routes = [
     component: PostListComponent
   },
   {
+    path: 'postlist/:name',
+    component: PostListComponent,
+    
+  },
+  {
     path: 'readquestion/:id',
     component: ReadQuestion,
-
   },
   {
     path: 'createquestion',
-    component: CreateQuestionComponent
+    component: CreateQuestionComponent,
+    canActivate: [AuthGuard],
+    data: {roles: [Role.Admin,Role.Member]}
   },
   {
-    path: 'createquestion/:id',
-    component: CreateQuestionComponent
+    path: 'createquestion/:id/:author',
+    component: CreateQuestionComponent,
+    canActivate: [AuthGuardAuthor],
+    data: {roles: [Role.Admin,Role.Member]}
   },
   {
     path: 'taglist',
-    component: TagListComponent
+    component: TagListComponent,
+
   }
   ,
   { path: 'restricted', component: RestrictedComponent },

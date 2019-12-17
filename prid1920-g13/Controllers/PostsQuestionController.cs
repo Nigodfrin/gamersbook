@@ -29,7 +29,7 @@ namespace prid_1819_g13.Controllers
             var posts = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             return posts.PostQuestToDTO();
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PostQuestionDTO>> GetPostById(int id)
         {

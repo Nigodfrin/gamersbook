@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { User } from 'src/app/models/User';
 import { MatSnackBar } from '@angular/material';
 import * as _ from 'lodash';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -21,21 +22,27 @@ export class PostListComponent implements OnInit {
   panelOpenState = false;
   posts: Post[];
   oneRepInQuestion: boolean;
-  CurrentUser: User;
-  test: string;
+  currentUser: User;
   selectedValue: string = "all";
-  filter: string = "";
-  isDisabled: boolean = false;
+  filter: string = "" ;
   
-  constructor(private postService: PostService, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
+  constructor(private postService: PostService,private route: ActivatedRoute, private authService: AuthenticationService,public snackBar: MatSnackBar) { }
   ngOnInit() {
-    this.postService.getAll().subscribe(posts => {
-      this.posts = posts;
-      this.CurrentUser = this.authService.currentUser;
-          if(this.CurrentUser == undefined){
-            this.isDisabled = true;
-          }
-    })
+    if(this.route.snapshot.paramMap.get('name')){
+      let name = this.route.snapshot.paramMap.get('name');
+      this.applyTagFilter(name);
+    }
+    else {
+      this.postService.getAll().subscribe(posts => {
+        this.posts = posts;
+        this.currentUser = this.authService.currentUser;
+      });
+    }
+  }
+  applyTagFilter(name: string) {
+    this.selectedValue = "tags";
+    this.filter = name;
+    this.withTags();
   }
   public onValChange(val: string) {
     this.selectedValue = val;
@@ -43,7 +50,7 @@ export class PostListComponent implements OnInit {
   getAll(){
     this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
-      this.CurrentUser = this.authService.currentUser;
+      this.currentUser = this.authService.currentUser;
     })
   }
   newest() {
@@ -56,8 +63,7 @@ export class PostListComponent implements OnInit {
       this.posts = posts;
     })
   }
-  onChange(filter: string) {
-    this.filter = filter;
+  onChange() {
     this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
     });
@@ -72,12 +78,12 @@ export class PostListComponent implements OnInit {
   withTags(){
     this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
-    })
+    });
   }
   asOneRepInQuestion(question: Post): boolean{
     console.log(question);
       question.reponses.forEach(response => {
-        if(response.user.id == this.CurrentUser.id){
+        if(response.user.id == this.currentUser.id){
           return true;
         }
       });
@@ -97,7 +103,10 @@ export class PostListComponent implements OnInit {
   refresh(){
     this.postService.getAll().subscribe(posts => {
       this.posts = posts;
-      this.CurrentUser = this.authService.currentUser;
+      this.currentUser = this.authService.currentUser;
     })
+  }
+  isAuthor(reponse: Post): boolean {
+    return this.currentUser && this.currentUser.id === reponse.user.id;
   }
 }

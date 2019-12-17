@@ -64,7 +64,7 @@ export class SignUpComponent {
             const bdate = new Date(control.value);
             const today = new Date(Date.now());
             let age = today.getFullYear() - bdate.getFullYear();
-            if(bdate.getMonth() > today.getMonth() || bdate.getDay() > today.getDay()){
+            if(bdate.getMonth() > today.getMonth() || bdate.getDate() > today.getDate()){
                 --age;
             }
             return age >= 18 ? null : { isAdult: true };

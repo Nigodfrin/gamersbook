@@ -30,9 +30,6 @@ export class CreateQuestionComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService) { }
   ngOnInit() {
-    if (!this.authenticationService.currentUser) {
-      this.router.navigate(['/']);
-  }
     let id = this.route.snapshot.paramMap.get('id');
     this.isNew = false;
     if (id != null) {

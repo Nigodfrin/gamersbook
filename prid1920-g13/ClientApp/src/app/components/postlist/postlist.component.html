@@ -2,9 +2,9 @@
   <div class="row">
     <h2 class="col-10">All Questions</h2>
     <span class="col-2">
-      <button [disabled]="isDisabled" class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</button>
+      <button [disabled]="!currentUser" class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</button>
     </span>
-    <input [(ngModel)]="test" placeholder="Search" class="col-3" (ngModelChange)="onChange($event)" type="text">
+    <input [(ngModel)]="filter" placeholder="Search" class="col-3" (ngModelChange)="onChange()" type="text">
     <mat-button-toggle-group #group="matButtonToggleGroup" class="offset-5" [value]="selectedValue" (change)="onValChange(group.value)">
       <mat-button-toggle value="all" (click)="getAll()">All</mat-button-toggle>
       <mat-button-toggle value="newest" (click)="newest()">Newest</mat-button-toggle>
@@ -21,11 +21,10 @@
         <mat-card-title-group>
           <mat-card-title>
             <h4>
-              <span *ngIf="isDisabled">{{post.title}}</span>
-              <a *ngIf="!isDisabled" [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
+              <a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
             </h4>
           </mat-card-title>
-          <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}}</mat-card-subtitle>
+          <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}}</mat-card-subtitle>
         </mat-card-title-group>
       </mat-card-header>
       <mat-card-content>
@@ -43,14 +42,16 @@
           <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline
           </mat-icon>
         </span>
-        <button [disabled]="isDisabled" class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
+        <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
           [routerLink]="['/readquestion',post.id]">See</button>
-        <button mat-icon-button tabindex="-1">
-          <mat-icon (click)="delete(post)">delete</mat-icon>
-        </button>
-        <button mat-icon-button tabindex="-1">
-          <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id]">edit</mat-icon>
-        </button>
+          <span *ngIf="authService.isAdmin() || isAuthor(post)">
+            <button mat-icon-button tabindex="-1">
+              <mat-icon (click)="delete(post)">delete</mat-icon>
+            </button>
+            <button mat-icon-button tabindex="-1">
+              <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id,post.user.id]">edit</mat-icon>
+            </button>
+          </span>
       </mat-card-actions>
     </mat-card>
   </div>

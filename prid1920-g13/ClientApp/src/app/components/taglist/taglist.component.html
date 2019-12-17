@@ -16,15 +16,15 @@
                         </ng-container>
                        <ng-container matColumnDef="num">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> reference </th>
-                            <td mat-cell *matCellDef="let row"> {{row.num}} </td>
+                            <td mat-cell *matCellDef="let row"><a [routerLink]="['/postlist',row.name]"><mat-chip> {{row.num}} </mat-chip> </a></td>
                         </ng-container>
-                        <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef> Actions </th>
-                            <td mat-cell *matCellDef="let row">
-                                <button mat-icon-button tabindex="-1">
+                        <ng-container matColumnDef="actions" >
+                            <th  mat-header-cell *matHeaderCellDef> Actions </th>
+                            <td  mat-cell *matCellDef="let row">
+                                <button *ngIf="authService.isAdmin()" mat-icon-button tabindex="-1">
                                     <mat-icon (click)="edit(row)">edit</mat-icon>
                                 </button>
-                                <button mat-icon-button tabindex="-1">
+                                <button *ngIf="authService.isAdmin()" mat-icon-button tabindex="-1">
                                     <mat-icon (click)="delete(row)">delete</mat-icon>
                                 </button>
                             </td>

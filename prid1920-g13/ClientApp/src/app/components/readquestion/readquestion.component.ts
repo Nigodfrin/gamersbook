@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { PostService } from 'src/app/services/post.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { Comment } from '../../models/Comment';
 import { EditCommentComponent } from '../edit-comment/edit-comment.component';
 import { Post } from 'src/app/models/Post';
@@ -20,12 +20,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ReadQuestion implements OnInit {
   question: Post;
-  reponses: Post[];
   acceptedPost: Post;
   Answer: string = "";
   votes: Vote[];
   currentUser: User;
   postInEdit: Post;
+  dlg: MatDialogRef<any>
+  @ViewChild('defaultDialogButtons', { static: false })
+  private defaultDialogButtonsTpl: TemplateRef<any>;
   constructor(
     private route: ActivatedRoute,
     private authService: AuthenticationService,
@@ -33,8 +35,9 @@ export class ReadQuestion implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public comservice: commentService,
-    private voteService: VoteService
-  ) {}
+    private voteService: VoteService,
+
+  ) { }
 
   ngOnInit() {
     let id = this.route.snapshot.paramMap.get('id');
@@ -42,79 +45,47 @@ export class ReadQuestion implements OnInit {
     this.service.getById(id).subscribe(post => {
       this.question = post;
       if (this.question.acceptedPostId != null) {
-        console.log(this.question.reponses);
-          this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
-          console.log(this.acceptedPost);
-          this.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
+        this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
+        this.question.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
       }
-      else {
-        this.reponses = this.question.reponses;
-      }
-
     });
     ;
-  }
-  removeAcceptAnswer(question: Post){
-    this.acceptedPost = null;
-    this.reponses = this.question.reponses;
-    const snackBarRef = this.snackBar.open(` This accepted answer will be deleted`, 'Undo', { duration: 5000 });
-    snackBarRef.afterDismissed().subscribe(res => {
-      if (!res.dismissedByAction){
-        this.service.removeAcceptAnswer(question).subscribe();
-      }
-      else
-        this.refresh();
-    });
   }
   refresh() {
     let id = this.route.snapshot.paramMap.get('id');
     this.service.getById(id).subscribe(post => {
       this.question = post;
       if (this.question.acceptedPostId != null) {
-          this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);          
-          this.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);          
-      }
-      else {
-        this.reponses = this.question.reponses;
+        this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
+        this.question.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
       }
     });
   }
-  edit(comment: Comment) {
-    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false }, height: '800px', width: '600px', });
-    dlg.beforeClose().subscribe(res => {
-      if (res) {
-        _.assign(comment, res);
-        this.comservice.update(comment).subscribe(res => {
-          if (!res) {
-            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refresh();
-            this.question.acceptedPostId = null;
-          }
-          else {
-            this.refresh();
-          }
+  // Fonction en rapport avec les réponses 
+  removeAcceptAnswer(question: Post) {
+    const snackBarRef = this.snackBar.open(` This accepted answer will be deleted`, 'Undo', { duration: 5000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+      if (!res.dismissedByAction) {
+        this.service.removeAcceptAnswer(question).subscribe(question => {
+          this.acceptedPost = null;
+          this.question = question;
         });
       }
-    });
-  }
-  delete(comment: Comment) {
-    this.question.comments = _.filter(this.question.comments, m => m.id !== comment.id);
-    this.reponses.forEach(post => {
-      post.comments = _.filter(post.comments, m => m.id !== comment.id);
-    })
-    this.acceptedPost.comments = _.filter(this.acceptedPost.comments, c => c.id !== comment.id);
-    const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
-    snackBarRef.afterDismissed().subscribe(res => {
-      if (!res.dismissedByAction)
-        this.comservice.delete(comment).subscribe();
       else
         this.refresh();
+    });
+  }
+  acceptAnswer(acceptedPost: Post) {
+    this.acceptedPost = null;
+    this.service.putAcceptedPost(this.question, acceptedPost.id).subscribe(res => {
+      this.acceptedPost = acceptedPost;
+      this.refresh();
     });
   }
   deleteRep(response: Post) {
     const snackBarRef = this.snackBar.open(` Response will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
-      if (!res.dismissedByAction){
+      if (!res.dismissedByAction) {
         this.service.delete(response).subscribe(res => {
           this.refresh();
         });
@@ -129,23 +100,23 @@ export class ReadQuestion implements OnInit {
   send() {
     var answer: Post;
     // dans le cas où on ajoute un post
-    if(this.postInEdit == null && this.postInEdit == undefined){
-     answer = new Post(
+    if (this.postInEdit == null && this.postInEdit == undefined) {
+      answer = new Post(
         {
           body: this.Answer,
           parentId: this.question.id,
           user: this.currentUser,
           timestamp: new Date(Date.now()),
         }
-        );
+      );
     }
-    else{
+    else {
       // si on veut update
       answer = this.postInEdit;
       answer.body = this.Answer;
       this.postInEdit = null;
       this.acceptedPost = null;
-    } 
+    }
     this.service.addPost(answer).subscribe(res => {
       if (!res) {
         this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
@@ -157,50 +128,47 @@ export class ReadQuestion implements OnInit {
       }
     });
   }
-  editAnswer(post: Post){
+  editAnswer(post: Post) {
     this.postInEdit = post;
     this.Answer = post.body;
-    window.scrollTo(0,document.body.scrollHeight);
+    window.scrollTo(0, document.body.scrollHeight);
   }
-  addVote(postid: number, upVote: number) {
-    if(this.currentUser != undefined){
-    let err = false;
-    this.voteService.getVotes(postid).subscribe(votes => {
-      votes.forEach(vote => {
-        if (vote.upDown == upVote && vote.postId == postid && vote.authorId == this.authService.currentUser.id) {
-          const snackBarData = this.snackBar.open(`You're about to cancel your vote`, 'Undo', { duration: 5000 });
-          snackBarData.afterDismissed().subscribe(res => {
-            if (!res.dismissedByAction) {
-              this.voteService.delete(vote).subscribe();
-              this.refresh();
-            }
-            else {
-              console.log(10);
-              this.refresh();
-            }
-          });
-          err = true;
-        }
-      });
-      if (!err) {
-        const vote = new Vote({ authorId: this.authService.currentUser.id, postId: postid, upDown: upVote });
-        this.voteService.add(vote).subscribe(res => {
-          this.refresh();
+  // fonction en rapport avec les commentaires
+  edit(comment: Comment) {
+    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false }, height: '800px', width: '600px', });
+    dlg.beforeClose().subscribe(res => {
+      if (res) {
+        _.assign(comment, res);
+        this.comservice.update(comment).subscribe(res => {
+          if (!res) {
+            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
+            this.question.acceptedPostId = null;
+            this.refresh();
+          }
+          else {
+            this.refresh();
+          }
         });
       }
     });
   }
-}
-  acceptAnswer(acceptedPost: Post) {
-    this.acceptedPost = null;
-    this.service.putAcceptedPost(this.question,acceptedPost.id).subscribe(res => {
-      this.acceptedPost = acceptedPost;
-      this.refresh();
+  delete(comment: Comment) {
+    this.question.comments = _.filter(this.question.comments, m => m.id !== comment.id);
+    this.question.reponses.forEach(post => {
+      post.comments = _.filter(post.comments, m => m.id !== comment.id);
+    })
+    this.acceptedPost.comments = _.filter(this.acceptedPost.comments, c => c.id !== comment.id);
+    const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
+    snackBarRef.afterDismissed().subscribe(res => {
+      if (!res.dismissedByAction)
+        this.comservice.delete(comment).subscribe();
+      else
+        this.refresh();
     });
   }
-  addComment(postId: number){
+  addComment(postId: number) {
     const comment = new Comment({});
-    const dlg = this.dialog.open(EditCommentComponent, { data: { comment,isNew: true }, height: '600px', width: '600px', });
+    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: true }, height: '600px', width: '600px', });
     dlg.beforeClose().subscribe(res => {
       if (res) {
         _.assign(comment, res);
@@ -218,5 +186,53 @@ export class ReadQuestion implements OnInit {
         });
       }
     });
+  }
+  // Fonctions en rapport avec les votes
+  addVote(postid: number, upVote: number) {
+    if (this.currentUser) {
+      let err = false;
+      this.voteService.getVotes(postid).subscribe(votes => {
+        votes.forEach(vote => {
+          if (vote.upDown == upVote && vote.postId == postid && vote.authorId == this.authService.currentUser.id) {
+            const snackBarData = this.snackBar.open(`You're about to cancel your vote`, 'Undo', { duration: 5000 });
+            snackBarData.afterDismissed().subscribe(res => {
+              if (!res.dismissedByAction) {
+                this.voteService.delete(vote).subscribe(res => {
+                  this.refresh();
+                });
+              }
+              else {
+                this.refresh();
+              }
+            });
+            err = true;
+          }
+        });
+        if (!err) {
+          const vote = new Vote({ authorId: this.authService.currentUser.id, postId: postid, upDown: upVote });
+          this.voteService.add(vote).subscribe(res => {
+            this.refresh();
+          });
+        }
+      });
+    }
+    else {
+      this.openConnectionDialog();
+    }
+  }
+  openConnectionDialog() {
+    this.dlg = this.dialog.open(this.defaultDialogButtonsTpl, { height: '175px', width: '500px', });
+
+  }
+  closeDialog() {
+    this.dlg.close();
+  }
+
+
+  isAuthor(reponse: Post): boolean {
+    return this.currentUser && this.currentUser.id === reponse.user.id;
+  }
+  isComAuthor(com: Comment): boolean {
+    return this.currentUser && this.currentUser.id === com.author.id;
   }
 }

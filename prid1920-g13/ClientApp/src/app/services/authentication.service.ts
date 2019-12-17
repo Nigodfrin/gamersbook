@@ -43,4 +43,7 @@ export class AuthenticationService {
   public isEmailAvailable(email: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}api/users/verif/${email}`);
   }
+  public isAdmin(): boolean{
+    return this.currentUser && this.currentUser.role === 2;
+  }
 }

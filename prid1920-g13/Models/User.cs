@@ -9,7 +9,7 @@ namespace prid_1819_g13.Models
 {
     public enum Role
     {
-        Admin = 2, Manager = 1, Member = 0
+        Admin = 2, Member = 1, Visitor = 0
     }
     public class User : IValidatableObject
     {
@@ -20,7 +20,6 @@ namespace prid_1819_g13.Models
         [RegularExpression("^[a-zA-Z][a-zA-Z0-9_]*", ErrorMessage = "Pseudo can contain only letters, numbers or underscore")]
         public string Pseudo { get; set; }
         [Required(ErrorMessage = "Requiered")]
-        [StringLength(10, MinimumLength = 3, ErrorMessage = "Password Should be minimum 3 characters and a maximum of 10 characters")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Requiered")]
         [EmailAddress(ErrorMessage = "Email is not valid")]
@@ -41,8 +40,6 @@ namespace prid_1819_g13.Models
         public virtual IList<Post> Posts {get;set;}
         [NotMapped]
         public virtual IList<Comment> Comments {get;set;}
-        [NotMapped]
-        public string RefreshToken { get; set; }
         [NotMapped]
         public int? Age
         {

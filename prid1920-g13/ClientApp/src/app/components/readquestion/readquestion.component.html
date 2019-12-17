@@ -11,7 +11,7 @@
             <mat-icon style="color:red;"> <a style="cursor: pointer;" (click)="addVote(question.id,-1)">thumb_down</a>
             </mat-icon>
         </div>
-        <markdown class="col-10"> {{question.body}}</markdown>
+        <markdown [data]="question.body" class="col-10"></markdown>
         <mat-chip-list class="offset-1 col-5">
             <mat-chip *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
         </mat-chip-list>
@@ -22,7 +22,7 @@
             <div class="row" *ngFor="let com of question.comments">
                 <div class="container">
                     <div class="row">
-                        <markdown class="offset-1 col-11">{{com.body}}</markdown>
+                        <markdown [data]="com.body" class="offset-1 col-11"></markdown>
                     </div>
                     <div class="row">
                         <div class="offset-7 col-3">
@@ -31,7 +31,7 @@
                                 {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
                             </p>
                         </div>
-                        <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                        <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
                             <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                             <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
                         </span>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="col-1">
-                <mat-icon aria-label="New comment"><a (click)="addComment(question.id)" style="cursor: pointer;">add</a>
+                <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(question.id)" style="cursor: pointer;">add</a>
                 </mat-icon>
             </div>
         </div>
@@ -58,7 +58,7 @@
                             (click)="addVote(acceptedPost.id,-1)">thumb_down</a>
                     </mat-icon>
                     <br />
-                    <mat-icon style="color: darkred"><a title="Remove accepted answer" style="cursor: pointer"
+                    <mat-icon *ngIf="currentUser" style="color: darkred"><a title="Remove accepted answer" style="cursor: pointer"
                             (click)="removeAcceptAnswer(question)">close</a></mat-icon>
                 </div>
                 <mat-icon>done_outline</mat-icon>
@@ -66,14 +66,14 @@
                 <div class="col-10">
                     <div class="container">
                         <div class="row">
-                            <markdown>{{acceptedPost.body}}</markdown>
+                            <markdown [data]="acceptedPost.body"></markdown>
                         </div>
                         <div class="row">
                             <div class="offset-7 col-3" style="vertical-align: text-bottom;">
                                 Answered by {{acceptedPost.user.pseudo}} <br />
                                 {{acceptedPost.timestamp | date :'d MMM, y, h:mm:ss'}}
                             </div>
-                            <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == acceptedPost.user.id">
+                            <span class="col-2" *ngIf="authService.isAdmin() || isAuthor(acceptedPost)">
                                 <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(acceptedPost)">edit</a>
                                 </mat-icon>
                                 <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(acceptedPost)">delete</a>
@@ -88,7 +88,7 @@
                         *ngFor="let com of acceptedPost.comments; let isLast = last;">
                         <div class="container">
                             <div class="row">
-                                <markdown class="offset-2 col-8">{{com.body}}</markdown>
+                                <markdown class="offset-2 col-8" [data]="com.body"></markdown>
                             </div>
                             <div class="row">
                                 <div class="offset-7 col-3">
@@ -97,7 +97,7 @@
                                         {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
                                     </p>
                                 </div>
-                                <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                                <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
                                     <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                                     <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
                                 </span>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="offset-11 col-1">
-                        <mat-icon aria-label="New comment"><a (click)="addComment(acceptedPost.id)"
+                        <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(acceptedPost.id)"
                                 style="cursor: pointer;">add</a></mat-icon>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let reponse of reponses">
+    <div *ngFor="let reponse of question.reponses">
         <div class="row">
             <div class="col-1">
                 <mat-icon style="color:green;"> <a style="cursor: pointer;" (click)="addVote(reponse.id,1)">thumb_up</a>
@@ -126,20 +126,20 @@
                         (click)="addVote(reponse.id,-1)">thumb_down</a>
                 </mat-icon>
                 <br />
-                <mat-icon style="color: green"><a title="Accept answer" style="cursor: pointer"
+                <mat-icon *ngIf="currentUser" style="color: green"><a title="Accept answer" style="cursor: pointer"
                         (click)="acceptAnswer(reponse)">done</a></mat-icon>
             </div>
             <div class="col-10">
                 <div class="container">
                     <div class="row">
-                        <markdown>{{reponse.body}}</markdown>
+                        <markdown [data]="reponse.body"></markdown>
                     </div>
                     <div class="row">
                         <div class="offset-7 col-3" style="vertical-align: text-bottom;">
                             Answered by {{reponse.user.pseudo}} <br />
                             {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}
                         </div>
-                        <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == reponse.user.id">
+                        <span class="col-2" *ngIf="authService.isAdmin() || isAuthor(reponse)">
                             <mat-icon> <a style="cursor: pointer;" (click)="editAnswer(reponse)">edit</a></mat-icon>
                             <mat-icon> <a style="cursor: pointer;" (click)="deleteRep(reponse)">delete</a></mat-icon>
                         </span>
@@ -151,7 +151,7 @@
                 <div class="row" style="font-size: 12px" *ngFor="let com of reponse.comments; let isLast = last;">
                     <div class="container">
                         <div class="row">
-                            <markdown class="offset-2 col-8">{{com.body}}</markdown>
+                            <markdown [data]="com.body" class="offset-2 col-8"></markdown>
                         </div>
                         <div class="row">
                             <div class="offset-7 col-3">
@@ -160,7 +160,7 @@
                                     {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
                                 </p>
                             </div>
-                            <span class="col-2" *ngIf="currentUser.role == 2 || currentUser.id == com.author.id">
+                            <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
                                 <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
                                 <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
                             </span>
@@ -172,15 +172,17 @@
                     <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
                 </div>
                 <div class="offset-11 col-1">
-                    <mat-icon aria-label="New comment"><a (click)="addComment(reponse.id)"
+                    <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(reponse.id)"
                             style="cursor: pointer;">add</a></mat-icon>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <label class="col-12" for="answer" class="col-form-label-lg">Your Answer</label>
+    <div class="row" *ngIf="currentUser">
+        <label for="answer" class="col-form-label-lg col-12">Your Answer</label>
         <simplemde class="col-12" id="anwser" [(ngModel)]="Answer"></simplemde>
+        <markdown class="col-12" style="border: 4px double black;border-radius: 1em;margin: 10px;min-height: 100px;"
+            [data]="Answer"></markdown>
         <div class="offset-9">
             <button type="submit" mat-raised-button color="primary"
                 [disabled]="Answer == null || Answer == '' || Answer == undefined" (click)="send()">Send</button>
@@ -188,4 +190,29 @@
                 (click)="cancel()">Cancel</button>
         </div>
     </div>
+    <ng-template #defaultDialogButtons>
+        <div class="container">
+            <div class="row justify-content-start">
+                <div class="col-12">
+                    <p class="col" style="text-align: center;">You can't vote if you are not connected, please <br/>
+                            <button mat-raised-button color="primary" [routerLink]='["/login"]' (click)="closeDialog()">
+                                Login
+                            </button>
+                            or
+                            <button mat-raised-button color="primary" [routerLink]='["/signup"]' (click)="closeDialog()">
+                                Signup
+                            </button>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button mat-raised-button color="warn"  (click)="closeDialog()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    `
 </section>
