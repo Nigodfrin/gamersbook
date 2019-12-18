@@ -35,8 +35,8 @@ export class ReadQuestion implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public comservice: commentService,
-    private voteService: VoteService,
-
+    public userservice: UserService,
+    private voteService: VoteService
   ) { }
 
   ngOnInit() {
@@ -79,6 +79,7 @@ export class ReadQuestion implements OnInit {
     this.acceptedPost = null;
     this.service.putAcceptedPost(this.question, acceptedPost.id).subscribe(res => {
       this.acceptedPost = acceptedPost;
+      this.userservice.changeReput(this.acceptedPost.user.id, this.question.user.id).subscribe();
       this.refresh();
     });
   }
@@ -133,6 +134,7 @@ export class ReadQuestion implements OnInit {
     this.Answer = post.body;
     window.scrollTo(0, document.body.scrollHeight);
   }
+
   // fonction en rapport avec les commentaires
   edit(comment: Comment) {
     const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false }, height: '800px', width: '600px', });
@@ -152,6 +154,7 @@ export class ReadQuestion implements OnInit {
       }
     });
   }
+
   delete(comment: Comment) {
     this.question.comments = _.filter(this.question.comments, m => m.id !== comment.id);
     this.question.reponses.forEach(post => {
@@ -166,6 +169,7 @@ export class ReadQuestion implements OnInit {
         this.refresh();
     });
   }
+
   addComment(postId: number) {
     const comment = new Comment({});
     const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: true }, height: '600px', width: '600px', });
@@ -189,7 +193,7 @@ export class ReadQuestion implements OnInit {
   }
   // Fonctions en rapport avec les votes
   addVote(postid: number, upVote: number) {
-    if (this.currentUser) {
+    if (this.currentUser != undefined) {
       let err = false;
       this.voteService.getVotes(postid).subscribe(votes => {
         votes.forEach(vote => {
@@ -197,9 +201,8 @@ export class ReadQuestion implements OnInit {
             const snackBarData = this.snackBar.open(`You're about to cancel your vote`, 'Undo', { duration: 5000 });
             snackBarData.afterDismissed().subscribe(res => {
               if (!res.dismissedByAction) {
-                this.voteService.delete(vote).subscribe(res => {
-                  this.refresh();
-                });
+                this.voteService.delete(vote).subscribe();
+                this.refresh();
               }
               else {
                 this.refresh();
@@ -211,6 +214,7 @@ export class ReadQuestion implements OnInit {
         if (!err) {
           const vote = new Vote({ authorId: this.authService.currentUser.id, postId: postid, upDown: upVote });
           this.voteService.add(vote).subscribe(res => {
+            this.userservice.changeReputVote(vote.postId, vote.upDown).subscribe();
             this.refresh();
           });
         }

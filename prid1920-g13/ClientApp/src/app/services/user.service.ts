@@ -29,6 +29,26 @@ export class UserService {
       })
     );
   }
+  public changeReput(id: number, iduq: number): Observable<boolean> {
+    
+    return this.http.put<User>(`${this.baseUrl}api/users/reput/${id}/${iduq}` , {id, iduq})
+    .pipe(map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  public changeReputVote(id: number, valeur: number): Observable<boolean> {
+    
+    return this.http.put<User>(`${this.baseUrl}api/users/reputation/${id}/${valeur}` , {id, valeur})
+    .pipe(map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
   public delete(m: User): Observable<boolean> {
     return this.http.delete<boolean>(`${this.baseUrl}api/users/${m.id}`).pipe(
       map(res => true),
