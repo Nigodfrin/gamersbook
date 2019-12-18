@@ -161,7 +161,7 @@ namespace prid_1819_g13.Controllers
                                              new Claim(ClaimTypes.Role, user.Role.ToString())
                                                  }),
                     IssuedAt = DateTime.UtcNow,
-                    Expires = DateTime.UtcNow.AddMinutes(10),
+                    Expires = DateTime.UtcNow.AddHours(2),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -171,6 +171,12 @@ namespace prid_1819_g13.Controllers
             user.Password = null;
             return user;
         }
+        // [HttpGet("isAuthor/{id}")]
+        // public async Task<ActionResult<bool>> isAuthor(int id){
+        //     var pseudo = User.Identity.Name;
+        //     var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
+        //     var post = await _context.Posts.FindAsync(id);
+        // }
         [HttpPut("reput/{authorid}/{id}")]
         public async Task<IActionResult> UpdateReputaion(int authorid, int id)
         {

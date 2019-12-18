@@ -49,7 +49,7 @@
               <mat-icon (click)="delete(post)">delete</mat-icon>
             </button>
             <button mat-icon-button tabindex="-1">
-              <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id,post.user.id]">edit</mat-icon>
+              <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id]" [queryParams]="{author:post.user.id}">edit</mat-icon>
             </button>
           </span>
       </mat-card-actions>

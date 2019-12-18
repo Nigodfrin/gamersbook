@@ -17,6 +17,7 @@ import { UserService } from 'src/app/services/user.service';
 
 @Component({
   templateUrl: './readquestion.component.html',
+  styleUrls: ['./readquestion.component.css'],
 })
 export class ReadQuestion implements OnInit {
   question: Post;

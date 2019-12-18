@@ -46,4 +46,7 @@ export class AuthenticationService {
   public isAdmin(): boolean{
     return this.currentUser && this.currentUser.role === 2;
   }
+  isAuthor(id: any): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}api/users/isAuthor/${id}`);
+  }
 }
