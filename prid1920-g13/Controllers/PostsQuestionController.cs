@@ -11,7 +11,7 @@ using prid_1819_g13.Helpers;
 
 namespace prid_1819_g13.Controllers
 {
-     [Authorize]
+    [Authorize]
     [Route("api/postsQuestion")]
     [ApiController]
     public class PostsQuestionController : ControllerBase
@@ -50,7 +50,7 @@ namespace prid_1819_g13.Controllers
 
         public List<Post> GetNonAnswered(List<Post> questions)
         {
-            return ( questions
+            return (questions
             .Where(p => p.AcceptedPost == null)
             .OrderByDescending(a => a.Timestamp)
             .ToList());
@@ -58,22 +58,22 @@ namespace prid_1819_g13.Controllers
 
         public List<Post> GetWithTags(List<Post> questions)
         {
-            var posts =  questions.
-            Where(p =>p.PostTags.Count() > 0)
+            var posts = questions.
+            Where(p => p.PostTags.Count() > 0)
             .OrderByDescending(a => a.Timestamp)
             .ToList();
             return posts;
         }
         public List<Post> GetOrderByVotes(List<Post> questions)
         {
-            var q =  questions.AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
-             return q;
-         
+            var q = questions.AsEnumerable().OrderByDescending(p => p.MaxScore).ToList();
+            return q;
+
         }
         [AllowAnonymous]
         [HttpGet("filter/{selectedVal}")]
         [HttpGet("filter/{selectedVal}/{filter}")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string selectedVal,string filter = "")
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> Filter(string selectedVal, string filter = "")
         {
             var questions = await _context.Posts.Where(p => p.Title != null).ToListAsync();
             if (!string.IsNullOrWhiteSpace(filter))
@@ -101,21 +101,25 @@ namespace prid_1819_g13.Controllers
 
                 ).ToList();
             }
-                if(selectedVal == "newest"){
-                    questions = this.GetNewest(questions);
-                }
-                if(selectedVal == "votes"){
-                    questions = GetOrderByVotes(questions);
-                }
-                if(selectedVal == "tags"){
-                    questions = this.GetWithTags(questions);
-                }
-                if(selectedVal == "unanswered"){
-                    questions = this.GetNonAnswered(questions);
-                }
+            if (selectedVal == "newest")
+            {
+                questions = this.GetNewest(questions);
+            }
+            if (selectedVal == "votes")
+            {
+                questions = GetOrderByVotes(questions);
+            }
+            if (selectedVal == "tags")
+            {
+                questions = this.GetWithTags(questions);
+            }
+            if (selectedVal == "unanswered")
+            {
+                questions = this.GetNonAnswered(questions);
+            }
             return questions.PostQuestToDTO();
         }
-        [HttpPost]
+        [HttpPost("{add}")]
         public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
         {
             var pseudo = User.Identity.Name;
@@ -144,29 +148,68 @@ namespace prid_1819_g13.Controllers
         public async Task<IActionResult> DeleteQuestion(int id)
         {
             var question = await _context.Posts.FindAsync(id);
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
 
             if (question == null)
             {
                 return NotFound();
             }
-            while (_context.PostTags.Where(x => x.PostId == id).Count() != 0)
-            {
-                var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == id);
-                _context.PostTags.Remove(postTag);
-                await _context.SaveChangesAsync();
-            }
-            while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
-            {
-                var comment = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
-                _context.Posts.Remove(comment);
-                await _context.SaveChangesAsync();
-            }
-            _context.Posts.Remove(question);
-            var res = await _context.SaveChangesAsyncWithValidation();
-            if (!res.IsEmpty)
-                return BadRequest(res);
-            return NoContent();
+            var test = user.Role.ToString();
+            if(user.Role.ToString() == "Admin" || ( user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0 )){
+                 // supprime les commentaire associé a une question
+                    while (_context.Comments.Where(x => x.PostId == question.Id).Count() != 0)
+                    {
+                        var commentQ = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == question.Id);
+                        _context.Comments.Remove(commentQ);
+                        await _context.SaveChangesAsync();
+                    }
+                // supprime les reponses associé a une question
+                while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
+                {
+                    var reponse = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
 
+                    //supprime les commentaire asssocié a une reponse
+                    while (_context.Comments.Where(x => x.PostId == reponse.Id).Count() != 0)
+                    {
+                        var commentR = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == reponse.Id);
+                        _context.Comments.Remove(commentR);
+                        await _context.SaveChangesAsync();
+                    }
+                    while (_context.Votes.Where(x => x.PostId == reponse.Id).Count() != 0)
+                    {
+                        var VoteR = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == reponse.Id);
+                        _context.Votes.Remove(VoteR);
+                        await _context.SaveChangesAsync();
+                    }
+                   
+                    _context.Posts.Remove(reponse);
+                    await _context.SaveChangesAsync();
+                }
+
+                // supprime les posttag associé a la question
+                while (_context.PostTags.Where(x => x.PostId == id).Count() != 0)
+                {
+                    var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == id);
+                    _context.PostTags.Remove(postTag);
+                    await _context.SaveChangesAsync();
+                }
+                while (_context.Votes.Where(x => x.PostId == question.Id).Count() != 0)
+                    {
+                        var VoteQ = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == question.Id);
+                        _context.Votes.Remove(VoteQ);
+                        await _context.SaveChangesAsync();
+                    }
+
+                _context.Posts.Remove(question);
+                var res = await _context.SaveChangesAsyncWithValidation();
+                if (!res.IsEmpty)
+                {
+
+                    return BadRequest(res);
+                }
+            }
+                return NoContent();
         }
         [HttpPut]
         public async Task<IActionResult> updatePost(PostQuestionDTO data)
@@ -197,9 +240,11 @@ namespace prid_1819_g13.Controllers
 
         }
         [HttpPut("removeAcceptAnswer")]
-        public async Task<ActionResult<PostQuestionDTO>> removeAcceptAnswer(PostQuestionDTO data){
+        public async Task<ActionResult<PostQuestionDTO>> removeAcceptAnswer(PostQuestionDTO data)
+        {
             var question = await _context.Posts.FindAsync(data.Id);
-            if(question == null){
+            if (question == null)
+            {
                 return BadRequest();
             }
             question.AcceptedPostId = null;
