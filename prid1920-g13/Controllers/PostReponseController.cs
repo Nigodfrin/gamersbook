@@ -72,7 +72,7 @@ namespace prid_1819_g13.Controllers
 
         }
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
-        public async Task<ActionResult<PostReponseDTO>> putAcceptedPost(int questionId, int acceptedPostId)
+        public async Task<ActionResult<PostQuestionDTO>> putAcceptedPost(int questionId, int acceptedPostId)
         {
             var question = await _context.Posts.FindAsync(questionId);
             if (questionId != question.Id)
@@ -84,7 +84,7 @@ namespace prid_1819_g13.Controllers
             _context.Entry(question).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return question.PostQuestToDTO();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

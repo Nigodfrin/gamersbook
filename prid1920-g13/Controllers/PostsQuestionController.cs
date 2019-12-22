@@ -171,9 +171,15 @@ namespace prid_1819_g13.Controllers
         [HttpPut]
         public async Task<IActionResult> updatePost(PostQuestionDTO data)
         {
+            var pseudo = User.Identity.Name;
+            var user = _context.Users.FirstOrDefault(p => p.Pseudo == pseudo);
             var post = await _context.Posts.FindAsync(data.Id);
+            
             if (post == null)
             {
+                return BadRequest();
+            }
+            if(user.Id != post.AuthorId){
                 return BadRequest();
             }
             post.Title = data.Title;

@@ -21,7 +21,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ReadQuestion implements OnInit {
   question: Post;
-  acceptedPost: Post;
   Answer: string = "";
   votes: Vote[];
   currentUser: User;
@@ -45,10 +44,7 @@ export class ReadQuestion implements OnInit {
     this.currentUser = this.authService.currentUser;
     this.service.getById(id).subscribe(post => {
       this.question = post;
-      if (this.question.acceptedPostId != null) {
-        this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
-        this.question.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
-      }
+      console.log(this.question);
     });
     ;
   }
@@ -56,10 +52,6 @@ export class ReadQuestion implements OnInit {
     let id = this.route.snapshot.paramMap.get('id');
     this.service.getById(id).subscribe(post => {
       this.question = post;
-      if (this.question.acceptedPostId != null) {
-        this.acceptedPost = this.question.reponses.find(m => m.id == this.question.acceptedPostId);
-        this.question.reponses = _.filter(this.question.reponses, r => r.id != this.question.acceptedPostId);
-      }
     });
   }
   // Fonction en rapport avec les réponses 
@@ -68,7 +60,6 @@ export class ReadQuestion implements OnInit {
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction) {
         this.service.removeAcceptAnswer(question).subscribe(question => {
-          this.acceptedPost = null;
           this.question = question;
         });
       }
@@ -77,11 +68,9 @@ export class ReadQuestion implements OnInit {
     });
   }
   acceptAnswer(acceptedPost: Post) {
-    this.acceptedPost = null;
     this.service.putAcceptedPost(this.question, acceptedPost.id).subscribe(res => {
-      this.acceptedPost = acceptedPost;
-      this.userservice.changeReput(this.acceptedPost.user.id, this.question.user.id).subscribe();
-      this.refresh();
+      this.userservice.changeReput(acceptedPost.user.id, this.question.user.id).subscribe();
+      this.question = res;
     });
   }
   deleteRep(response: Post) {
@@ -117,11 +106,10 @@ export class ReadQuestion implements OnInit {
       answer = this.postInEdit;
       answer.body = this.Answer;
       this.postInEdit = null;
-      this.acceptedPost = null;
     }
     this.service.addPost(answer).subscribe(res => {
       if (!res) {
-        this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
+        this.snackBar.open(`There was an error at the server. The answer has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
         this.refresh();
       }
       else {
@@ -145,7 +133,6 @@ export class ReadQuestion implements OnInit {
         this.comservice.update(comment).subscribe(res => {
           if (!res) {
             this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.question.acceptedPostId = null;
             this.refresh();
           }
           else {
@@ -157,11 +144,10 @@ export class ReadQuestion implements OnInit {
   }
 
   delete(comment: Comment) {
-    this.question.comments = _.filter(this.question.comments, m => m.id !== comment.id);
+    this.question.comments = _.filter(this.question.comments, c => c.id !== comment.id);
     this.question.reponses.forEach(post => {
-      post.comments = _.filter(post.comments, m => m.id !== comment.id);
+      post.comments = _.filter(post.comments, c => c.id !== comment.id);
     })
-    this.acceptedPost.comments = _.filter(this.acceptedPost.comments, c => c.id !== comment.id);
     const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction)

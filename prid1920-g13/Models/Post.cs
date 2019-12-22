@@ -37,6 +37,14 @@ namespace prid_1819_g13.Models
             get =>PostTags.Select(f => f.Tag);
         }
         [NotMapped]
+        public int NumUp {
+            get => Votes.Where(v => v.UpDown == 1).Count();
+        }
+        [NotMapped]
+        public int NumDown {
+            get => Votes.Where(v => v.UpDown == -1).Count();
+        }
+        [NotMapped]
         public int MaxScore 
         {
             get => Reponses.Count() > 0 ? Reponses.Max(p => p.Score) > this.Score ?  Reponses.Max(p => p.Score) : this.Score : 0 ;

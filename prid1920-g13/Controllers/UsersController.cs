@@ -13,6 +13,7 @@ using System.Security.Claims;
 using prid_1819_g13.Helpers;
 using System;
 using PRID_Framework;
+using System.Linq;
 
 namespace prid_1819_g13.Controllers
 {
@@ -103,8 +104,16 @@ namespace prid_1819_g13.Controllers
             }
 
             _context.Votes.RemoveRange(user.Votes);
-            // _context.PostTags.RemoveRange(user.Posts)
-            _context.Posts.RemoveRange(user.Posts);
+            foreach (var post in user.Posts)
+            {
+               while (_context.PostTags.Where(x => x.PostId == post.Id).Count() != 0)
+                {
+                    var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == post.Id);
+                    _context.PostTags.Remove(postTag);
+                }
+            }
+            // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title == null));
+            // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title != null));
             _context.Comments.RemoveRange(user.Comments);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -171,12 +180,13 @@ namespace prid_1819_g13.Controllers
             user.Password = null;
             return user;
         }
-        // [HttpGet("isAuthor/{id}")]
-        // public async Task<ActionResult<bool>> isAuthor(int id){
-        //     var pseudo = User.Identity.Name;
-        //     var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
-        //     var post = await _context.Posts.FindAsync(id);
-        // }
+        [HttpGet("isAuthor/{id}")]
+        public async Task<ActionResult<bool>> isAuthor(int id){
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
+            var post = await _context.Posts.FindAsync(id);
+            return user.Id == post.AuthorId;
+        }
         [HttpPut("reput/{authorid}/{id}")]
         public async Task<IActionResult> UpdateReputaion(int authorid, int id)
         {

@@ -10,8 +10,9 @@ export class AuthGuardAuthor implements CanActivate {
         private authenticationService: AuthenticationService,
 
     ) { }
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<boolean>  {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>{
         const id = route.paramMap.get('id');
+        
         return this.authenticationService.isAuthor(id);
     }
 

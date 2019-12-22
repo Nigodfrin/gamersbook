@@ -53,8 +53,7 @@ const appRoutes: Routes = [
   {
     path: 'createquestion/:id',
     component: CreateQuestionComponent,
-    canActivate: [AuthGuardAuthor],
-    data: {roles: [Role.Admin,Role.Member]}
+    canActivate: [AuthGuard,AuthGuardAuthor],
   },
   {
     path: 'taglist',
