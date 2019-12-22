@@ -1,6 +1,7 @@
 import { User } from "./User";
 import {UserService} from '../services/user.service';
 import { Tag } from "./Tag";
+import { Vote } from "./Vote";
 export class Post {
     public id: number;
     public title: string;
@@ -13,8 +14,10 @@ export class Post {
     public comments: any;
     public acceptedPostId: number;
     public parentId: number;
-    public votes: any;
+    public votes: Vote[];
     public maxScore: number;
+    public numUp: number;
+    public numDown: number;
     constructor(data: any) {
         if (data) {
             this.id = data.id,
@@ -29,7 +32,9 @@ export class Post {
             this.acceptedPostId = data.acceptedRepId
             this.parentId = data.parentId,
             this.votes = data.votes,
-            this.maxScore = data.maxScore
+            this.maxScore = data.maxScore,
+            this.numUp = data.numUp,
+            this.numDown = data.numDown
         }
     }
 }

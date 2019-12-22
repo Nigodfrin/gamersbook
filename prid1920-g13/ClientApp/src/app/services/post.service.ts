@@ -43,7 +43,7 @@ export class PostService {
     );
   }
   addQuestion(title: string, body: string, tags: Tag[]): Observable<boolean> {
-    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion/add`, new Post({ title: title, body: body, tags: tags })).pipe(
+    return this.http.post<Post>(`${this.baseUrl}api/postsQuestion/`, new Post({ title: title, body: body, tags: tags })).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -86,13 +86,10 @@ export class PostService {
       catchError(err => of(null))
     );
   }
-  putAcceptedPost(question: Post, acceptedPostId: number): Observable<boolean> {
+  putAcceptedPost(question: Post, acceptedPostId: number) : Observable<Post>{
     return this.http.get<Post>(`${this.baseUrl}api/postRep/putAccepted/${question.id}/${acceptedPostId}`)
-      .pipe(map(res => true),
-        catchError(err => {
-          console.error(err);
-          return of(false);
-        })
+      .pipe(map(m => !m ? null : new Post(m)),
+        catchError(err => of(null))
       );
   }
 }

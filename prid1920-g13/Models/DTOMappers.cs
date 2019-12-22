@@ -30,12 +30,14 @@ namespace prid_1819_g13.Models {
                 Timestamp = post.Timestamp,
                 Score = post.Score,
                 User = post.User.ToDTO(),
-                Reponses = post.Reponses.PostRepToDTO(),
+                Reponses = post.Reponses.OrderByDescending(p => p.Id == post.AcceptedPostId).ThenByDescending(p => p.Score).ThenByDescending(p => p.Timestamp).PostRepToDTO(),
                 Tags = post.Tags.ToDTO(),
-                Comments = post.Comments?.ToDTO(),
+                Comments = post.Comments?.ToDTO().OrderByDescending(p => p.Timestamp).ToList(),
                 Votes = post.Votes?.ToDTO(),
                 AcceptedRepId = post.AcceptedPostId,
-                MaxScore = post.MaxScore
+                MaxScore = post.MaxScore,
+                NumUp = post.NumUp,
+                NumDown = post.NumDown,
             };
             
         }
@@ -50,8 +52,10 @@ namespace prid_1819_g13.Models {
                 User = post.User.ToDTO(),
                 Score = post.Score,
                 Votes = post.Votes?.ToDTO(),
-                Comments = post.Comments?.ToDTO(),
-                ParentId = post.ParentId
+                Comments = post.Comments?.OrderByDescending(p => p.Timestamp).ToDTO(),
+                ParentId = post.ParentId,
+                NumUp = post.NumUp,
+                NumDown = post.NumDown,
             };
         }
         public static List<PostReponseDTO> PostRepToDTO(this IEnumerable<Post> posts) {
