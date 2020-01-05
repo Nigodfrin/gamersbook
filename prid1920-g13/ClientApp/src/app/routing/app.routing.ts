@@ -53,7 +53,7 @@ const appRoutes: Routes = [
   {
     path: 'createquestion/:id',
     component: CreateQuestionComponent,
-    canActivate: [AuthGuard,AuthGuardAuthor],
+   // canActivate: [AuthGuard,AuthGuardAuthor], // empeche de pouvoir appuyez dessus en temps qu'admin
   },
   {
     path: 'taglist',
