@@ -1,24 +1,42 @@
-<form id="frm" class="form container" *ngIf="frm && tags" [formGroup]="frm" novalidate>
-    <h1 class="header">Create question</h1>
-        <div class="row formGroup">
-            <label class="form-label">Title</label>
-            <textarea class="col-12 form-control" style="min-height: 200px;" placeholder="Title" [formControl]="ctlTitle" required></textarea>
-        </div>
-        <div class="row formGroup">
-            <label class="form-label">Body</label>
-            <simplemde class="col-12" [formControl]="ctlBody"></simplemde>
-        </div>
-        <div class="row">
-            <label class="col-12">Tags</label>
-            <div class="form-control" class="col-lg-3 col-md-4 col-sm-6"  formArrayName="tagsForm" *ngFor="let tag of frm.controls.tagsForm.controls; let i = index">
-                <mat-checkbox    [formControlName]="i">{{tags[i].name}}</mat-checkbox>
-            </div>
-        </div>
-    <div class="footer">
-        <button *ngIf="isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="add()">Add</button>
-        <button *ngIf="!isNew"   type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending" (click)="update()">Update</button>
-        <button type="reset" mat-button (click)="cancel()">Cancel</button>
-        <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
-      [routerLink]="['/postlist']">Back To Question List</button>
-    </div>
+<form id="frm" class="form container" *ngIf="frm" [formGroup]="frm" novalidate>
+  <h1 class="header">Create question</h1>
+  <div class="row formGroup">
+    <label class="form-label">Title</label>
+    <textarea class="col-12 form-control" style="min-height: 200px;" placeholder="Title" [formControl]="ctlTitle"
+      required></textarea>
+  </div>
+  <div class="row formGroup">
+    <label class="form-label">Body</label>
+    <simplemde class="col-12" [formControl]="ctlBody"></simplemde>
+  </div>
+  <div class="row">
+    <label class="col-12">Tags</label>
+    <mat-form-field class="col-12">
+      <mat-chip-list selectable="false" #chipList aria-label="Tags selection">
+        <mat-chip style="background-color: goldenrod" *ngFor="let tag of ntags" [selectable]="false" [removable]="removable" (removed)="remove(tag)">
+          {{tag.name}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Add tags..." #tagInput [formControl]="tagsCtrl" [matAutocomplete]="tags"
+          [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addTontags($event)">
+          <mat-error class="float-right" *ngIf="tagsCtrl.hasError('invalidInput')">invalid tag</mat-error>
+        </mat-chip-list>
+        <mat-hint>Use COMMA to separate your tags</mat-hint>
+        <mat-autocomplete #tags="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag.name">
+          {{tag.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="footer">
+    <button *ngIf="isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+      (click)="add()">Add</button>
+    <button *ngIf="!isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+      (click)="update()">Update</button>
+    <button type="reset" mat-button (click)="cancel()">Cancel</button>
+    <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]' [routerLink]="['/postlist']">Back To
+      Question List</button>
+  </div>
 </form>
