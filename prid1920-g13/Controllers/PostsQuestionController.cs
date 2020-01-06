@@ -223,8 +223,7 @@ namespace prid_1819_g13.Controllers
             {
                 return BadRequest();
             }
-            if (user.Id != post.AuthorId)
-            {
+            if(user.Id != post.AuthorId && user.Role.ToString() != "Admin"){
                 return BadRequest();
             }
             post.Title = data.Title;
