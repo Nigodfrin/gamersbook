@@ -119,7 +119,7 @@ namespace prid_1819_g13.Controllers
             }
             return questions.PostQuestToDTO();
         }
-        [HttpPost("{add}")]
+        [HttpPost("add")]
         public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
         {
             var pseudo = User.Identity.Name;
@@ -156,14 +156,15 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             }
             var test = user.Role.ToString();
-            if(user.Role.ToString() == "Admin" || ( user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0 )){
-                 // supprime les commentaire associé a une question
-                    while (_context.Comments.Where(x => x.PostId == question.Id).Count() != 0)
-                    {
-                        var commentQ = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == question.Id);
-                        _context.Comments.Remove(commentQ);
-                        await _context.SaveChangesAsync();
-                    }
+            if (user.Role.ToString() == "Admin" || (user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0))
+            {
+                // supprime les commentaire associé a une question
+                while (_context.Comments.Where(x => x.PostId == question.Id).Count() != 0)
+                {
+                    var commentQ = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == question.Id);
+                    _context.Comments.Remove(commentQ);
+                    await _context.SaveChangesAsync();
+                }
                 // supprime les reponses associé a une question
                 while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
                 {
@@ -182,7 +183,7 @@ namespace prid_1819_g13.Controllers
                         _context.Votes.Remove(VoteR);
                         await _context.SaveChangesAsync();
                     }
-                   
+
                     _context.Posts.Remove(reponse);
                     await _context.SaveChangesAsync();
                 }
@@ -195,11 +196,11 @@ namespace prid_1819_g13.Controllers
                     await _context.SaveChangesAsync();
                 }
                 while (_context.Votes.Where(x => x.PostId == question.Id).Count() != 0)
-                    {
-                        var VoteQ = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == question.Id);
-                        _context.Votes.Remove(VoteQ);
-                        await _context.SaveChangesAsync();
-                    }
+                {
+                    var VoteQ = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == question.Id);
+                    _context.Votes.Remove(VoteQ);
+                    await _context.SaveChangesAsync();
+                }
 
                 _context.Posts.Remove(question);
                 var res = await _context.SaveChangesAsyncWithValidation();
@@ -209,7 +210,7 @@ namespace prid_1819_g13.Controllers
                     return BadRequest(res);
                 }
             }
-                return NoContent();
+            return NoContent();
         }
         [HttpPut]
         public async Task<IActionResult> updatePost(PostQuestionDTO data)
@@ -217,12 +218,13 @@ namespace prid_1819_g13.Controllers
             var pseudo = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(p => p.Pseudo == pseudo);
             var post = await _context.Posts.FindAsync(data.Id);
-            
+
             if (post == null)
             {
                 return BadRequest();
             }
-            if(user.Id != post.AuthorId){
+            if (user.Id != post.AuthorId)
+            {
                 return BadRequest();
             }
             post.Title = data.Title;

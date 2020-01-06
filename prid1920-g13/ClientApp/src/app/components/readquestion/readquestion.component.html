@@ -14,7 +14,7 @@
         </div>
         <markdown [data]="question.body" class="col-10"></markdown>
         <mat-chip-list class="offset-1 col-5">
-            <mat-chip *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
+            <mat-chip style="background-color: goldenrod;" *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
         </mat-chip-list>
         <span class="col-2">Posted by {{question.user.pseudo}}</span>
     </div>
