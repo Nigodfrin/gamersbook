@@ -22,7 +22,7 @@
           [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addTontags($event)">
           <mat-error class="float-right" *ngIf="tagsCtrl.hasError('invalidInput')">invalid tag</mat-error>
         </mat-chip-list>
-        <mat-hint>Use COMMA to separate your tags</mat-hint>
+        <mat-hint>Use COMMA to separate your tags or choose them in the list</mat-hint>
         <mat-autocomplete #tags="matAutocomplete" (optionSelected)="selected($event)">
           <mat-option *ngFor="let tag of filteredTags | async" [value]="tag.name">
           {{tag.name}}

@@ -73,6 +73,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
                         this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
                     }
+                    this.refresh();
                 });
             }
         });
@@ -84,7 +85,9 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         const snackBarRef = this.snackBar.open(`User '${user.pseudo}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction)
-                this.userService.delete(user).subscribe();
+                this.userService.delete(user).subscribe(res => {
+                    this.refresh();
+                });
             else
                 this.dataSource.data = backup;
         });
@@ -101,6 +104,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
                         this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
                     }
+                    this.refresh();
                 });
             }
         });

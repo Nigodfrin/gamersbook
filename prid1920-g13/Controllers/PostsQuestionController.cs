@@ -159,50 +159,30 @@ namespace prid_1819_g13.Controllers
             if (user.Role.ToString() == "Admin" || (user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0))
             {
                 // supprime les commentaire associé a une question
-                while (_context.Comments.Where(x => x.PostId == question.Id).Count() != 0)
-                {
-                    var commentQ = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == question.Id);
-                    _context.Comments.Remove(commentQ);
-                    await _context.SaveChangesAsync();
-                }
+                var coms = await _context.Comments.Where(x => x.PostId == question.Id).ToListAsync();
+                _context.Comments.RemoveRange(coms);
+
                 // supprime les reponses associé a une question
-                while (_context.Posts.Where(x => x.ParentId == id).Count() != 0)
-                {
-                    var reponse = await _context.Posts.FirstOrDefaultAsync(x => x.ParentId == id);
-
+                var reponses = await _context.Posts.Where(x => x.ParentId == id).ToListAsync();
+                reponses.ForEach(async rep => {
                     //supprime les commentaire asssocié a une reponse
-                    while (_context.Comments.Where(x => x.PostId == reponse.Id).Count() != 0)
-                    {
-                        var commentR = await _context.Comments.FirstOrDefaultAsync(x => x.PostId == reponse.Id);
-                        _context.Comments.Remove(commentR);
-                        await _context.SaveChangesAsync();
-                    }
-                    while (_context.Votes.Where(x => x.PostId == reponse.Id).Count() != 0)
-                    {
-                        var VoteR = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == reponse.Id);
-                        _context.Votes.Remove(VoteR);
-                        await _context.SaveChangesAsync();
-                    }
-
-                    _context.Posts.Remove(reponse);
-                    await _context.SaveChangesAsync();
-                }
-
+                    var commentsRep = await _context.Comments.Where(x => x.PostId == rep.Id).ToListAsync();
+                    _context.Comments.RemoveRange(commentsRep);
+                    //supprime les votes
+                    var votesR = await _context.Votes.Where(x => x.PostId == rep.Id).ToListAsync();
+                    _context.Votes.RemoveRange(votesR);
+                    // supprime la réponse
+                    _context.Posts.Remove(rep);
+                });
                 // supprime les posttag associé a la question
-                while (_context.PostTags.Where(x => x.PostId == id).Count() != 0)
-                {
-                    var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == id);
-                    _context.PostTags.Remove(postTag);
-                    await _context.SaveChangesAsync();
-                }
-                while (_context.Votes.Where(x => x.PostId == question.Id).Count() != 0)
-                {
-                    var VoteQ = await _context.Votes.FirstOrDefaultAsync(x => x.PostId == question.Id);
-                    _context.Votes.Remove(VoteQ);
-                    await _context.SaveChangesAsync();
-                }
-
+                var postTags = await _context.PostTags.Where(x => x.PostId == id).ToListAsync();
+                _context.PostTags.RemoveRange(postTags);
+                // supprime les votes associés à la question
+                var votes = await _context.Votes.Where(x => x.PostId == id).ToListAsync();
+                _context.Votes.RemoveRange(votes);
+                // supprime la question
                 _context.Posts.Remove(question);
+
                 var res = await _context.SaveChangesAsyncWithValidation();
                 if (!res.IsEmpty)
                 {
@@ -223,7 +203,8 @@ namespace prid_1819_g13.Controllers
             {
                 return BadRequest();
             }
-            if(user.Id != post.AuthorId && user.Role.ToString() != "Admin"){
+            if (user.Id != post.AuthorId && user.Role.ToString() != "Admin")
+            {
                 return BadRequest();
             }
             post.Title = data.Title;

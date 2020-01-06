@@ -111,6 +111,9 @@ namespace prid_1819_g13.Controllers
                     var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == post.Id);
                     _context.PostTags.Remove(postTag);
                 }
+                if(post.Title == null){
+                    
+                }
             }
             // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title == null));
             // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title != null));

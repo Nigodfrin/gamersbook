@@ -93,8 +93,9 @@ export class PostListComponent implements OnInit {
     const snackBarRef = this.snackBar.open(` Post will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction){
-        this.postService.deletePost(post).subscribe();
-        this.refresh();
+        this.postService.deletePost(post).subscribe(res =>{
+          this.refresh();
+        });
       }
       else
         this.refresh();
