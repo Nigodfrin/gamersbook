@@ -24,7 +24,7 @@
               <a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
             </h4>
           </mat-card-title>
-          <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}}</mat-card-subtitle>
+          <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}} Reputation : {{post.user.reputation}} </mat-card-subtitle>
         </mat-card-title-group>
       </mat-card-header>
       <mat-card-content>

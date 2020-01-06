@@ -66,7 +66,6 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     edit(user: User) {
         const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: false } });
         dlg.beforeClose().subscribe(res => {
-            console.log(res);
             if (res) {
                 _.assign(user, res);
                 this.userService.update(user).subscribe(res => {

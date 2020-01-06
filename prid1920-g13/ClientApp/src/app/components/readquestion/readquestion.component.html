@@ -17,6 +17,7 @@
             <mat-chip *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
         </mat-chip-list>
         <span class="col-2">Posted by {{question.user.pseudo}}</span>
+        <span class="col-2">Reputation : {{question.user.reputation}}</span>
     </div>
     <div class="row" style="border-bottom: 1px solid black">
         <div class="offset-1 col-11 style2 divCom">
@@ -29,6 +30,7 @@
                         <div class="offset-7 col-3">
                             <p style="width: 100%;">
                                 Commented by {{com.author.pseudo}} <br />
+                                Reputation : {{com.author.reputation}} <br />
                                 {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
                             </p>
                         </div>
@@ -73,6 +75,7 @@
                     <div class="row">
                         <div class="offset-7 col-3" style="vertical-align: text-bottom;">
                             Answered by {{reponse.user.pseudo}} <br />
+                            Reputation : {{reponse.user.reputation}} <br />
                             {{reponse.timestamp | date :'d MMM, y, h:mm:ss'}}
                         </div>
                         <span class="col-2" *ngIf="authService.isAdmin() || isAuthor(reponse)">
@@ -93,6 +96,7 @@
                             <div class="offset-7 col-3">
                                 <p style="width: 100%;">
                                     Commented by {{com.author.pseudo}} <br />
+                                    Reputation : {{com.author.reputation}} <br />
                                     {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
                                 </p>
                             </div>

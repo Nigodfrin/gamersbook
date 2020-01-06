@@ -93,10 +93,10 @@ namespace prid_1819_g13.Controllers
             return user.ToDTO();
         }
         [Authorized(Role.Admin)]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        [HttpDelete("{pseudo}")]
+        public async Task<IActionResult> DeleteUser(string pseudo)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
 
             if (user == null)
             {
