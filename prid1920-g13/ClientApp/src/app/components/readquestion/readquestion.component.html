@@ -3,21 +3,28 @@
         <h3 class="col-12">{{question.title}}</h3>
         <span class="col-12">Asked : {{question.timestamp | date:'d MMM, y, h:mm:ss'}}</span>
     </div>
-    <div class="row divBodyQuestion" >
+    <div class="row divBodyQuestion">
         <div class="col-1">
-            <mat-icon matBadge="{{question.numUp}}" matBadgeSize="small" matBadgePosition="above below" style="color:green;"> <a style="cursor: pointer;" (click)="addVote(question.id,1)">thumb_up</a>
+                <button class="buttonstyle" [disabled]="currentUser.reputation <= 14" (click)="addVote(question.id,1)">
+            <mat-icon  matBadge="{{question.numUp}}" matBadgeSize="small" matBadgePosition="above below"
+                style="cursor: pointer; color:green;"> thumb_up
             </mat-icon>
+        </button>
             <p>{{question.score}}</p>
-            <mat-icon matBadge="{{question.numDown}}" matBadgeSize="small" matBadgePosition="above below" style="color:red;"> <a style="cursor: pointer;" (click)="addVote(question.id,-1)">thumb_down</a>
+            <button class="buttonstyle" [disabled]="currentUser.reputation <= 29"  (click)="addVote(question.id,-1)">
+            <mat-icon matBadge="{{question.numDown}}" matBadgeSize="small" matBadgePosition="above below"
+                style="cursor: pointer;color:red;"> thumb_down
             </mat-icon>
-        
+        </button>
+
         </div>
         <markdown [data]="question.body" class="col-10"></markdown>
         <mat-chip-list class="offset-1 col-5">
             <mat-chip style="background-color: goldenrod;" *ngFor="let tag of question.tags"> {{tag.name}}</mat-chip>
         </mat-chip-list>
-        <span class="col-2">Posted by {{question.user.pseudo}}</span>
-        <span class="col-2">Reputation : {{question.user.reputation}}</span>
+        <span class="col-2">Posted by {{question.user.pseudo}} <br />
+            Reputation : {{question.user.reputation}}
+        </span>
     </div>
     <div class="row" style="border-bottom: 1px solid black">
         <div class="offset-1 col-11 style2 divCom">
@@ -43,28 +50,37 @@
                 </div>
             </div>
         </div>
-                <div class="offset-11 col-1">
-                    <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(question.id)"
-                            style="cursor: pointer;">add</a>
-                    </mat-icon>
-                </div>
+        <div class="offset-11 col-1">
+            <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(question.id)"
+                    style="cursor: pointer;">add</a>
+            </mat-icon>
+        </div>
     </div>
     <div *ngFor="let reponse of question.reponses;let index = index;let isFirst = first" class="divRep">
         <h4 *ngIf="isFirst && question.acceptedPostId" class="col-12 titleAcceptedAnswer"> Accepted answer</h4>
-        <h4 *ngIf="(isFirst && !question.acceptedPostId) || (index == 1 && question.acceptedPostId) " class="titleAnswer">Answers</h4>
+        <h4 *ngIf="(isFirst && !question.acceptedPostId) || (index == 1 && question.acceptedPostId) "
+            class="titleAnswer">Answers</h4>
         <div class="row">
             <div class="col-1">
-                <mat-icon matBadge="{{reponse.numUp}}" matBadgeSize="small" matBadgePosition="above below" style="color:green;"> <a style="cursor: pointer;" (click)="addVote(reponse.id,1)">thumb_up</a>
+                <button (click)="addVote(reponse.id,1)" class="buttonstyle" [disabled]="currentUser.reputation <= 14">
+                    <mat-icon matBadge="{{reponse.numUp}}" matBadgeSize="small" matBadgePosition="above below"
+                        style="color:green;cursor: pointer;"> thumb_up
+                    </mat-icon>
+                </button>
+                    <p> {{reponse.score}}</p>
+                <button (click)="addVote(reponse.id,-1)" class="buttonstyle" [disabled]="currentUser.reputation <= 29">
+                    <mat-icon matBadge="{{reponse.numDown}}" matBadgeSize="small" matBadgePosition="above below"
+                    style="color:red;cursor: pointer;" >thumb_down
                 </mat-icon>
-                <p> {{reponse.score}}</p>
-                <mat-icon matBadge="{{reponse.numDown}}" matBadgeSize="small" matBadgePosition="above below" style="color:red;"> <a style="cursor: pointer;"
-                        (click)="addVote(reponse.id,-1)">thumb_down</a>
-                </mat-icon>
+            </button>
+
                 <br />
-                <mat-icon *ngIf="currentUser && reponse.id != question.acceptedPostId" style="color: green"><a title="Accept answer" style="cursor: pointer"
-                        (click)="acceptAnswer(reponse)">done</a></mat-icon>
-                <mat-icon *ngIf="currentUser && reponse.id == question.acceptedPostId" style="color: darkred"><a title="Remove accepted answer"
-                    style="cursor: pointer" (click)="removeAcceptAnswer(question)">close</a></mat-icon>
+                <mat-icon *ngIf="currentUser && reponse.id != question.acceptedPostId" style="color: green"><a
+                        title="Accept answer" style="cursor: pointer" (click)="acceptAnswer(reponse)">done</a>
+                </mat-icon>
+                <mat-icon *ngIf="currentUser && reponse.id == question.acceptedPostId" style="color: darkred"><a
+                        title="Remove accepted answer" style="cursor: pointer"
+                        (click)="removeAcceptAnswer(question)">close</a></mat-icon>
             </div>
             <br *ngIf="currentUser && reponse.id == question.acceptedPostId" />
             <div class="col-10">
@@ -109,10 +125,10 @@
                     <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
                 </div>
             </div>
-                    <div class="offset-11 col-1">
-                        <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(reponse.id)"
-                                style="cursor: pointer;">add</a></mat-icon>
-                    </div>
+            <div class="offset-11 col-1">
+                <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(reponse.id)"
+                        style="cursor: pointer;">add</a></mat-icon>
+            </div>
         </div>
     </div>
     <div class="row" *ngIf="currentUser">

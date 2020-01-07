@@ -65,3 +65,6 @@ border-radius: 10px;
 .mat-badge-content{
     background :  rgba(31,103,153,1);
   }
+  .buttonstyle{
+      all: unset;
+  }

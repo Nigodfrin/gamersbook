@@ -138,18 +138,4 @@ export class CreateQuestionComponent implements OnInit {
       this.router.navigate(['/postlist']);
     });
   }
-  cancel() {
-    if (this.isNew) {
-      this.ctlBody.setValue('');
-      this.ctlTitle.setValue('');
-    }
-    else {
-      this.ctlTitle.setValue(this.tmpTitle);
-      this.ctlBody.setValue(this.tmpBody);
-    }
-    // if(this.frm.valid)
-    // this.frm.reset();
-  }
-
-
 }
