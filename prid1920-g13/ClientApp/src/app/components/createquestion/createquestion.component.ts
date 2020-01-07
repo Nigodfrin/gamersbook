@@ -74,12 +74,11 @@ export class CreateQuestionComponent implements OnInit {
     if (index >= 0) {
       this.ntags.splice(index, 1);
       this.allTags.push(new Tag(tag));
-      this.tagsCtrl.setValue(null);
+      this.tagsCtrl.markAsDirty();
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    console.log("1");
     this.ntags.push(this.allTags.find(tag => tag.name == event.option.viewValue));
     this.allTags = _.remove(this.allTags,tag => tag.name != event.option.viewValue);
     this.tagInput.nativeElement.value = '';
@@ -104,6 +103,7 @@ export class CreateQuestionComponent implements OnInit {
         this.frm = this.fb.group({
           body: this.ctlBody,
           title: this.ctlTitle,
+          tags: this.tagsCtrl
         }, {});
         this.tagService.getAll().subscribe(tags => {
           this.ntags.forEach(tag => {
@@ -120,6 +120,7 @@ export class CreateQuestionComponent implements OnInit {
       this.frm = this.fb.group({
         body: this.ctlBody,
         title: this.ctlTitle,
+        tags: this.tagsCtrl
       },);
       this.tagService.getAll().subscribe(tags => {
         this.allTags = tags;
@@ -132,7 +133,7 @@ export class CreateQuestionComponent implements OnInit {
     });      
   }
   update() {
-    var id = +this.route.snapshot.paramMap.get('id');
+    var id = this.route.snapshot.paramMap.get('id');
     var post: Post = new Post({ id: id, body: this.ctlBody.value, title: this.ctlTitle.value,tags: this.ntags });
     this.postService.update(post).subscribe(res => {
       this.router.navigate(['/postlist']);

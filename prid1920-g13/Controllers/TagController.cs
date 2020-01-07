@@ -74,6 +74,8 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             }
 
+            var postTags = await _context.PostTags.Where(p => p.TagId == id).ToListAsync();
+            _context.PostTags.RemoveRange(postTags);
             _context.Tags.Remove(tag);
             await _context.SaveChangesAsync();
 

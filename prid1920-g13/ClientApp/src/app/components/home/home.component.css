@@ -1,0 +1,9 @@
+.titleHome{
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    margin: 20px 0px;
+    background: rgb(240,194,6);
+    background: radial-gradient(circle, rgba(240,194,6,1) 48%, rgba(222,235,1,1) 64%);
+    border-radius: 10px;
+}

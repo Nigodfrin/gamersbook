@@ -84,11 +84,12 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
     delete(tag: Tag) {
         const backup = this.dataSource.data;
         this.dataSource.data = _.filter(this.dataSource.data, m => m.name !== tag.name);
-        const snackBarRef = this.snackBar.open(`Tag '${tag.name}' will be deleted`, 'Undo', { duration: 10000 });
+        const snackBarRef = this.snackBar.open(`Tag '${tag.name}' will be deleted`, 'Undo', { duration: 5000 });
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction){
-
-                this.tagService.delete(tag).subscribe();
+                this.tagService.delete(tag).subscribe(res => {
+                    this.refresh();
+                });
             }
             else
                 this.dataSource.data = backup;
@@ -107,6 +108,7 @@ export class TagListComponent implements AfterViewInit, OnDestroy {
                         this.snackBar.open(`There was an error at the server. The tag has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
                         this.refresh();
                     }
+                    this.refresh();
                 });
             }
         });

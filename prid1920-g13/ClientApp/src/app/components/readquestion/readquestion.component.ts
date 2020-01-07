@@ -188,8 +188,9 @@ export class ReadQuestion implements OnInit {
             const snackBarData = this.snackBar.open(`You're about to cancel your vote`, 'Undo', { duration: 5000 });
             snackBarData.afterDismissed().subscribe(res => {
               if (!res.dismissedByAction) {
-                this.voteService.delete(vote).subscribe();
-                this.refresh();
+                this.voteService.delete(vote).subscribe(res => {
+                  this.refresh();
+                });
               }
               else {
                 this.refresh();
