@@ -151,7 +151,7 @@ namespace prid_1819_g13.Controllers
             var question = await _context.Posts.FindAsync(id);
             var pseudo = User.Identity.Name;
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
-            if(!(user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0)){
+            if(user.Role.ToString() != "Admin" && !(user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0)){
                 return Unauthorized();
             }
 

@@ -30,7 +30,7 @@ namespace prid_1819_g13.Controllers
         public async Task<IActionResult> UpdateComment(int id ,CommentDTO data)
         {
              var comment = await _context.Comments.FindAsync(id);
-            if(!isAuthor(comment)){
+            if(!isAuthorOrAdmin(comment)){
                 return Unauthorized();
             }
              
@@ -50,7 +50,7 @@ namespace prid_1819_g13.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var comment = await _context.Comments.FindAsync(id);
-            if(!isAuthor(comment)){
+            if(!isAuthorOrAdmin(comment)){
                 return Unauthorized();
             }
             if (comment == null)
@@ -81,11 +81,11 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-        private bool isAuthor(Comment comment){
+        private bool isAuthorOrAdmin(Comment comment){
             var pseudo = User.Identity.Name;
             var user =  _context.Users.FirstOrDefault(x => x.Pseudo == pseudo);
 
-            return user.Id == comment.AuthorId;
+            return user.Id == comment.AuthorId || user.Role.ToString() == "Admin" ;
         }
 
     }
