@@ -56,10 +56,10 @@ namespace prid_1819_g13.Controllers
             .ToList());
         }
 
-        public List<Post> GetWithTags(List<Post> questions)
+        public List<Post> GetWithTags(List<Post> questions,string filter)
         {
             var posts = questions.
-            Where(p => p.PostTags.Count() > 0)
+            Where(p => p.PostTags.Count() > 0 && p.Tags.Any(t => t.Name.Contains(filter)))
             .OrderByDescending(a => a.Timestamp)
             .ToList();
             return posts;
@@ -111,7 +111,7 @@ namespace prid_1819_g13.Controllers
             }
             if (selectedVal == "tags")
             {
-                questions = this.GetWithTags(questions);
+                questions = this.GetWithTags(questions,filter);
             }
             if (selectedVal == "unanswered")
             {
@@ -142,44 +142,44 @@ namespace prid_1819_g13.Controllers
             if (!res.IsEmpty)
                 return BadRequest(res);
             return NoContent();
-            //  return CreatedAtAction( nameof(GetQuest),new { id = newQuestion.Id},  newQuestion.PostQuestToDTO());
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
             var question = await _context.Posts.FindAsync(id);
             var pseudo = User.Identity.Name;
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            if(user.Role.ToString() != "Admin" && !(user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0)){
+                return Unauthorized();
+            }
 
             if (question == null)
             {
                 return NotFound();
             }
-            var test = user.Role.ToString();
-            if (user.Role.ToString() == "Admin" || (user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0))
-            {
                 // supprime les commentaire associé a une question
-                var coms = await _context.Comments.Where(x => x.PostId == question.Id).ToListAsync();
-                _context.Comments.RemoveRange(coms);
+                _context.Comments.RemoveRange(question.Comments);
 
                 // supprime les reponses associé a une question
-                var reponses = await _context.Posts.Where(x => x.ParentId == id).ToListAsync();
-                reponses.ForEach(async rep => {
+                foreach (var rep in question.Reponses)
+                {
+                    if(rep.Id == question.AcceptedPostId){
+                        question.AcceptedPostId = null;
+                        _context.Entry(question).State = EntityState.Modified;
+                    }
                     //supprime les commentaire asssocié a une reponse
-                    var commentsRep = await _context.Comments.Where(x => x.PostId == rep.Id).ToListAsync();
-                    _context.Comments.RemoveRange(commentsRep);
+                    _context.Comments.RemoveRange(rep.Comments);
                     //supprime les votes
-                    var votesR = await _context.Votes.Where(x => x.PostId == rep.Id).ToListAsync();
-                    _context.Votes.RemoveRange(votesR);
+                    _context.Votes.RemoveRange(rep.Votes);
                     // supprime la réponse
                     _context.Posts.Remove(rep);
-                });
-                // supprime les posttag associé a la question
-                var postTags = await _context.PostTags.Where(x => x.PostId == id).ToListAsync();
-                _context.PostTags.RemoveRange(postTags);
+                }
+                _context.SaveChanges();
+                // supprime les postTag associé a la question
+                _context.PostTags.RemoveRange(question.PostTags);
                 // supprime les votes associés à la question
-                var votes = await _context.Votes.Where(x => x.PostId == id).ToListAsync();
-                _context.Votes.RemoveRange(votes);
+                _context.Votes.RemoveRange(question.Votes);
                 // supprime la question
                 _context.Posts.Remove(question);
 
@@ -189,7 +189,6 @@ namespace prid_1819_g13.Controllers
 
                     return BadRequest(res);
                 }
-            }
             return NoContent();
         }
         [HttpPut]

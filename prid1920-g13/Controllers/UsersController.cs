@@ -104,25 +104,61 @@ namespace prid_1819_g13.Controllers
             }
 
             _context.Votes.RemoveRange(user.Votes);
+            var postsAccepted = await _context.Posts.Where(p => p.User.Id == user.Id && p.AcceptedPostId != null).ToListAsync();
+            foreach(var postAccepted in postsAccepted){
+                postAccepted.AcceptedPostId = null;
+                _context.Entry(postAccepted).State = EntityState.Modified;
+            }
+            _context.SaveChanges();
             foreach (var post in user.Posts)
             {
-               while (_context.PostTags.Where(x => x.PostId == post.Id).Count() != 0)
-                {
-                    var postTag = await _context.PostTags.FirstOrDefaultAsync(x => x.PostId == post.Id);
-                    _context.PostTags.Remove(postTag);
-                }
-                if(post.Title == null){
-                    
-                }
+                if(post.Title == null){await DeleteR(post);}
+                else { DeleteQ(post);}
+                   
+                
             }
-            // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title == null));
-            // _context.Posts.RemoveRange(user.Posts.Where(p => p.Title != null));
             _context.Comments.RemoveRange(user.Comments);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
+        private async Task<IActionResult> DeleteR(Post post)
+        {
+            var question = await _context.Posts.FindAsync(post.ParentId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            _context.Votes.RemoveRange(post.Votes);
+            _context.Comments.RemoveRange(post.Comments);
+            _context.Posts.Remove(post);
+            return NoContent();
+        }
+
+        private void DeleteQ(Post question)
+        {
+            _context.Comments.RemoveRange(question.Comments);
+
+                // supprime les reponses associé a une question
+                foreach (var rep in question.Reponses)
+                {
+                    //supprime les commentaire asssocié a une reponse
+                    _context.Comments.RemoveRange(rep.Comments);
+                    //supprime les votes
+                    _context.Votes.RemoveRange(rep.Votes);
+                    // supprime la réponse
+                    _context.Posts.Remove(rep);
+                }
+                // supprime les postTag associé a la question
+                _context.PostTags.RemoveRange(question.PostTags);
+                // supprime les votes associés à la question
+                _context.Votes.RemoveRange(question.Votes);
+                // supprime la question
+                _context.Posts.Remove(question);
+        }
+
         [AllowAnonymous]
         [HttpGet("available/{pseudo}")]
         public async Task<ActionResult<bool>> IsAvailable(string pseudo)

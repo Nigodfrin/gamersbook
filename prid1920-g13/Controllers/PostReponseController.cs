@@ -86,11 +86,17 @@ namespace prid_1819_g13.Controllers
 
             return question.PostQuestToDTO();
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
             var post = await _context.Posts.FindAsync(id);
             var question = await _context.Posts.FindAsync(post.ParentId);
+            if(user.Role.ToString() != "Admin" && user.Id != post.User.Id){
+                return Unauthorized();
+            }
             if (post == null)
             {
                 return NotFound();
