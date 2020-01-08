@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using prid_1819_g13.Helpers;
 using PRID_Framework;
+using System.Linq;
 
 namespace prid_1819_g13.Controllers
 {
@@ -24,10 +25,14 @@ namespace prid_1819_g13.Controllers
         {
             return (await _context.Comments.ToListAsync()).ToDTO();
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateComment(int id ,CommentDTO data)
         {
              var comment = await _context.Comments.FindAsync(id);
+            if(!isAuthor(comment)){
+                return Unauthorized();
+            }
              
             if (id != comment.Id)
             {
@@ -40,11 +45,14 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var comment = await _context.Comments.FindAsync(id);
-
+            if(!isAuthor(comment)){
+                return Unauthorized();
+            }
             if (comment == null)
             {
                 return NotFound();
@@ -55,7 +63,8 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-         [HttpPost]
+        [Authorized(Role.Admin,Role.Member)]
+        [HttpPost]
         public async Task<ActionResult<VoteDTO>> CreateComment(CommentDTO data)
         {
             var newComment = new Comment()
@@ -71,6 +80,12 @@ namespace prid_1819_g13.Controllers
                 return BadRequest(res);
 
             return NoContent();
+        }
+        private bool isAuthor(Comment comment){
+            var pseudo = User.Identity.Name;
+            var user =  _context.Users.FirstOrDefault(x => x.Pseudo == pseudo);
+
+            return user.Id == comment.AuthorId;
         }
 
     }

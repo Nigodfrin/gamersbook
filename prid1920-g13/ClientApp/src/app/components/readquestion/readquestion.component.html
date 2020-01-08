@@ -5,13 +5,13 @@
     </div>
     <div class="row divBodyQuestion">
         <div class="col-1">
-                <button class="buttonstyle" [disabled]="currentUser.reputation <= 14" (click)="addVote(question.id,1)">
+                <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 14" (click)="addVote(question.id,1)">
             <mat-icon  matBadge="{{question.numUp}}" matBadgeSize="small" matBadgePosition="above below"
                 style="cursor: pointer; color:green;"> thumb_up
             </mat-icon>
         </button>
             <p>{{question.score}}</p>
-            <button class="buttonstyle" [disabled]="currentUser.reputation <= 29"  (click)="addVote(question.id,-1)">
+            <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 29"  (click)="addVote(question.id,-1)">
             <mat-icon matBadge="{{question.numDown}}" matBadgeSize="small" matBadgePosition="above below"
                 style="cursor: pointer;color:red;"> thumb_down
             </mat-icon>
@@ -62,23 +62,23 @@
             class="titleAnswer">Answers</h4>
         <div class="row">
             <div class="col-1">
-                <button (click)="addVote(reponse.id,1)" class="buttonstyle" [disabled]="currentUser.reputation <= 14">
+                <button (click)="addVote(reponse.id,1)" class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 14">
                     <mat-icon matBadge="{{reponse.numUp}}" matBadgeSize="small" matBadgePosition="above below"
                         style="color:green;cursor: pointer;"> thumb_up
                     </mat-icon>
                 </button>
                     <p> {{reponse.score}}</p>
-                <button (click)="addVote(reponse.id,-1)" class="buttonstyle" [disabled]="currentUser.reputation <= 29">
+                <button (click)="addVote(reponse.id,-1)" class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 29">
                     <mat-icon matBadge="{{reponse.numDown}}" matBadgeSize="small" matBadgePosition="above below"
                     style="color:red;cursor: pointer;" >thumb_down
                 </mat-icon>
             </button>
 
                 <br />
-                <mat-icon *ngIf="currentUser && reponse.id != question.acceptedPostId" style="color: green"><a
+                <mat-icon *ngIf="currentUser && currentUser.id == question.user.id && reponse.id != question.acceptedPostId" style="color: green"><a
                         title="Accept answer" style="cursor: pointer" (click)="acceptAnswer(reponse)">done</a>
                 </mat-icon>
-                <mat-icon *ngIf="currentUser && reponse.id == question.acceptedPostId" style="color: darkred"><a
+                <mat-icon *ngIf="currentUser  && currentUser.id == question.user.id && reponse.id == question.acceptedPostId" style="color: darkred"><a
                         title="Remove accepted answer" style="cursor: pointer"
                         (click)="removeAcceptAnswer(question)">close</a></mat-icon>
             </div>
@@ -134,7 +134,7 @@
     <div class="row" *ngIf="currentUser">
         <label for="answer" class="col-form-label-lg col-12">Your Answer</label>
         <simplemde class="col-12" id="anwser" [(ngModel)]="Answer"></simplemde>
-        <markdown class="col-12" style="border: 4px double black;border-radius: 1em;margin: 10px;min-height: 100px;"
+        <markdown class="col-12" style="word-wrap: break-word ;border: 4px double black;border-radius: 1em;margin: 10px;min-height: 100px;"
             [data]="Answer"></markdown>
         <div class="offset-9">
             <button type="submit" mat-raised-button color="primary"

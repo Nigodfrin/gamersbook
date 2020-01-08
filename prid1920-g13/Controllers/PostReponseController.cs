@@ -71,10 +71,16 @@ namespace prid_1819_g13.Controllers
             }
 
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpGet("putAccepted/{questionId}/{acceptedPostId}")]
         public async Task<ActionResult<PostQuestionDTO>> putAcceptedPost(int questionId, int acceptedPostId)
         {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo); 
             var question = await _context.Posts.FindAsync(questionId);
+            if(user.Id != question.User.Id){
+                return Unauthorized();
+            }
             if (questionId != question.Id)
             {
                 return BadRequest();
@@ -94,7 +100,7 @@ namespace prid_1819_g13.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
             var post = await _context.Posts.FindAsync(id);
             var question = await _context.Posts.FindAsync(post.ParentId);
-            if(user.Role.ToString() != "Admin" && user.Id != post.User.Id){
+            if(user.Id != post.User.Id){
                 return Unauthorized();
             }
             if (post == null)

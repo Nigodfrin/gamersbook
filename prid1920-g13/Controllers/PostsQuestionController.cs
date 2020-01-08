@@ -119,6 +119,7 @@ namespace prid_1819_g13.Controllers
             }
             return questions.PostQuestToDTO();
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpPost("add")]
         public async Task<ActionResult<PostQuestionDTO>> CreateQuestion(PostQuestionDTO data)
         {
@@ -150,7 +151,7 @@ namespace prid_1819_g13.Controllers
             var question = await _context.Posts.FindAsync(id);
             var pseudo = User.Identity.Name;
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
-            if(user.Role.ToString() != "Admin" && !(user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0)){
+            if(!(user.Id == question.AuthorId && _context.Posts.Where(x => x.ParentId == id).Count() == 0 && _context.Comments.Where(x => x.PostId == question.Id).Count() == 0)){
                 return Unauthorized();
             }
 
@@ -191,6 +192,7 @@ namespace prid_1819_g13.Controllers
                 }
             return NoContent();
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpPut]
         public async Task<IActionResult> updatePost(PostQuestionDTO data)
         {
@@ -204,7 +206,7 @@ namespace prid_1819_g13.Controllers
             }
             if (user.Id != post.AuthorId && user.Role.ToString() != "Admin")
             {
-                return BadRequest();
+                return Unauthorized();
             }
             post.Title = data.Title;
             post.Body = data.Body;
@@ -226,13 +228,19 @@ namespace prid_1819_g13.Controllers
             return NoContent();
 
         }
+        [Authorized(Role.Admin,Role.Member)]
         [HttpPut("removeAcceptAnswer")]
         public async Task<ActionResult<PostQuestionDTO>> removeAcceptAnswer(PostQuestionDTO data)
         {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo); 
             var question = await _context.Posts.FindAsync(data.Id);
             if (question == null)
             {
                 return BadRequest();
+            }
+            if(user.Id != question.User.Id){
+                return Unauthorized();
             }
             question.AcceptedPostId = null;
             _context.Entry(question).State = EntityState.Modified;
