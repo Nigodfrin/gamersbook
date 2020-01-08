@@ -31,7 +31,7 @@ export class SignUpComponent {
         this.ctlLastname = this.fb.control('', [Validators.minLength(3), Validators.maxLength(50)]);
         this.ctlPasswordConfirm = this.fb.control('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]);
         this.ctlEmail = this.fb.control('', [Validators.email, Validators.required], [this.emailUsed()]);
-        this.ctlBirthdate = this.fb.control('', [this.isAdult()]);
+        this.ctlBirthdate = this.fb.control(null, [this.isAdult() ]);
         this.frm = this.fb.group({
             pseudo: this.ctlPseudo,
             firstname: this.ctlFirstname,
