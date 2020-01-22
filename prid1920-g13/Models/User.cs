@@ -21,6 +21,7 @@ namespace prid_1819_g13.Models
         public string Pseudo { get; set; }
         [Required(ErrorMessage = "Requiered")]
         public string Password { get; set; }
+        public string PicturePath { get; set; }
         [Required(ErrorMessage = "Requiered")]
         [EmailAddress(ErrorMessage = "Email is not valid")]
         public string Email { get; set; }
@@ -40,6 +41,8 @@ namespace prid_1819_g13.Models
         public virtual IList<Post> Posts {get;set;}
         [NotMapped]
         public virtual IList<Comment> Comments {get;set;}
+        [NotMapped]
+        public virtual IList<Game> Games {get;set;}
         [NotMapped]
         public int? Age
         {

@@ -12,6 +12,7 @@ import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
 import {TagListComponent} from '../components/taglist/taglist.component';
 import { AuthGuardAuthor } from '../services/authAuthor.guard';
+import { ProfileComponent } from '../components/profile-component/profile.component';
 
 
 
@@ -22,6 +23,11 @@ const appRoutes: Routes = [
     component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin] }
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',

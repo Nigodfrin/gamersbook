@@ -1,0 +1,29 @@
+<div class="offset-1 col-11 style2 divCom">
+    <div class="row rowCom" *ngFor="let com of comments;">
+        <div class="container">
+
+            <div class="row">
+                <markdown [data]="com.body" class="offset-1 col-11"></markdown>
+            </div>
+            <div class="row">
+                <div class="offset-7 col-3">
+                    <p style="width: 100%;">
+                        Commented by {{com.author.pseudo}} <br />
+                        Reputation : {{com.author.reputation}} <br />
+                        {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
+                    </p>
+                </div>
+                <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
+                    <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
+                    <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="offset-11 col-1">
+    <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(question.id)"
+            style="cursor: pointer;">add</a>
+    </mat-icon>
+</div>

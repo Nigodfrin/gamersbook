@@ -24,8 +24,10 @@ import { MarkdownModule } from 'ngx-markdown';
 import { SimplemdeModule } from 'ngx-simplemde';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
-
 import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
+import { CommentComponent } from '../components/comment-component/comment.component';
+import { ProfileComponent, DialogCropper } from '../components/profile-component/profile.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -44,9 +46,13 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     ReadQuestion,
     EditCommentComponent,
     CreateQuestionComponent,
-    TagListComponent
+    TagListComponent,
+    CommentComponent,
+    ProfileComponent,
+    DialogCropper
+    
   ],
-  entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent],
+  entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -57,6 +63,7 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
     SharedModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
     SimplemdeModule.forRoot({}),
+    ImageCropperModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

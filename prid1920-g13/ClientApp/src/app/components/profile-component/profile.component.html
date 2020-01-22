@@ -1,0 +1,56 @@
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-3" style="position: relative;">
+            <img style="box-shadow: 5px 10px #353535;"  class="img-responsive rounded-lg" [src]="picture">
+            
+            <label  for="file-input" class="labelInput" style="position: absolute; bottom: 0px; right: 15px;cursor: pointer;"><mat-icon>edit</mat-icon></label>
+            <input type="file" id="file-input" (change)="fileChangeEvent($event)" style="display: none;" />
+
+        </div>
+        <div class="container col-9">
+            <div class="row" style="padding: 0px 50px 50px 50px;">
+                <h3 class="col-12 profileTitle" style="text-align: center;">{{userProfile.pseudo}} profile's</h3>
+            </div>
+            <div class="row " style="padding: 0px 0px 50px 0px;">
+                <h4 class="col-6">Lastname :  {{userProfile.lastName}} </h4>
+                <h4 class="col-6">Firstname :  {{userProfile.firstName}} </h4>
+            </div>
+            <div class="row" style="padding: 0px 0px 50px 0px;">
+                <h4 class="col-6"> Birthdate :  {{userProfile.birthDate}} </h4>
+                <h4 class="col-6">email :  {{userProfile.email}} </h4>
+            </div>
+            <div><button mat-icon-button aria-label="Edit user icon" ><mat-icon (click)="edit()" style="color: goldenrod;">edit</mat-icon ></button></div>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="col-12">Questions posées</h3>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let question of userPostsQuest">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{question.title}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Score : {{question.score}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <markdown>{{question.body}}</markdown>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <div class="row">
+        <h3 class="col-12">Réponses données</h3>
+        <ul>
+            <li *ngFor="let rep of userPostsRep"> {{rep.body}} </li>
+        </ul>
+    </div>
+    <div class="row">
+        <h3 class="col-12">Commentaires ajoutés</h3>
+        <ul>
+            <li *ngFor="let com of userComment"> {{com.body}} </li>
+        </ul>
+    </div>
+</section>
+
+
+

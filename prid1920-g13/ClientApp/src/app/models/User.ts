@@ -13,6 +13,7 @@ export class User {
     firstName: string;
     birthDate: Date;
     reputation: any;
+    picturePath: string;
     role: Role;
     token: string;
     constructor(data: any) {
@@ -23,6 +24,7 @@ export class User {
         this.lastName = data.lastName;
         this.firstName = data.firstName;
         this.reputation = data.reputation;
+        this.picturePath = data.picturePath;
         this.email = data.email;
         this.birthDate = data.birthDate &&
           data.birthDate.length > 10 ? data.birthDate.substring(0, 10) : data.birthDate;

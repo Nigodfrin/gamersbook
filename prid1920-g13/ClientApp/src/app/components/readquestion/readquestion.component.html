@@ -5,17 +5,19 @@
     </div>
     <div class="row divBodyQuestion">
         <div class="col-1">
-                <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 14" (click)="addVote(question.id,1)">
-            <mat-icon  matBadge="{{question.numUp}}" matBadgeSize="small" matBadgePosition="above below"
-                style="cursor: pointer; color:green;"> thumb_up
-            </mat-icon>
-        </button>
+            <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 14"
+                (click)="addVote(question.id,1)">
+                <mat-icon matBadge="{{question.numUp}}" matBadgeSize="small" matBadgePosition="above below"
+                    style="cursor: pointer; color:green;"> thumb_up
+                </mat-icon>
+            </button>
             <p>{{question.score}}</p>
-            <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 29"  (click)="addVote(question.id,-1)">
-            <mat-icon matBadge="{{question.numDown}}" matBadgeSize="small" matBadgePosition="above below"
-                style="cursor: pointer;color:red;"> thumb_down
-            </mat-icon>
-        </button>
+            <button class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 29"
+                (click)="addVote(question.id,-1)">
+                <mat-icon matBadge="{{question.numDown}}" matBadgeSize="small" matBadgePosition="above below"
+                    style="cursor: pointer;color:red;"> thumb_down
+                </mat-icon>
+            </button>
 
         </div>
         <markdown [data]="question.body" class="col-10"></markdown>
@@ -26,60 +28,37 @@
             Reputation : {{question.user.reputation}}
         </span>
     </div>
-    <div class="row" style="border-bottom: 1px solid black">
-        <div class="offset-1 col-11 style2 divCom">
-            <div class="row rowCom" *ngFor="let com of question.comments">
-                <div class="container">
-                    <div class="row">
-                        <markdown [data]="com.body" class="offset-1 col-11"></markdown>
-                    </div>
-                    <div class="row">
-                        <div class="offset-7 col-3">
-                            <p style="width: 100%;">
-                                Commented by {{com.author.pseudo}} <br />
-                                Reputation : {{com.author.reputation}} <br />
-                                {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
-                            </p>
-                        </div>
-                        <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
-                            <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
-                            <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
-                        </span>
-                    </div>
-                    <mat-divider class="col-12"></mat-divider>
-                </div>
-            </div>
-        </div>
-        <div class="offset-11 col-1">
-            <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(question.id)"
-                    style="cursor: pointer;">add</a>
-            </mat-icon>
-        </div>
-    </div>
+    <app-comment class="row" style="border-bottom: 1px solid black" [comments]="question.comments"
+        (refreshAlert)="refresh()"></app-comment>
     <div *ngFor="let reponse of question.reponses;let index = index;let isFirst = first" class="divRep">
         <h4 *ngIf="isFirst && question.acceptedPostId" class="col-12 titleAcceptedAnswer"> Accepted answer</h4>
         <h4 *ngIf="(isFirst && !question.acceptedPostId) || (index == 1 && question.acceptedPostId) "
             class="titleAnswer">Answers</h4>
         <div class="row">
             <div class="col-1">
-                <button (click)="addVote(reponse.id,1)" class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 14">
+                <button (click)="addVote(reponse.id,1)" class="buttonstyle"
+                    [disabled]="currentUser && currentUser.reputation <= 14">
                     <mat-icon matBadge="{{reponse.numUp}}" matBadgeSize="small" matBadgePosition="above below"
                         style="color:green;cursor: pointer;"> thumb_up
                     </mat-icon>
                 </button>
-                    <p> {{reponse.score}}</p>
-                <button (click)="addVote(reponse.id,-1)" class="buttonstyle" [disabled]="currentUser && currentUser.reputation <= 29">
+                <p> {{reponse.score}}</p>
+                <button (click)="addVote(reponse.id,-1)" class="buttonstyle"
+                    [disabled]="currentUser && currentUser.reputation <= 29">
                     <mat-icon matBadge="{{reponse.numDown}}" matBadgeSize="small" matBadgePosition="above below"
-                    style="color:red;cursor: pointer;" >thumb_down
-                </mat-icon>
-            </button>
+                        style="color:red;cursor: pointer;">thumb_down
+                    </mat-icon>
+                </button>
 
                 <br />
-                <mat-icon *ngIf="currentUser && currentUser.id == question.user.id && reponse.id != question.acceptedPostId" style="color: green"><a
-                        title="Accept answer" style="cursor: pointer" (click)="acceptAnswer(reponse)">done</a>
+                <mat-icon
+                    *ngIf="currentUser && currentUser.id == question.user.id && reponse.id != question.acceptedPostId"
+                    style="color: green"><a title="Accept answer" style="cursor: pointer"
+                        (click)="acceptAnswer(reponse)">done</a>
                 </mat-icon>
-                <mat-icon *ngIf="currentUser  && currentUser.id == question.user.id && reponse.id == question.acceptedPostId" style="color: darkred"><a
-                        title="Remove accepted answer" style="cursor: pointer"
+                <mat-icon
+                    *ngIf="currentUser  && currentUser.id == question.user.id && reponse.id == question.acceptedPostId"
+                    style="color: darkred"><a title="Remove accepted answer" style="cursor: pointer"
                         (click)="removeAcceptAnswer(question)">close</a></mat-icon>
             </div>
             <br *ngIf="currentUser && reponse.id == question.acceptedPostId" />
@@ -102,39 +81,16 @@
                 </div>
             </div>
             <mat-divider *ngIf="reponse.comments.length > 0" class="col-12"></mat-divider>
-            <div class="container style2 divCom">
-                <div class="row rowCom" *ngFor="let com of reponse.comments; let isLast = last;">
-                    <div class="container">
-                        <div class="row">
-                            <markdown [data]="com.body" class="offset-2 col-8"></markdown>
-                        </div>
-                        <div class="row">
-                            <div class="offset-7 col-3">
-                                <p style="width: 100%;">
-                                    Commented by {{com.author.pseudo}} <br />
-                                    Reputation : {{com.author.reputation}} <br />
-                                    {{com.timestamp | date :'d MMM, y, h:mm:ss'}}
-                                </p>
-                            </div>
-                            <span class="col-2" *ngIf="authService.isAdmin() || isComAuthor(com)">
-                                <mat-icon> <a style="cursor: pointer;" (click)="edit(com)">edit</a></mat-icon>
-                                <mat-icon> <a style="cursor: pointer;" (click)="delete(com)">delete</a></mat-icon>
-                            </span>
-                        </div>
-                    </div>
-                    <mat-divider *ngIf="!isLast" class="col-12"></mat-divider>
-                </div>
-            </div>
-            <div class="offset-11 col-1">
-                <mat-icon *ngIf="currentUser" aria-label="New comment"><a (click)="addComment(reponse.id)"
-                        style="cursor: pointer;">add</a></mat-icon>
+            <div class="container">
+                <app-comment class="row" [comments]="reponse.comments" (refreshAlert)="refresh()"></app-comment>
             </div>
         </div>
     </div>
     <div class="row" *ngIf="currentUser">
         <label for="answer" class="col-form-label-lg col-12">Your Answer</label>
         <simplemde class="col-12" id="anwser" [(ngModel)]="Answer"></simplemde>
-        <markdown class="col-12" style="word-wrap: break-word ;border: 4px double black;border-radius: 1em;margin: 10px;min-height: 100px;"
+        <markdown class="col-12"
+            style="word-wrap: break-word ;border: 4px double black;border-radius: 1em;margin: 10px;min-height: 100px;"
             [data]="Answer"></markdown>
         <div class="offset-9">
             <button type="submit" mat-raised-button color="primary"

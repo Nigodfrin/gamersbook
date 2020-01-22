@@ -25,6 +25,8 @@ export class EditUserComponent {
     public ctlRole: FormControl;
     public ctlEmail: FormControl;
     public isNew: boolean;
+    private tempPicturePath: string;
+    private pictureChanged: boolean;
     pseudoPattern = "^[a-zA-Z][a-zA-Z0-9_]*";
     constructor(public dialogRef: MatDialogRef<EditUserComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { user: User; isNew: boolean; },
@@ -51,6 +53,8 @@ export class EditUserComponent {
         console.log(data);
         this.isNew = data.isNew;
         this.frm.patchValue(data.user);
+        this.tempPicturePath = data.user.picturePath;
+        this.pictureChanged = false;
     }
     isEmailExist(): AsyncValidatorFn {
         let timeout: NodeJS.Timer;
@@ -124,9 +128,43 @@ export class EditUserComponent {
         this.dialogRef.close();
     }
     update() {
-        this.dialogRef.close(this.frm.value);
+        const data = this.frm.value;
+        if (this.pictureChanged) {
+            this.userService.confirmPicture(data.pseudo, this.tempPicturePath).subscribe();
+            data.picturePath = 'uploads/' + data.pseudo + '.jpg';
+            this.pictureChanged = false;
+        }
+        this.dialogRef.close(data);
     }
     cancel() {
         this.dialogRef.close();
+    }
+    fileChange(event) {
+        const fileList: FileList = event.target.files;
+        console.log(event.target.files);
+        if (fileList.length > 0) {
+            const file = fileList[0];
+            this.userService.uploadPicture(this.frm.value.pseudo || 'empty', file).subscribe(path => {
+                console.log(path);
+                this.cancelTempPicture();
+                this.tempPicturePath = path;
+                this.pictureChanged = true;
+                this.frm.markAsDirty();
+            });
+        }
+    }
+
+    get picturePath(): string {
+        return this.tempPicturePath && this.tempPicturePath !== '' ? this.tempPicturePath : 'uploads/unknown-user.jpg';
+    }
+
+    ngOnDestroy(): void {
+        this.cancelTempPicture();
+    }
+    cancelTempPicture() {
+        const data = this.frm.value;
+        if (this.pictureChanged) {
+            this.userService.cancelPicture(this.tempPicturePath).subscribe();
+        }
     }
 }

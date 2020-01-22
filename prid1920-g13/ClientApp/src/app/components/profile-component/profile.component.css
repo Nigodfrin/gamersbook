@@ -1,0 +1,16 @@
+.profileTitle {
+    background: rgb(235,49,12);
+    background: radial-gradient(circle, rgba(235,49,12,1) 48%, rgba(254,196,0,1) 68%);
+    font-family: 'Bookman Old Style', serif;
+}
+.labelInput {
+    position: absolute; 
+    bottom: 0px; 
+    right: 15px;
+    cursor: pointer;
+}
+.labelInput:hover {
+    color: white;
+    border: 2px solid white;
+    border-radius: 100%;
+}

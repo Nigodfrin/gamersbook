@@ -44,6 +44,10 @@
                 <mat-option [value]="0">Member</mat-option>
               </mat-select>
         </mat-form-field>
+        <div >
+            <img class="img-responsive" style="max-height: 150px;" [src]="picturePath" width="200px" >
+            <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".png,.jpg,.gif">
+        </div>
     </div>
     <div class="footer">
             <mat-error class="float-left" *ngIf="frm.hasError('lastnameError')">The lastname error</mat-error>

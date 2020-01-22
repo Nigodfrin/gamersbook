@@ -1,0 +1,23 @@
+<section class="container">
+    <div class="row">
+            <image-cropper class="col-6"
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="6 / 8"
+                [resizeToWidth]="250"
+                format="png"
+                [cropperMinWidth]="512"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()">
+            </image-cropper>
+            <div class="col-6">
+                <img  [src]="croppedImage" />
+            </div>
+    </div>
+    <div class="row" style="padding-top: 50px;">
+        <button class="btn btn-success col-12" (click)="save()"> Save </button>
+    </div>
+
+</section>

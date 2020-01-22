@@ -16,7 +16,8 @@ namespace prid_1819_g13.Models {
                 Reputation = user.Reputation,
                 Id = user.Id,
                 Role = user.Role,
-                Token = user.Token
+                Token = user.Token,
+                PicturePath = user.PicturePath
             };
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {

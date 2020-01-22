@@ -21,11 +21,12 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ReadQuestion implements OnInit {
   question: Post;
-  Answer: string = "";
   votes: Vote[];
   currentUser: User;
+  dlg: MatDialogRef<any>;
+  
+  Answer: string = "";
   postInEdit: Post;
-  dlg: MatDialogRef<any>
   @ViewChild('defaultDialogButtons', { static: false })
   private defaultDialogButtonsTpl: TemplateRef<any>;
   constructor(
@@ -44,7 +45,6 @@ export class ReadQuestion implements OnInit {
     this.currentUser = this.authService.currentUser;
     this.service.getById(id).subscribe(post => {
       this.question = post;
-      console.log(this.question);
     });
     ;
   }
@@ -73,16 +73,19 @@ export class ReadQuestion implements OnInit {
       this.question = res;
     });
   }
+  isAuthor(reponse: Post): boolean {
+    return this.authService.currentUser && this.authService.currentUser.id === reponse.user.id;
+  }
   deleteRep(response: Post) {
     const snackBarRef = this.snackBar.open(` Response will be deleted`, 'Undo', { duration: 5000 });
     snackBarRef.afterDismissed().subscribe(res => {
       if (!res.dismissedByAction) {
         this.service.delete(response).subscribe(res => {
-          this.refresh();
+        this.refresh();
         });
       }
       else
-        this.refresh();
+      this.refresh();            
     });
   }
   cancel() {
@@ -96,7 +99,7 @@ export class ReadQuestion implements OnInit {
         {
           body: this.Answer,
           parentId: this.question.id,
-          user: this.currentUser,
+          user: this.authService.currentUser,
           timestamp: new Date(Date.now()),
         }
       );
@@ -111,9 +114,10 @@ export class ReadQuestion implements OnInit {
       if (!res) {
         this.snackBar.open(`There was an error at the server. The answer has not been created! Please try again.`, 'Dismiss', { duration: 10000 });
         this.refresh();
+        
       }
       else {
-        this.refresh();
+        this.refresh();            
         this.Answer = '';
       }
     });
@@ -123,61 +127,8 @@ export class ReadQuestion implements OnInit {
     this.Answer = post.body;
     window.scrollTo(0, document.body.scrollHeight);
   }
-
   // fonction en rapport avec les commentaires
-  edit(comment: Comment) {
-    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: false }, height: '800px', width: '600px', });
-    dlg.beforeClose().subscribe(res => {
-      if (res) {
-        _.assign(comment, res);
-        this.comservice.update(comment).subscribe(res => {
-          if (!res) {
-            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refresh();
-          }
-          else {
-            this.refresh();
-          }
-        });
-      }
-    });
-  }
 
-  delete(comment: Comment) {
-    this.question.comments = _.filter(this.question.comments, c => c.id !== comment.id);
-    this.question.reponses.forEach(post => {
-      post.comments = _.filter(post.comments, c => c.id !== comment.id);
-    })
-    const snackBarRef = this.snackBar.open(` Comment will be deleted`, 'Undo', { duration: 5000 });
-    snackBarRef.afterDismissed().subscribe(res => {
-      if (!res.dismissedByAction)
-        this.comservice.delete(comment).subscribe();
-      else
-        this.refresh();
-    });
-  }
-
-  addComment(postId: number) {
-    const comment = new Comment({});
-    const dlg = this.dialog.open(EditCommentComponent, { data: { comment, isNew: true }, height: '600px', width: '600px', });
-    dlg.beforeClose().subscribe(res => {
-      if (res) {
-        _.assign(comment, res);
-        comment.author = this.currentUser;
-        comment.postId = postId;
-        comment.timestamp = new Date(Date.now());
-        this.comservice.addComment(comment).subscribe(res => {
-          if (!res) {
-            this.snackBar.open(`There was an error at the server. The update has not been done! Please try again.`, 'Dismiss', { duration: 10000 });
-            this.refresh();
-          }
-          else {
-            this.refresh();
-          }
-        });
-      }
-    });
-  }
   // Fonctions en rapport avec les votes
   addVote(postid: number, upVote: number) {
     if (this.currentUser != undefined) {
@@ -200,6 +151,7 @@ export class ReadQuestion implements OnInit {
           }
         });
         if (!err) {
+          upVote == -1 ? this.currentUser.reputation += -1 : null;
           const vote = new Vote({ authorId: this.authService.currentUser.id, postId: postid, upDown: upVote });
           this.voteService.add(vote).subscribe(res => {
             this.userservice.changeReputVote(vote.postId, vote.upDown).subscribe();
@@ -221,10 +173,6 @@ export class ReadQuestion implements OnInit {
   }
 
 
-  isAuthor(reponse: Post): boolean {
-    return this.currentUser && this.currentUser.id === reponse.user.id;
-  }
-  isComAuthor(com: Comment): boolean {
-    return this.currentUser && this.currentUser.id === com.author.id;
-  }
+
+
 }

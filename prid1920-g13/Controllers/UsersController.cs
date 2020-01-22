@@ -44,6 +44,12 @@ namespace prid_1819_g13.Controllers
             {
                 return BadRequest();
             }
+             if (!string.IsNullOrWhiteSpace(data.PicturePath))
+                // On ajoute un timestamp à la fin de l'url pour générer un URL différent quand on change d'image
+                // car sinon l'image ne se rafraîchit pas parce que l'url ne change pas et le browser la prend dans la cache.
+                user.PicturePath = data.PicturePath + "?" + DateTime.Now.Ticks;
+            else
+                user.PicturePath = null;
             user.Pseudo = data.Pseudo;
             user.LastName = data.LastName;
             if (data.Password != null)
@@ -76,6 +82,7 @@ namespace prid_1819_g13.Controllers
                 FirstName = data.FirstName,
                 BirthDate = data.BirthDate,
                 Email = data.Email,
+                PicturePath = data.PicturePath
             };
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
@@ -271,6 +278,78 @@ namespace prid_1819_g13.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        [HttpGet("userPostsRep")]
+        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> getUserRep()
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            if(user == null){
+                return BadRequest();
+            }
+            var posts = await _context.Posts.Where(post => post.User.Id == user.Id && post.Title == null).ToListAsync();
+
+            return posts.PostRepToDTO();
+
+        }
+        [HttpGet("userPostsQuest")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> getUserQuest()
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            if(user == null){
+                return BadRequest();
+            }
+            var posts = await _context.Posts.Where(post => post.AuthorId == user.Id && post.Title != null).ToListAsync();
+
+            return posts.PostQuestToDTO();
+        }
+        [HttpGet("userComment")]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> getUserComment()
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            if(user == null){
+                return BadRequest();
+            }
+            var comments = await _context.Comments.Where(comment => comment.AuthorId == user.Id).ToListAsync();
+
+            return comments.ToDTO();
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload([FromForm] string pseudo, [FromForm]IFormFile picture) {
+            if (picture != null && picture.Length > 0) {
+                //var fileName = Path.GetFileName(picture.FileName);
+                var fileName = pseudo + "-" + DateTime.Now.ToString("yyyyMMddHHmmssff") + ".jpg";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", fileName);
+                using (var fileSrteam = new FileStream(filePath, FileMode.Create)) {
+                    await picture.CopyToAsync(fileSrteam);
+                }
+                return Ok($"\"uploads/{fileName}\"");
+            }
+            return Ok();
+        }
+        [HttpPost("cancel")]
+        public IActionResult Cancel([FromBody] dynamic data) {
+            string picturePath = data.picturePath;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", picturePath);
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+            return Ok();
+        }
+
+        [HttpPost("confirm")]
+        public IActionResult Confirm([FromBody] dynamic data) {
+            string pseudo = data.pseudo;
+            string picturePath = data.picturePath;
+            string newPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", pseudo + ".jpg");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", picturePath);
+            if (System.IO.File.Exists(path)) {
+                if (System.IO.File.Exists(newPath))
+                    System.IO.File.Delete(newPath);
+                System.IO.File.Move(path, newPath);
+            }
+            return Ok();
         }
     }
 
