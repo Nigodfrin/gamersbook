@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { ImageCroppedEvent, CropperPosition, ImageCropperComponent } from 'ngx-image-cropper';
 import { SourceListMap } from 'source-list-map';
 import { constructor } from 'lodash';
+import { GameService } from 'src/app/services/game.service';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class ProfileComponent implements OnInit {
     public snackBar: MatSnackBar;
     @ViewChild(ImageCropperComponent, { static: true }) imageCropper: ImageCropperComponent;
 
-    constructor(private fb: FormBuilder, private authService: AuthenticationService, private dialog: MatDialog, private userService: UserService) {
+    constructor(private fb: FormBuilder,private gameService: GameService, private authService: AuthenticationService, private dialog: MatDialog, private userService: UserService) {
         this.userProfile = this.authService.currentUser;
         this.picture = this.userProfile.picturePath ? this.userProfile.picturePath : 'uploads/unknown-user.jpg';
     }

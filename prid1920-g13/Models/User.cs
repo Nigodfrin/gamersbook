@@ -41,8 +41,7 @@ namespace prid_1819_g13.Models
         public virtual IList<Post> Posts {get;set;}
         [NotMapped]
         public virtual IList<Comment> Comments {get;set;}
-        [NotMapped]
-        public virtual IList<Game> Games {get;set;}
+
         [NotMapped]
         public int? Age
         {
