@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
+import { Game } from 'src/app/models/Game';
 
 @Component({
   selector: 'app-home',
@@ -8,8 +9,10 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class HomeComponent {
     constructor(private gamesService: GameService){
-      this.gamesService.getGames();
-      console.log("test");
-}
+      this.gamesService.getGames().subscribe((res: Game[]) => {
+        
+      });
+    
+    }
 }
 
