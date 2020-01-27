@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace prid_1819_g13.Models
 {
@@ -36,11 +37,18 @@ namespace prid_1819_g13.Models
         [NotMapped]
         public string Token { get; set; }
         [NotMapped]
-        public virtual IList<Vote> Votes {get;set;}
+        public virtual IList<Vote> Votes { get; set; }
         [NotMapped]
-        public virtual IList<Post> Posts {get;set;}
+        public virtual IList<Post> Posts { get; set; }
         [NotMapped]
-        public virtual IList<Comment> Comments {get;set;}
+        public virtual IList<Comment> Comments { get; set; }
+        [NotMapped]
+        public virtual IList<UserGames> UserGames { get; set; } = new List<UserGames>();
+        [NotMapped]
+        public IEnumerable<Game> Games
+        {
+            get => UserGames.Select(g => g.ownedGame);
+        }
 
         [NotMapped]
         public int? Age

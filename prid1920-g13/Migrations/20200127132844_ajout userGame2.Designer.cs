@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20200127132844_ajout userGame2")]
+    partial class ajoutuserGame2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,13 +49,17 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<string>("Deck");
 
-                    b.Property<DateTime>("Expected_released_date");
-
-                    b.Property<string>("Image");
-
                     b.Property<string>("Name");
 
-                    b.Property<string>("Platforms");
+                    b.Property<int>("expected_release_day");
+
+                    b.Property<int>("expected_release_month");
+
+                    b.Property<int>("expected_release_year");
+
+                    b.Property<string>("image");
+
+                    b.Property<string>("platforms");
 
                     b.HasKey("Id");
 

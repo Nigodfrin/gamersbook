@@ -13,6 +13,7 @@ import { CreateQuestionComponent } from '../components/createquestion/createques
 import {TagListComponent} from '../components/taglist/taglist.component';
 import { AuthGuardAuthor } from '../services/authAuthor.guard';
 import { ProfileComponent } from '../components/profile-component/profile.component';
+import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
 
 
 
@@ -28,6 +29,10 @@ const appRoutes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'searchGame',
+    component: SearchGamesComponent,
   },
   {
     path: 'login',

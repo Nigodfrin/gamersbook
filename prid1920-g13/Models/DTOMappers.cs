@@ -17,7 +17,8 @@ namespace prid_1819_g13.Models {
                 Id = user.Id,
                 Role = user.Role,
                 Token = user.Token,
-                PicturePath = user.PicturePath
+                PicturePath = user.PicturePath,
+                Games = user.Games.GamesToDTO()
             };
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
@@ -99,6 +100,19 @@ namespace prid_1819_g13.Models {
         }
          public static List<CommentDTO> ToDTO(this IEnumerable<Comment> comments) {
             return comments.Select(c => c.ToDTO()).ToList();
+        }
+        public static GameDTO GameToDTO(this Game game){
+            return new GameDTO{
+                Id = game.Id,
+                Name = game.Name,
+                Expected_released_date = game.Expected_released_date,
+                Deck = game.Deck,
+                Image = game.Image,
+                Platforms = game.Platforms
+            };
+        }
+         public static List<GameDTO> GamesToDTO(this IEnumerable<Game> games) {
+            return games.Select(c => c.GameToDTO()).ToList();
         }
     }
 }

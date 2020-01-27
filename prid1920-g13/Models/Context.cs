@@ -15,6 +15,8 @@ namespace prid_1819_g13.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
+        public DbSet<Game> Games {get;set;}
+        public DbSet<UserGames> UserGames {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -84,6 +86,23 @@ namespace prid_1819_g13.Models
             .WithMany(p => p.Reponses)
             .HasForeignKey(p => p.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<UserGames>()
+            .HasKey(userGame => new { userGame.UserId, userGame.GameId});
+
+            modelBuilder.Entity<UserGames>()
+            .HasOne<User>(user => user.UserGame)
+            .WithMany(u => u.UserGames)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<UserGames>()
+            .HasOne<Game>(game => game.ownedGame)
+            .WithMany(u => u.UserGames)
+            .HasForeignKey(u => u.GameId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            
         }
     }
 }

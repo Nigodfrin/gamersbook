@@ -18,7 +18,92 @@ namespace prid_1819_g13.Models {
                                 new User { Id = 2, Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
                                 new User { Id = 3, Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
                                 new User { Id = 4, Pseudo = "boris", Password = TokenHelper.GetPasswordHash("boris"), LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
-                                new User { Id = 5, Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" }
+                                new User { Id = 5, Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" },
+                                new User { Id = 6, Pseudo = "Darknico", Password = TokenHelper.GetPasswordHash("123"), LastName = "Godfrin", FirstName = "Nicolas", Email = "nicolas.godfrin@live.be",BirthDate= new DateTime(1994,11,02) }
+                            );
+                            context.SaveChanges();
+                        }
+                        if (context.Games.Count() == 0) {
+                            context.Games.AddRange(
+                                new Game { Id = 18603, Deck = @"Travel to Outland in the first expansion to the immensely popular World of Warcraft. 
+                                The Burning Crusade brings new races, instances, areas and experiences to the table.",
+                                 Name = "World of Warcraft: The Burning Crusade", 
+                                 Expected_released_date = new DateTime(2007,01,16), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849278-box_wowtbc.png"
+
+                                },
+                                new Game { Id = 19783, Deck = @"World of Warcraft is an MMORPG that takes place in Blizzard Entertainment's 
+                                Warcraft universe. At its peak, it boasted a player base of over 12.5 million subscribers, 
+                                making it the most popular MMO of all time",
+                                 Name = "World of Warcraft", 
+                                 Expected_released_date = new DateTime(2004,11,23), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849275-box_wow.png"
+                                },
+                                new Game { Id = 20701, Deck = @"Travel to the arctic continent of Northrend in Blizzard's 
+                                second expansion to the most popular MMORPG ever made.",
+                                 Name = "World of Warcraft: Wrath of the Lich King", 
+                                 Expected_released_date = new DateTime(2008,11,13), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849280-box_wowwotlk.png"
+                                },
+                                new Game { Id = 27896, Deck = @"Cataclysm is the third expansion pack to World of Warcraft. 
+                                This expansion revamped and changed much of the original world content in addition to providing new areas, 
+                                dungeons, and playable races.",
+                                 Name = "World of Warcraft: Cataclysm", 
+                                 Expected_released_date = new DateTime(2010,12,07), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849276-box_wowc.png"
+                                },
+                                new Game { Id = 36734, Deck = @"Unveiled at Blizzcon 2011, Mists of Pandaria is the fourth expansion for World of Warcraft. 
+                                The game focuses on the war between the Horde and Alliance, and not a main villain like the previous expansions. 
+                                Players embark on a journey to Pandaria, discovering a new race, class and much more.",
+                                 Name = "World of Warcraft: Mists of Pandaria", 
+                                 Expected_released_date = new DateTime(2012,09,25), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849277-box_wowmop.png"
+                                },
+                                new Game { Id = 44468, Deck = @"Allowing players to enter the past and tread the world of Draenor before its 
+                                destruction, the fifth World of Warcraft expansion brings a level cap increase to level 100, 
+                                a new world, and another graphics engine overhaul.",
+                                 Name = "World of Warcraft: Warlords of Draenor", 
+                                 Expected_released_date = new DateTime(2014,11,13), 
+                                 Platforms ="PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2849279-box_wowwod.png"
+                                },
+                                new Game { Id = 50520, Deck = @"The sixth World of Warcraft expansion taking place on the Broken Isles 
+                                with a new Demon Hunter hero class and a level 110 level cap.",
+                                 Name = "World of Warcraft: Legion", 
+                                 Expected_released_date = new DateTime(2016,08,30), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/2881096-box_wowl.png"
+                                },
+                                new Game { Id = 64475, Deck = @"The seventh expansion for World of Warcraft features new zones, 
+                                Allied Races for both factions and a raised level cap to 120.",
+                                 Name = "World of Warcraft: Battle for Azeroth", 
+                                 Expected_released_date = new DateTime(2018,08,14), 
+                                 Platforms = "PC,MAC",
+                                 Image = "https://www.giantbomb.com/api/image/scale_medium/3015277-6219515987-world.jpg"
+                                },
+                                new Game { Id = 75882, Deck = @"The eighth World of Warcraft expansion set, Shadowlands opens up 
+                                the world of the afterlife, due to Sylvanas Windrunner defeating the Lich King.",
+                                 Name = "World of Warcraft: Shadowlands", 
+                                 Expected_released_date = new DateTime(2020,01,01), 
+                                 Platforms = "PC,MAC",
+                                }
+
+                            );
+                            context.SaveChanges();
+                        }
+                        if(context.UserGames.Count() == 0){
+                            context.UserGames.AddRange(
+                                new UserGames() {UserId = 6, GameId = 18603},
+                                new UserGames() {UserId = 6, GameId = 75882},
+                                new UserGames() {UserId = 6, GameId = 64475},
+                                new UserGames() {UserId = 6, GameId = 44468},
+                                new UserGames() {UserId = 4, GameId = 27896},
+                                new UserGames() {UserId = 3, GameId = 36734}
                             );
                             context.SaveChanges();
                         }

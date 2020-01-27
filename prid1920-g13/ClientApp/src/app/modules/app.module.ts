@@ -28,6 +28,7 @@ import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
 import { CommentComponent } from '../components/comment-component/comment.component';
 import { ProfileComponent, DialogCropper } from '../components/profile-component/profile.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     TagListComponent,
     CommentComponent,
     ProfileComponent,
-    DialogCropper
+    DialogCropper,
+    SearchGamesComponent
     
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
