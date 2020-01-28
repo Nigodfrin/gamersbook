@@ -33,6 +33,7 @@ const appRoutes: Routes = [
   {
     path: 'searchGame',
     component: SearchGamesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',

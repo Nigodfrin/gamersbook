@@ -28,7 +28,9 @@ namespace prid_1819_g13.Models {
                                 new Game { Id = 18603, Deck = @"Travel to Outland in the first expansion to the immensely popular World of Warcraft. 
                                 The Burning Crusade brings new races, instances, areas and experiences to the table.",
                                  Name = "World of Warcraft: The Burning Crusade", 
-                                 Expected_released_date = new DateTime(2007,01,16), 
+                                 Expected_release_year = 2007,
+                                 Expected_release_month = 1,
+                                 Expected_release_day = 16,
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849278-box_wowtbc.png"
 
@@ -36,15 +38,19 @@ namespace prid_1819_g13.Models {
                                 new Game { Id = 19783, Deck = @"World of Warcraft is an MMORPG that takes place in Blizzard Entertainment's 
                                 Warcraft universe. At its peak, it boasted a player base of over 12.5 million subscribers, 
                                 making it the most popular MMO of all time",
-                                 Name = "World of Warcraft", 
-                                 Expected_released_date = new DateTime(2004,11,23), 
+                                 Name = "World of Warcraft",
+                                 Expected_release_year = 2004,
+                                 Expected_release_month = 11,
+                                 Expected_release_day = 23, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849275-box_wow.png"
                                 },
                                 new Game { Id = 20701, Deck = @"Travel to the arctic continent of Northrend in Blizzard's 
                                 second expansion to the most popular MMORPG ever made.",
                                  Name = "World of Warcraft: Wrath of the Lich King", 
-                                 Expected_released_date = new DateTime(2008,11,13), 
+                                 Expected_release_year = 2008,
+                                 Expected_release_month = 11,
+                                 Expected_release_day = 13, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849280-box_wowwotlk.png"
                                 },
@@ -52,7 +58,9 @@ namespace prid_1819_g13.Models {
                                 This expansion revamped and changed much of the original world content in addition to providing new areas, 
                                 dungeons, and playable races.",
                                  Name = "World of Warcraft: Cataclysm", 
-                                 Expected_released_date = new DateTime(2010,12,07), 
+                                 Expected_release_year = 2010,
+                                 Expected_release_month = 12,
+                                 Expected_release_day = 7, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849276-box_wowc.png"
                                 },
@@ -60,7 +68,9 @@ namespace prid_1819_g13.Models {
                                 The game focuses on the war between the Horde and Alliance, and not a main villain like the previous expansions. 
                                 Players embark on a journey to Pandaria, discovering a new race, class and much more.",
                                  Name = "World of Warcraft: Mists of Pandaria", 
-                                 Expected_released_date = new DateTime(2012,09,25), 
+                                 Expected_release_year = 2012,
+                                 Expected_release_month = 9,
+                                 Expected_release_day = 25, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849277-box_wowmop.png"
                                 },
@@ -68,28 +78,36 @@ namespace prid_1819_g13.Models {
                                 destruction, the fifth World of Warcraft expansion brings a level cap increase to level 100, 
                                 a new world, and another graphics engine overhaul.",
                                  Name = "World of Warcraft: Warlords of Draenor", 
-                                 Expected_released_date = new DateTime(2014,11,13), 
+                                 Expected_release_year = 2014,
+                                 Expected_release_month = 11,
+                                 Expected_release_day = 13, 
                                  Platforms ="PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2849279-box_wowwod.png"
                                 },
                                 new Game { Id = 50520, Deck = @"The sixth World of Warcraft expansion taking place on the Broken Isles 
                                 with a new Demon Hunter hero class and a level 110 level cap.",
                                  Name = "World of Warcraft: Legion", 
-                                 Expected_released_date = new DateTime(2016,08,30), 
+                                 Expected_release_year = 2016,
+                                 Expected_release_month = 8,
+                                 Expected_release_day = 30, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/2881096-box_wowl.png"
                                 },
                                 new Game { Id = 64475, Deck = @"The seventh expansion for World of Warcraft features new zones, 
                                 Allied Races for both factions and a raised level cap to 120.",
                                  Name = "World of Warcraft: Battle for Azeroth", 
-                                 Expected_released_date = new DateTime(2018,08,14), 
+                                 Expected_release_year = 2018,
+                                 Expected_release_month = 8,
+                                 Expected_release_day = 14, 
                                  Platforms = "PC,MAC",
                                  Image = "https://www.giantbomb.com/api/image/scale_medium/3015277-6219515987-world.jpg"
                                 },
                                 new Game { Id = 75882, Deck = @"The eighth World of Warcraft expansion set, Shadowlands opens up 
                                 the world of the afterlife, due to Sylvanas Windrunner defeating the Lich King.",
                                  Name = "World of Warcraft: Shadowlands", 
-                                 Expected_released_date = new DateTime(2020,01,01), 
+                                 Expected_release_year = 2020,
+                                 Expected_release_month = 01,
+                                 Expected_release_day = 01, 
                                  Platforms = "PC,MAC",
                                 }
 

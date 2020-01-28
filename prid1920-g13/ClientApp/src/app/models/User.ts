@@ -6,7 +6,7 @@ export enum Role {
   Admin = 2
 }
 export class User {
-    id: any;
+    id: number;
     pseudo: string;
     password: string;
     email: string;
@@ -32,7 +32,7 @@ export class User {
           data.birthDate.length > 10 ? data.birthDate.substring(0, 10) : data.birthDate;
         this.role = data.role || Role.Member;
         this.token = data.token;
-        data.games.forEach(game => {
+        data.games.forEach((game: Game) => {
           this.games.push(new Game(game));
         });;
       }

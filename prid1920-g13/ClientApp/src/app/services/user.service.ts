@@ -12,8 +12,8 @@ export class UserService {
     return this.http.get<User[]>(`${this.baseUrl}api/users`)
       .pipe(map(res => res.map(m => new User(m))));
   }
-  getById(id: number) {
-    return this.http.get<User>(`${this.baseUrl}api/users/${id}`).pipe(
+  getById(pseudo: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
       map(m => !m ? null : new User(m)),
       catchError(err => of(null))
     );

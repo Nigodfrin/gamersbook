@@ -105,7 +105,9 @@ namespace prid_1819_g13.Models {
             return new GameDTO{
                 Id = game.Id,
                 Name = game.Name,
-                Expected_released_date = game.Expected_released_date,
+                Expected_release_day = game.Expected_release_day,
+                Expected_release_month = game.Expected_release_month,
+                Expected_release_year = game.Expected_release_year,
                 Deck = game.Deck,
                 Image = game.Image,
                 Platforms = game.Platforms

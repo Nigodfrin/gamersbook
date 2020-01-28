@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20200127204949_expected_date")]
+    partial class expected_date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,11 +49,11 @@ namespace prid_1819_g13.Migrations
 
                     b.Property<string>("Deck");
 
-                    b.Property<int>("Expected_release_day");
+                    b.Property<int>("Expected_released_day");
 
-                    b.Property<int>("Expected_release_month");
+                    b.Property<int>("Expected_released_month");
 
-                    b.Property<int>("Expected_release_year");
+                    b.Property<int>("Expected_released_year");
 
                     b.Property<string>("Image");
 

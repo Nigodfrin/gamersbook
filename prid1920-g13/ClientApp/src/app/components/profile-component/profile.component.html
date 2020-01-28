@@ -24,10 +24,10 @@
     </div>
     <div class="row  justify-content-center">
         <h3 class="col-12">Games</h3>
-        <mat-card class="col-3 gameCard" *ngFor="let game of userProfile.games">
+        <mat-card class="col-lg-3 col-md-5 col-sm-8 gameCard" *ngFor="let game of userProfile.games">
             <mat-card-header>
-              <mat-card-title>{{game.name}}</mat-card-title>
-              <mat-card-subtitle>{{game.releaseDate | date: 'd MMM, y, h:mm:ss'}}</mat-card-subtitle>
+              <mat-card-title title="{{game.name}}" style="font-size: 16px;">{{(game.name.length>20)? (game.name | slice:0:20)+'...':(game.name)}}</mat-card-title>
+              <mat-card-subtitle>{{game.expected_release_day}}/{{game.expected_release_month}}/{{game.expected_release_year}}</mat-card-subtitle>
             </mat-card-header>
             <img style="height: 300px;" mat-card-image src={{game.image}} alt={{game.name}}>
             <mat-card-content style="height: 125px">

@@ -8,10 +8,7 @@ import { Game } from 'src/app/models/Game';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-    constructor(private gamesService: GameService){
-      this.gamesService.getGames().subscribe((res: Game[]) => {
-        
-      });
+    constructor(){
     
     }
 }

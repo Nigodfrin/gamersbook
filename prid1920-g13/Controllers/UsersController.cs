@@ -94,7 +94,7 @@ namespace prid_1819_g13.Controllers
         [HttpGet("{pseudo}")]
         public async Task<ActionResult<UserDTO>> GetOneUser(string pseudo)
         {
-            var user = await _context.Users.FindAsync(pseudo);
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
             if (user == null)
                 return NotFound();
             return user.ToDTO();
