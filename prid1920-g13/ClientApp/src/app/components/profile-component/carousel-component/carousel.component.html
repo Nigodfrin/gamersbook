@@ -1,0 +1,22 @@
+<h3 class="col-12" style="text-align: center;" >Played games</h3>
+<ngu-carousel #myCarousel [inputs]="carouselTile" [dataSource]="games">
+    <ngu-tile *nguCarouselDef="let game; let j = index">
+        <mat-card class="tile">
+                <mat-card-header>
+                    <mat-card-title title="{{game.name}}" style="font-size: 16px;">
+                        {{(game.name.length>20)? (game.name | slice:0:20)+'...':(game.name)}}</mat-card-title>
+                    <mat-card-subtitle>
+                        {{game.expected_release_day}}/{{game.expected_release_month}}/{{game.expected_release_year}}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <img class="imgCard" style="height: 300px;" mat-card-image src={{game.image}} alt={{game.name}}>
+                <div class="deckContent">{{game.deck}}</div>
+            </mat-card>
+    </ngu-tile>
+    <button NguCarouselPrev class="leftRs" [style.opacity]="myCarousel.isFirst ? 0.5:1">&lt;</button>
+    <button NguCarouselNext class="rightRs" [style.opacity]="myCarousel.isLast ? 0.5:1">&gt;</button>
+    <ul class="myPoint" NguCarouselPoint>
+        <li *ngFor="let j of myCarousel.pointNumbers; let j = index" [class.active]="j==myCarousel.activePoint"
+            (click)="myCarousel.moveTo(j)"></li>
+    </ul>
+</ngu-carousel>

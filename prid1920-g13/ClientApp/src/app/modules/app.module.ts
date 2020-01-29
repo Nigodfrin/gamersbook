@@ -29,6 +29,8 @@ import { CommentComponent } from '../components/comment-component/comment.compon
 import { ProfileComponent, DialogCropper } from '../components/profile-component/profile.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
+import { NguCarouselModule } from '@ngu/carousel';
+import { CarouselComponent } from '../components/profile-component/carousel-component/carousel.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { SearchGamesComponent } from '../components/searchGames/searchGames.comp
     CommentComponent,
     ProfileComponent,
     DialogCropper,
-    SearchGamesComponent
+    SearchGamesComponent,
+    CarouselComponent
     
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
@@ -66,7 +69,9 @@ import { SearchGamesComponent } from '../components/searchGames/searchGames.comp
     SharedModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
     SimplemdeModule.forRoot({}),
-    ImageCropperModule
+    ImageCropperModule,
+    NguCarouselModule
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

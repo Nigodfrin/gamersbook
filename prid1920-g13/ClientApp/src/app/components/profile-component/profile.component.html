@@ -1,9 +1,12 @@
 <section class="container-fluid">
     <div class="row">
         <div class="col-3" style="position: relative;">
-            <img style="box-shadow: 5px 10px #353535;"  class="img-responsive rounded-lg" [src]="picture">
-            
-            <label  for="file-input" class="labelInput" style="position: absolute; bottom: 0px; right: 15px;cursor: pointer;"><mat-icon>edit</mat-icon></label>
+            <img style="box-shadow: 5px 10px #353535;" class="img-responsive rounded-lg" [src]="picture">
+
+            <label for="file-input" class="labelInput"
+                style="position: absolute; bottom: 0px; right: 15px;cursor: pointer;">
+                <mat-icon>edit</mat-icon>
+            </label>
             <input type="file" id="file-input" (change)="fileChangeEvent($event)" style="display: none;" />
 
         </div>
@@ -12,63 +15,46 @@
                 <h3 class="col-12 profileTitle" style="text-align: center;">{{userProfile.pseudo}} profile's</h3>
             </div>
             <div class="row " style="padding: 0px 0px 50px 0px;">
-                <h4 class="col-6">Lastname :  {{userProfile.lastName}} </h4>
-                <h4 class="col-6">Firstname :  {{userProfile.firstName}} </h4>
+                <h4 class="col-6">Lastname : {{userProfile.lastName}} </h4>
+                <h4 class="col-6">Firstname : {{userProfile.firstName}} </h4>
             </div>
             <div class="row" style="padding: 0px 0px 50px 0px;">
-                <h4 class="col-6"> Birthdate :  {{userProfile.birthDate}} </h4>
-                <h4 class="col-6">email :  {{userProfile.email}} </h4>
+                <h4 class="col-6"> Birthdate : {{userProfile.birthDate}} </h4>
+                <h4 class="col-6">email : {{userProfile.email}} </h4>
             </div>
-            <div><button mat-icon-button aria-label="Edit user icon" ><mat-icon (click)="edit()" style="color: goldenrod;">edit</mat-icon ></button></div>
+            <div><button mat-icon-button aria-label="Edit user icon">
+                    <mat-icon (click)="edit()" style="color: goldenrod;">edit</mat-icon>
+                </button></div>
         </div>
     </div>
-    <div class="row  justify-content-center">
-        <h3 class="col-12">Games</h3>
-        <mat-card class="col-lg-3 col-md-5 col-sm-8 gameCard" *ngFor="let game of userProfile.games">
-            <mat-card-header>
-              <mat-card-title title="{{game.name}}" style="font-size: 16px;">{{(game.name.length>20)? (game.name | slice:0:20)+'...':(game.name)}}</mat-card-title>
-              <mat-card-subtitle>{{game.expected_release_day}}/{{game.expected_release_month}}/{{game.expected_release_year}}</mat-card-subtitle>
-            </mat-card-header>
-            <img style="height: 300px;" mat-card-image src={{game.image}} alt={{game.name}}>
-            <mat-card-content style="height: 125px">
-              <p>
-                {{(game.deck.length>300)? (game.deck | slice:0:300)+'...':(game.deck)}}
-              </p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button>Add to my Games</button>
-            </mat-card-actions>
-          </mat-card>
-    </div>
+    <carousel-profile-component [games]="userProfile.games"></carousel-profile-component>
     <div class="row">
-        <h3 class="col-12">Questions posées</h3>
-        <mat-accordion>
-            <mat-expansion-panel *ngFor="let question of userPostsQuest">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        {{question.title}}
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Score : {{question.score}}
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-                <markdown>{{question.body}}</markdown>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
-    <div class="row">
-        <h3 class="col-12">Réponses données</h3>
-        <ul>
-            <li *ngFor="let rep of userPostsRep"> {{rep.body}} </li>
-        </ul>
-    </div>
-    <div class="row">
-        <h3 class="col-12">Commentaires ajoutés</h3>
-        <ul>
-            <li *ngFor="let com of userComment"> {{com.body}} </li>
-        </ul>
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Questions">
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let question of userPostsQuest">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{question.title}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Score : {{question.score}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <markdown>{{question.body}}</markdown>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-tab>
+            <mat-tab label="Responses">
+                <ul>
+                    <li *ngFor="let rep of userPostsRep"> {{rep.body}} </li>
+                </ul>
+            </mat-tab>
+            <mat-tab label="Comments">
+                <ul>
+                    <li *ngFor="let com of userComment"> {{com.body}} </li>
+                </ul>
+            </mat-tab>
+        </mat-tab-group>
     </div>
 </section>
-
-
-

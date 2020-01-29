@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/platform-server": "~8.1.0",
     "@angular/router": "~8.1.0",
+    "@ngu/carousel": "^1.5.5",
     "@nguniversal/module-map-ngfactory-loader": "7.1.0",
     "@types/lodash": "^4.14.149",
     "aspnet-prerendering": "^3.0.1",
