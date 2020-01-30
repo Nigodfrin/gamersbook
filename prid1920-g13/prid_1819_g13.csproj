@@ -7,14 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CypherNet" Version="0.9.25" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Neo4j.Driver" Version="4.0.0" />
+    <PackageReference Include="Neo4jClient" Version="4.0.0.1-prerelease" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
      <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
      <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../PRID_Framework/PRID_Framework.csproj"/>
+    <ProjectReference Include="../PRID_Framework/PRID_Framework.csproj" />
   </ItemGroup>
 
 </Project>
