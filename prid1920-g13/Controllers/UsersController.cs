@@ -65,9 +65,14 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
+        [HttpGet("search/{name}")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> userSearch(string name){
+            return (await _context.Users.Where(u => u.Pseudo.Contains(name)).ToListAsync()).ToDTO();
+        }
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
         {
+            
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == data.Pseudo);
             if (user != null)
             {
@@ -86,11 +91,14 @@ namespace prid_1819_g13.Controllers
             };
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
+            var userN = await this.GetOneUser(newUser.Pseudo);
+            await new UserNeo4JController().CreateUser(userN.Value);
             if (!res.IsEmpty)
                 return BadRequest(res);
 
             return CreatedAtAction(nameof(GetOneUser), new { pseudo = newUser.Pseudo }, newUser.ToDTO());
         }
+
         [HttpGet("{pseudo}")]
         public async Task<ActionResult<UserDTO>> GetOneUser(string pseudo)
         {
@@ -279,11 +287,10 @@ namespace prid_1819_g13.Controllers
 
             return NoContent();
         }
-        [HttpGet("userPostsRep")]
-        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> getUserRep()
+        [HttpGet("userPostsRep/{id}")]
+        public async Task<ActionResult<IEnumerable<PostReponseDTO>>> getUserRep(int id)
         {
-            var pseudo = User.Identity.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var user = await _context.Users.FindAsync(id);
             if(user == null){
                 return BadRequest();
             }
@@ -292,11 +299,10 @@ namespace prid_1819_g13.Controllers
             return posts.PostRepToDTO();
 
         }
-        [HttpGet("userPostsQuest")]
-        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> getUserQuest()
+        [HttpGet("userPostsQuest/{id}")]
+        public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> getUserQuest(int id)
         {
-            var pseudo = User.Identity.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var user = await _context.Users.FindAsync(id);
             if(user == null){
                 return BadRequest();
             }
@@ -304,11 +310,10 @@ namespace prid_1819_g13.Controllers
 
             return posts.PostQuestToDTO();
         }
-        [HttpGet("userComment")]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> getUserComment()
+        [HttpGet("userComment/{id}")]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> getUserComment(int id)
         {
-            var pseudo = User.Identity.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == pseudo);
+            var user = await _context.Users.FindAsync(id);
             if(user == null){
                 return BadRequest();
             }

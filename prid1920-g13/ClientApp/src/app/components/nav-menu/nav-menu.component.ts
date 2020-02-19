@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+  userSearch= "";
   isExpanded = false;
   constructor(
     private router: Router,
@@ -15,6 +16,11 @@ export class NavMenuComponent {
   ) { }
   collapse() {
     this.isExpanded = false;
+  }
+  searchUser(){
+    console.log(this.userSearch);
+    this.router.navigate(['/users'], { queryParams: { name: this.userSearch } });    
+    this.userSearch = "";
   }
   toggle() {
     this.isExpanded = !this.isExpanded;

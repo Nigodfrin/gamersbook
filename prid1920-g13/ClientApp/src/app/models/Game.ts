@@ -13,13 +13,14 @@ export class Game {
 
     constructor(data: any){
         if(data){
+            console.log(data);
             this.id = data.id,
             this.name = data.name,
             this.deck = data.deck,
             this.platforms = data.platforms,
-            this.expected_release_day = data.expected_release_day,
-            this.expected_release_month = data.expected_release_month,
-            this.expected_release_year = data.expected_release_year,
+            this.expected_release_day = data.expected_release_day ? data.expected_release_day : 0,
+            this.expected_release_month = data.expected_release_month ? data.expected_release_month : 0,
+            this.expected_release_year = data.expected_release_year ? data.expected_release_year : 0,
             this.image = data.image ? data.image : 'uploads/_Unknown.png';
 
         }

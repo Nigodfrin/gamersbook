@@ -6,6 +6,8 @@ import { UserService } from '../../services/user.service';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
+import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
     selector: 'app-userlist',
     templateUrl: './userlist.component.html',
@@ -21,8 +23,10 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     constructor(
         private userService: UserService,
         private stateService: StateService,
+        private router: ActivatedRoute,
         public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private authService: AuthenticationService
     ) {
         this.state = this.stateService.userListState;
     }
@@ -42,7 +46,9 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         this.refresh();
     }
     refresh() {
-        this.userService.getAll().subscribe(users => {
+        let name = this.router.snapshot.queryParamMap.get('name');
+        console.log(name);
+        this.userService.getUsers(name).subscribe(users => {
             // assigne les données récupérées au datasource
             this.dataSource.data = users;
             // restaure l'état du datasource (tri et pagination) à partir du state
@@ -50,6 +56,14 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             // restaure l'état du filtre à partir du state
             this.filter = this.state.filter;
         });
+        // this.userService.getAll().subscribe(users => {
+        //     // assigne les données récupérées au datasource
+        //     this.dataSource.data = users;
+        //     // restaure l'état du datasource (tri et pagination) à partir du state
+        //     this.state.restoreState(this.dataSource);
+        //     // restaure l'état du filtre à partir du state
+        //     this.filter = this.state.filter;
+        // });
     }
     // appelée chaque fois que le filtre est modifié par l'utilisateur
     filterChanged(filterValue: string) {
@@ -61,6 +75,9 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         // en se mettant sur la première page
         if (this.dataSource.paginator)
             this.dataSource.paginator.firstPage();
+    }
+    addFriend(user: User){
+        this.userService.addFriend(user).subscribe();
     }
     // appelée quand on clique sur le bouton "edit" d'un membre
     edit(user: User) {

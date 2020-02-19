@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     path: 'users',
     component: UserListComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Admin] }
+    data: { roles: [Role.Admin,Role.Member] }
   },
   {
     path: 'profile',
@@ -67,6 +67,12 @@ const appRoutes: Routes = [
     component: CreateQuestionComponent,
     canActivate: [AuthGuardAuthor],
     data: {roles: [Role.Admin]}
+  },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [AuthGuard],
+    data: {roles: [Role.Admin,Role.Member]}
   },
   {
     path: 'taglist',

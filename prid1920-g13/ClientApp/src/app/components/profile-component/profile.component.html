@@ -27,7 +27,7 @@
                 </button></div>
         </div>
     </div>
-    <carousel-profile-component [games]="userProfile.games"></carousel-profile-component>
+    <carousel-profile-component *ngIf="userGames" [games]="userGames"></carousel-profile-component>
     <div class="row">
         <mat-tab-group mat-align-tabs="center">
             <mat-tab label="Questions">
@@ -56,5 +56,13 @@
                 </ul>
             </mat-tab>
         </mat-tab-group>
+    </div>
+    <div class="row">
+        <h3 class="col-12">MY FRIENDS</h3>
+        <ul class="col-6">
+            <li *ngFor="let friend of friends">
+                <span><a [routerLink]="['/profile',friend.id]">{{friend.pseudo}}</a> <button mat-icon-button (click)="deleteFriend(friend)"><mat-icon>delete</mat-icon></button></span>
+            </li>
+        </ul>
     </div>
 </section>

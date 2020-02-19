@@ -5,12 +5,17 @@ import { Comment } from '../models/Comment';
 import { map, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { Post } from '../models/Post';
+import { Game } from '../models/Game';
 @Injectable({ providedIn: 'root' })
 export class UserService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
   getAll() {
     return this.http.get<User[]>(`${this.baseUrl}api/users`)
       .pipe(map(res => res.map(m => new User(m))));
+  }
+  getUserGames(pseudo: string) {
+    return this.http.get<User[]>(`${this.baseUrl}api/userNeo4J/${pseudo}`)
+      .pipe(map(res => res.map(m => new Game(m))));
   }
   getById(pseudo: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
@@ -69,16 +74,43 @@ export class UserService {
       })
     );
   }
-  public getUserPostRep(){
-    return this.http.get<Post[]>(`${this.baseUrl}api/users/userPostsRep`)
+  public getUsers(name: string){
+    return this.http.get<User[]>(`${this.baseUrl}api/users/search/${name}`)
+      .pipe(map(res => res.map(m => new User(m))));
+  }
+  public addFriend(user: User){
+    return this.http.post<User>(`${this.baseUrl}api/userNeo4J/addFriend`, user).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  public deleteFriend(id: number){
+    return this.http.delete(`${this.baseUrl}api/userNeo4J/${id}`).pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+  }
+  public getFriend(){
+    return this.http.get<User[]>(`${this.baseUrl}api/userNeo4J/getFriends`)
+      .pipe(map(res => res.map(m => new User(m))));
+  }
+  public getUserPostRep(userId:any){
+    console.log(userId);
+    return this.http.get<Post[]>(`${this.baseUrl}api/users/userPostsRep/${userId}`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
-  public getUserPostQuest(){
-    return this.http.get<Post[]>(`${this.baseUrl}api/users/userPostsQuest`)
+  public getUserPostQuest(userId:any){
+    return this.http.get<Post[]>(`${this.baseUrl}api/users/userPostsQuest/${userId}`)
       .pipe(map(res => res.map(m => new Post(m))));
   }
-  public getUserComment(){
-    return this.http.get<Comment[]>(`${this.baseUrl}api/users/userComment`)
+  public getUserComment(userId: any){
+    return this.http.get<Comment[]>(`${this.baseUrl}api/users/userComment/${userId}`)
       .pipe(map(res => res.map(m => new Comment(m))));
   }
   public uploadPicture(pseudo, file): Observable<string> {

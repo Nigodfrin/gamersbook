@@ -13,6 +13,8 @@ import { ImageCroppedEvent, CropperPosition, ImageCropperComponent } from 'ngx-i
 import { SourceListMap } from 'source-list-map';
 import { constructor } from 'lodash';
 import { GameService } from 'src/app/services/game.service';
+import { Game } from 'src/app/models/Game';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -22,8 +24,10 @@ import { GameService } from 'src/app/services/game.service';
 export class ProfileComponent implements OnInit {
 
     userProfile: User;
+    friends: User[];
     userPostsRep: Post[];
     userPostsQuest: Post[];
+    userGames: Game[];
     userComment: Comment[];
     picture: string;
     ctlPseudo: FormControl;
@@ -34,26 +38,43 @@ export class ProfileComponent implements OnInit {
     ctlEmail: FormControl;
     ctlBirthdate: FormControl;
     frm: FormGroup;
+    userId: any;
     public snackBar: MatSnackBar;
     @ViewChild(ImageCropperComponent, { static: true }) imageCropper: ImageCropperComponent;
 
-    constructor(private fb: FormBuilder,private gameService: GameService, private authService: AuthenticationService, private dialog: MatDialog, private userService: UserService) {
-        this.userProfile = this.authService.currentUser;
-        this.picture = this.userProfile.picturePath ? this.userProfile.picturePath : 'uploads/unknown-user.jpg';
+    constructor(private fb: FormBuilder,private router: ActivatedRoute,private gameService: GameService, private authService: AuthenticationService, private dialog: MatDialog, private userService: UserService) {
+        if(this.router.snapshot.paramMap.get('id')){
+            this.userId = this.router.snapshot.paramMap.get('id');
+            this.userService.getById(this.userId).subscribe(res => {
+                this.userProfile = res;
+            });
+        }
+        else {
+            this.userId = this.authService.currentUser.id;
+            this.userProfile = this.authService.currentUser;
+            this.picture = this.userProfile.picturePath ? this.userProfile.picturePath : 'uploads/unknown-user.jpg';
+        }
     }
 
     ngOnInit(): void {
-        console.log(this.userProfile);
-        this.userService.getUserPostQuest().subscribe(questions => {
+        this.userService.getUserPostQuest(this.userId).subscribe(questions => {
             this.userPostsQuest = questions;
         });
-        this.userService.getUserPostRep().subscribe(reponses => {
+        this.userService.getUserPostRep(this.userId).subscribe(reponses => {
             this.userPostsRep = reponses
         });
-        this.userService.getUserComment().subscribe(comments => {
+        this.userService.getUserComment(this.userId).subscribe(comments => {
             this.userComment = comments
         });
-
+        this.userService.getUserGames(this.userProfile.pseudo).subscribe(games => {
+            this.userGames = games;
+        });
+        this.refreshGetFriends();
+    }
+    refreshGetFriends(){
+        this.userService.getFriend().subscribe(amis => {
+            this.friends = amis;
+        });
     }
     refresh() {
         this.userProfile = this.authService.currentUser;
@@ -73,6 +94,11 @@ export class ProfileComponent implements OnInit {
                     this.refresh();
                 });
             }
+        });
+    }
+    deleteFriend(friend: User){
+        this.userService.deleteFriend(friend.id).subscribe(res => {
+            this.refreshGetFriends();
         });
     }
     fileChangeEvent(event: any): void {
