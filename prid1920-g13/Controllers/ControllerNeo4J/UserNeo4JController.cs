@@ -11,6 +11,7 @@ using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Controllers
 {
+    [Authorize]
     [Route("api/userNeo4J")]
     [ApiController]
     public class UserNeo4JController : ControllerBase

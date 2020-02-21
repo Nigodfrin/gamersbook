@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using prid_1819_g13.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace prid_1819_g13
 {
@@ -36,34 +31,13 @@ namespace prid_1819_g13
                 // opt.UseSqlServer(Configuration.GetConnectionString("prid-1920-g13-mssql"));
                 opt.UseMySql(Configuration.GetConnectionString("prid-1920-g13-mysql"));
             });
-            services.AddCors(options =>
-                {
-                    options.AddPolicy("CorsPolicy",
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:5000", "https://localhost:5001", "http://www.giantbomb.com")
-                                            .AllowAnyHeader()
-                                            .AllowAnyMethod().AllowAnyOrigin();
-
-                    });
-                });
-            services.AddMvc()
-                .AddJsonOptions(opt =>
-                {
-                    /*  
-                    ReferenceLoopHandling.Ignore: Json.NET will ignore objects in reference loops and not serialize them.
-                    The first time an object is encountered it will be serialized as usual but if the object is 
-                    encountered as a child object of itself the serializer will skip serializing it.
-                    See: https://stackoverflow.com/a/14205542
-                    */
-                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddRazorPages();   
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddSignalR();
             //------------------------------
             // configure jwt authentication
             //------------------------------
@@ -116,7 +90,7 @@ namespace prid_1819_g13
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -131,15 +105,18 @@ namespace prid_1819_g13
             app.UseDefaultFiles();
             app.UseStaticFiles();
             // app.UseHttpsRedirection();
-            app.UseSpaStaticFiles();
             app.UseAuthentication();
-            app.UseCors("CorsPolicy");
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                name: "Default",
+                pattern: "{controller=default}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapHub<NotificationsHub>("/notificationsHub");
             });
+            app.UseSpaStaticFiles();
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
