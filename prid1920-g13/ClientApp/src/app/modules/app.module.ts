@@ -31,6 +31,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
 import { NguCarouselModule } from '@ngu/carousel';
 import { CarouselComponent } from '../components/profile-component/carousel-component/carousel.component';
+import { NotifsComponent } from '../components/nav-menu/notification-component/notifications.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { CarouselComponent } from '../components/profile-component/carousel-comp
     ProfileComponent,
     DialogCropper,
     SearchGamesComponent,
-    CarouselComponent
+    CarouselComponent,
+    NotifsComponent
     
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],

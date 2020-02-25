@@ -34,6 +34,33 @@ namespace prid_1819_g13.Controllers
             .ResultsAsync;
             return friends.ToList();
         }
+        [HttpPost("acceptFriend")]
+        public async Task<IActionResult> acceptFriendship(string pseudo){
+            await this.Client.ConnectAsync();
+            var connectPseudo = User.Identity.Name;
+            this.Client.Cypher
+            .Match("(me:User)<-[r:friend]-(newFriend:User)")
+            .Where((UserNeo4J newFriend) => newFriend.Pseudo == pseudo)
+            .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
+            .OnMatch()
+            .Set("r.accepted = true")
+            .ExecuteWithoutResultsAsync()
+            .Wait();
+            return NoContent();
+        }
+        [HttpDelete("refuseFriend/{pseudo}")]
+        public async Task<IActionResult> refuseFriendship (string pseudo){
+            await this.Client.ConnectAsync();
+            var connectPseudo = User.Identity.Name;
+            this.Client.Cypher
+            .Match("(sender:User)-[r:friend]->(me:User)")
+            .Where((UserNeo4J sender) => sender.Pseudo == pseudo)
+            .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
+            .Delete("r")
+            .ExecuteWithoutResultsAsync()
+            .Wait();
+            return NoContent();
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> deleteFriend(int id){
             await this.Client.ConnectAsync();
@@ -59,6 +86,20 @@ namespace prid_1819_g13.Controllers
             Console.WriteLine(games);
             return games.ToList();
         }
+        [HttpGet("notifications")]
+        public async Task<IEnumerable<NotificationNeo4J>> GetNotifications()
+        {
+            var pseudo = User.Identity.Name;
+            
+            await this.Client.ConnectAsync();
+            var notifications = await this.Client.Cypher.
+            Match("(u:User)-[:Has]->(n:Notification)").
+            Where("u.pseudo = {param}")
+            .WithParam("param",pseudo).
+            Return(n => n.As<NotificationNeo4J>()).ResultsAsync;
+            Console.WriteLine(notifications);
+            return notifications.ToList();
+        }
         public async Task CreateUser(UserDTO user){
             await this.Client.ConnectAsync();
             var member = new UserNeo4J(){
@@ -80,7 +121,9 @@ namespace prid_1819_g13.Controllers
             .Match("(ami:User),(me:User)")
             .Where((UserNeo4J ami) => ami.Pseudo == friend.Pseudo)
             .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
-            .Merge("(me)-[:friend]-(ami)")
+            .Merge("(me)-[:friend {accepted: false}]-(ami)")
+            .Create("(ami)-[:Has]->(n:Notification {type: 'Relationship', from: {user},see: false})")
+            .WithParam("user",pseudo)
             .ExecuteWithoutResultsAsync();
         }
         [HttpPost]

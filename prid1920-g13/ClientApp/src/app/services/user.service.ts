@@ -6,9 +6,30 @@ import { map, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { Post } from '../models/Post';
 import { Game } from '../models/Game';
+import { Notif } from '../models/Notif';
 @Injectable({ providedIn: 'root' })
 export class UserService {
+  
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
+
+    refuseFriend(pseudo: string) {
+      return this.http.delete<boolean>(`${this.baseUrl}api/userNeo4J/refuseFriend/${pseudo}`)
+      .pipe(map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+    }
+    acceptFriend(pseudo: string) {
+      return this.http.post<boolean>(`${this.baseUrl}api/userNeo4J/acceptFriend`,pseudo)
+      .pipe(map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+    }
   getAll() {
     return this.http.get<User[]>(`${this.baseUrl}api/users`)
       .pipe(map(res => res.map(m => new User(m))));
@@ -22,6 +43,10 @@ export class UserService {
       map(m => !m ? null : new User(m)),
       catchError(err => of(null))
     );
+  }
+  getNotifs() {
+    return this.http.get<Notif[]>(`${this.baseUrl}api/userNeo4J/notifications`)
+    .pipe(map(res => res.map(m => new Notif(m))));
   }
   public isPseudoAvailable(pseudo: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);
