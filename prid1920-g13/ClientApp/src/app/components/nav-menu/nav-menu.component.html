@@ -54,11 +54,11 @@
               <span> Logout </span>
             </a>
               <span class="text-info">({{authenticationService.currentUser.pseudo}})
-                <button (click)="showNotifs()"  mat-raised-button color="primary" [matBadge]="numNotif" matBadgePosition="before" matBadgeColor="accent">
+                <button  cdk-overlay-origin (click)="showNotifs()"  mat-raised-button color="primary" [matBadge]="numNotif" matBadgePosition="before" matBadgeColor="accent">
                   Notifications
                 </button>
               </span>
-              <notifs-component id="notifCompo" [notifs]="notifications" style="display: none; position: absolute;top: 125px; z-index: 1000; border: 2px solid black" ></notifs-component>
+              <notifs-component id="notifCompo" [notifs]="notifications" class="notifComponent"></notifs-component>
           </li>
         </ul>
       </div>
