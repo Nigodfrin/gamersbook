@@ -1,0 +1,26 @@
+.badgeConnected {
+    background-color: green !important;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+.friendsContainerItem {
+    height: 35px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.friendsContainer {
+    border-left: 2px solid black;
+     width: 200px;
+     position: fixed;
+     top: 0px;
+     right: 0px;
+     display: flex;
+     flex-direction: column;
+     padding: 10px 5px 10px 5px;
+     justify-content: flex-end;
+}
+.friendsContainerItem :hover {
+    background-color: #BBBBBB;
+    cursor: pointer;
+}

@@ -1,0 +1,7 @@
+<article class="friendsContainer" [style.height.px]="friendsContainerHeight">
+    <div *ngFor="let friend of connectedFriends" style="height: 30px;" class="friendsContainerItem">
+        <div tyle="display: inline-block" (Click)="showChat(friend.pseudo)">
+            {{friend.firstName}} {{friend.lastName}}<div style="display: inline-block" class="badgeConnected" ></div>
+        </div>
+    </div>
+</article>
