@@ -25,6 +25,7 @@
     "@angular/platform-server": "~8.1.0",
     "@angular/router": "~8.1.0",
     "@aspnet/signalr": "^1.1.4",
+    "@ng-bootstrap/ng-bootstrap": "~5.2.2",
     "@ngu/carousel": "^1.5.5",
     "@nguniversal/module-map-ngfactory-loader": "7.1.0",
     "@types/lodash": "^4.14.149",
@@ -44,7 +45,7 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.23",
+    "@angular-devkit/build-angular": "^0.803.25",
     "@angular/cli": "~8.1.0",
     "@angular/compiler-cli": "~8.1.0",
     "@angular/language-service": "~8.1.0",
@@ -54,7 +55,7 @@
     "codelyzer": "^5.2.1",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~4.1.0",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.5",
     "karma-jasmine": "~2.0.1",

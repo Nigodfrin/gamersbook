@@ -23,9 +23,6 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
             <a class="nav-link text-dark" [routerLink]='["/profile"]'>Profile</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/users"]'>Users</a>
-          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/taglist"]'>Tags</a>
           </li>
@@ -54,11 +51,28 @@
               <span> Logout </span>
             </a>
               <span class="text-info">({{authenticationService.currentUser.pseudo}})
-                <button  cdk-overlay-origin (click)="showNotifs()"  mat-raised-button color="primary" [matBadge]="numNotif" matBadgePosition="before" matBadgeColor="accent">
-                  Notifications
+                <button class="btn btn-secondary" [ngbTooltip]="tipContent" [autoClose]="'inside'" triggers="click" tooltipClass="customTooltip">
+                  Notifications <span class="badge badge-light">{{numNotif}}</span>
+                  <span class="sr-only">unread messages</span>
                 </button>
               </span>
-              <notifs-component id="notifCompo" [notifs]="notifications" class="notifComponent"></notifs-component>
+              <ng-template #tipContent>
+                <div  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
+                  <div class="notif-item">
+                      <div style="width: 100%">{{notif.senderPseudo}} has invited you as friend !</div>
+                      <span>
+                        <button class="btn btn-success btn-sm" (click)="acceptFriend(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>Accept</button>
+                        <button class="btn btn-danger btn-sm ml-1" (click)="acceptFriend(notif,false,index)"><svg class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                          <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
+                        </svg>Deny</button>
+                    </span>
+                      
+                  </div>
+              </div>
+              </ng-template>
           </li>
         </ul>
       </div>

@@ -12,5 +12,9 @@ namespace prid_1819_g13
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[a-zA-Z][a-zA-Z0-9_]*", ErrorMessage = "Pseudo can contain only letters, numbers or underscore")]
         public string Pseudo { get; set; }
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName {get;set;}
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName {get;set;}
     }
 }

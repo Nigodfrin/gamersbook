@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient, HttpClientJsonpModule } from '@angular/common/http';
@@ -32,6 +33,9 @@ import { SearchGamesComponent } from '../components/searchGames/searchGames.comp
 import { NguCarouselModule } from '@ngu/carousel';
 import { CarouselComponent } from '../components/profile-component/carousel-component/carousel.component';
 import { NotifsComponent } from '../components/nav-menu/notification-component/notifications.component';
+import {ToastsContainer} from '../Helpers/toast/toast-container.component';
+import {FriendsComponent} from '../components/smallChat/friends.component/friends.component';
+import { ChatContainerComponent } from '../components/smallChat/friends.component/chatContainer/chat-container.component';
 
 @NgModule({
   declarations: [
@@ -56,8 +60,10 @@ import { NotifsComponent } from '../components/nav-menu/notification-component/n
     DialogCropper,
     SearchGamesComponent,
     CarouselComponent,
-    NotifsComponent
-    
+    NotifsComponent,
+    ToastsContainer,
+    FriendsComponent,
+    ChatContainerComponent
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
   imports: [
@@ -72,8 +78,8 @@ import { NotifsComponent } from '../components/nav-menu/notification-component/n
     MarkdownModule.forRoot({ loader: HttpClient }),
     SimplemdeModule.forRoot({}),
     ImageCropperModule,
-    NguCarouselModule
-    
+    NguCarouselModule,
+    NgbModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

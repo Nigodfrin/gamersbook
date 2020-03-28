@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System;
-using PRID_Framework;
 using System.Linq;
 using Neo4jClient;
 using Newtonsoft.Json.Serialization;
@@ -35,15 +34,21 @@ namespace prid_1819_g13.Controllers
             return friends.ToList();
         }
         [HttpPost("acceptFriend")]
-        public async Task<IActionResult> acceptFriendship(string pseudo){
+        public async Task<IActionResult> acceptFriendship(UserNeo4J user){
             await this.Client.ConnectAsync();
             var connectPseudo = User.Identity.Name;
+            var ami = await this.Client.Cypher.Match("(ami:User)").Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo).Return(ami => ami.As<UserNeo4J>()).ResultsAsync;
+            var a = ami.ToList().FirstOrDefault();
+            if(a == null){
+                return BadRequest();
+            }
             this.Client.Cypher
-            .Match("(me:User)<-[r:friend]-(newFriend:User)")
-            .Where((UserNeo4J newFriend) => newFriend.Pseudo == pseudo)
+            .Match("(ami:User),(me:User)-[h:Has]->(n:Notification)")
+            .Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo)
             .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
-            .OnMatch()
-            .Set("r.accepted = true")
+            .AndWhere((NotificationNeo4J n) => n.SenderPseudo == user.Pseudo && n.Type == "Relationship")
+            .Merge("(me)-[:friend]-(ami)")
+            .DetachDelete("n")
             .ExecuteWithoutResultsAsync()
             .Wait();
             return NoContent();
@@ -53,10 +58,11 @@ namespace prid_1819_g13.Controllers
             await this.Client.ConnectAsync();
             var connectPseudo = User.Identity.Name;
             this.Client.Cypher
-            .Match("(sender:User)-[r:friend]->(me:User)")
+            .Match("(me:User)-[h:Has]->(n:Notification)")
             .Where((UserNeo4J sender) => sender.Pseudo == pseudo)
             .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
-            .Delete("r")
+            .AndWhere((NotificationNeo4J n) => n.SenderPseudo == pseudo && n.Type == "Relationship")
+            .DetachDelete("n")
             .ExecuteWithoutResultsAsync()
             .Wait();
             return NoContent();
@@ -121,7 +127,6 @@ namespace prid_1819_g13.Controllers
             .Match("(ami:User),(me:User)")
             .Where((UserNeo4J ami) => ami.Pseudo == friend.Pseudo)
             .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
-            .Merge("(me)-[:friend {accepted: false}]-(ami)")
             .Create("(ami)-[:Has]->(n:Notification {type: 'Relationship', from: {user},see: false})")
             .WithParam("user",pseudo)
             .ExecuteWithoutResultsAsync();

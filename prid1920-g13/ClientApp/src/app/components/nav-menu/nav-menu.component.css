@@ -18,11 +18,23 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
-.notifComponent {
-  display: none; 
-  position: absolute;
-  top: 125px; 
-  z-index: 1000; 
-  border: 2px solid black;
-  background-color: whitesmoke;
+.notifContainer {
+  display: flex;
+  flex-direction: column;
+}
+.notif-item {
+  padding: 5px 0px;
+  border-bottom: 1px solid white;
+}
+.notif-item:hover {
+  opacity: 0.5;
+}
+.customTooltip .tooltip-inner {
+  background-color: lightgray;
+  color: black;
+  min-width: 300px;
+  max-width: 300px;
+}
+.customTooltip .arrow::before {
+  border-top-color: black;
 }

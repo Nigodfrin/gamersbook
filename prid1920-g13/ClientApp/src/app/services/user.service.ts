@@ -22,7 +22,7 @@ export class UserService {
     );
     }
     acceptFriend(pseudo: string) {
-      return this.http.post<boolean>(`${this.baseUrl}api/userNeo4J/acceptFriend`,pseudo)
+      return this.http.post<boolean>(`${this.baseUrl}api/userNeo4J/acceptFriend`,{pseudo:pseudo})
       .pipe(map(res => true),
       catchError(err => {
         console.error(err);
