@@ -21,7 +21,7 @@ export class HomeComponent {
       })
     }
     submit(){
-      this.chat.sendMessage(this.authServ.currentUser.pseudo);
+      this.chat.sendMessage('bruno','salut bruno');
     }
 
 }

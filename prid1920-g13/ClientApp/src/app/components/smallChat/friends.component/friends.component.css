@@ -3,24 +3,49 @@
     border-radius: 50%;
     width: 10px;
     height: 10px;
+    display: inline-block;
 }
 .friendsContainerItem {
     height: 35px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
 }
 .friendsContainer {
-    border-left: 2px solid black;
+    border-left: 1px solid black;
      width: 200px;
-     position: fixed;
-     top: 0px;
-     right: 0px;
      display: flex;
      flex-direction: column;
      padding: 10px 5px 10px 5px;
-     justify-content: flex-end;
+     justify-content: space-between;
+    background-color: #444;
+    height: 100%;
+    transition-duration: 1s;
+    margin-right: 0px;
+}
+.friends-container-header {
+    color: white;
 }
 .friendsContainerItem :hover {
-    background-color: #BBBBBB;
+    background-color: #555;
     cursor: pointer;
+}
+.showFriendsContainer{
+    height: 100%;
+    width: 30px;
+    background-color: #444;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+    transition-duration: 0.5s
+}
+.showFriendsContainer:hover {
+    background-color: #BBB;
+    cursor: pointer;
+}
+.header-input {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid lightgray;
+    border-radius: 500px;
+    padding: 0px 10px;
+    width: 95%;
+    outline: none;
 }

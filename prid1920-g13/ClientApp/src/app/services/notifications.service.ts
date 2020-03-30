@@ -1,6 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { User } from '../models/User';
+import { AuthenticationService } from './authentication.service';
+import * as signalR from '@aspnet/signalr';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
@@ -10,19 +12,20 @@ export class ChatService {
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
 
-  constructor() {
+  constructor(private authServ: AuthenticationService) {
     this.createConnection();
     this.registerOnServerEvents();
     this.startConnection();
   }
 
-  sendMessage(pseudo: string) {
-    this._hubConnection.invoke('SendMessage', pseudo, 'Coucou les gars');
+  sendMessage(pseudo: string,message: string) {
+    this._hubConnection.invoke('SendMessage', 'bruno', message);
   }
 
   private createConnection() {
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl('notificationsHub')
+      .withUrl('notificationsHub', {accessTokenFactory: () => { return this.authServ.currentUser.token} })
+      .configureLogging(signalR.LogLevel.Information)
       .build();
   }
 

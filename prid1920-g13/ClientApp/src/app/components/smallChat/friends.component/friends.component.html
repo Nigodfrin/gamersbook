@@ -1,7 +1,33 @@
-<article class="friendsContainer" [style.height.px]="friendsContainerHeight">
-    <div *ngFor="let friend of connectedFriends" style="height: 30px;" class="friendsContainerItem">
-        <div tyle="display: inline-block" (Click)="showChat(friend.pseudo)">
-            {{friend.firstName}} {{friend.lastName}}<div style="display: inline-block" class="badgeConnected" ></div>
-        </div>
+<article style="display: flex;position: fixed;top: 0px;right: 0px;" [style.height.px]="friendsContainerHeight">
+    <div class="showFriendsContainer" (click)="showFriends()">
+        <svg *ngIf="showFriendsContainer" class="bi bi-chevron-double-right" style="color: lightgrey;margin-left: -2px;" width="1.5em" height="1.5em"
+            viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                d="M3.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L9.293 8 3.646 2.354a.5.5 0 010-.708z"
+                clip-rule="evenodd" />
+            <path fill-rule="evenodd"
+                d="M7.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L13.293 8 7.646 2.354a.5.5 0 010-.708z"
+                clip-rule="evenodd" />
+        </svg>
+        <svg *ngIf="!showFriendsContainer" class="bi bi-chevron-double-left" style="color: lightgrey;margin-right: -2px;" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 010 .708L2.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 010 .708L6.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+          </svg>
     </div>
+    <div class="friendsContainer" id="friends-container">
+        <div class="friends-container-header">
+            <div>Friends</div>
+                <input class="header-input" [(ngModel)]="filter" placeholder="Search" (ngModelChange)="filterUsers()" type="text" placeholder="Search">
+        </div>
+        <div>
+            <div *ngFor="let friend of filterConnectedUsers" style="height: 30px;" class="friendsContainerItem">
+                <div style="display: inline-block;color:white;" (click)="showChat(friend)">
+                    {{friend.firstName}} {{friend.lastName}}<div  class="badgeConnected ml-3"></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <app-smallChatBox (closeDialog)="closeDialog($event)" (sendMessage)="sendMessage(message)" *ngFor="let chatBox of chatBoxUser;let index = index" [user]="chatBox"
+        style="position: fixed;bottom:0px;" [style.right.px]="270*(index+1)" [index]="index"></app-smallChatBox>
 </article>
