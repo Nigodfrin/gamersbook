@@ -17,6 +17,9 @@ namespace prid_1819_g13.Models
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<Game> Games {get;set;}
         public DbSet<UserGames> UserGames {get;set;}        
+        public DbSet<Message> Messages {get;set;}
+        public DbSet<Discussion> Discussions {get;set;}        
+        public DbSet<UserDiscussion> UserDiscussions {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -100,6 +103,26 @@ namespace prid_1819_g13.Models
             .HasOne<Game>(game => game.ownedGame)
             .WithMany(u => u.UserGames)
             .HasForeignKey(u => u.GameId)
+            .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserDiscussion>()
+            .HasKey(ud => new { ud.UserId, ud.DiscussionId});
+
+            modelBuilder.Entity<UserDiscussion>()
+            .HasOne<User>(user => user.User)
+            .WithMany(u => u.UserDiscussions)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<UserDiscussion>()
+            .HasOne<Discussion>(d => d.ownedDiscussion)
+            .WithMany(u => u.UserDiscussions)
+            .HasForeignKey(u => u.DiscussionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+            .HasOne<Discussion>(d => d.Discussion)
+            .WithMany(m => m.Messages)
+            .HasForeignKey(d => d.DiscussionId)
             .OnDelete(DeleteBehavior.Restrict);
 
             

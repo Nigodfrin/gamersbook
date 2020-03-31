@@ -14,6 +14,6 @@
 
     </div>
     <div class="chatBox-footer" id="chatBoxFooter{{index}}">
-        <input class="inputFooter" (change)="sendText($event)" type="text" placeholder="Type your message" />
+        <input class="inputFooter" #box (keyup.enter)="sendText(box.value)" type="text" placeholder="Type your message" />
     </div>
 </div>

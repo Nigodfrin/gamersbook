@@ -23,6 +23,39 @@ namespace prid_1819_g13.Models {
                             );
                             context.SaveChanges();
                         }
+                        if(context.Messages.Count() == 0){
+                            context.Messages.AddRange(
+                                new Message {Id = 1,Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Salut bruno comment tu vas ?"},
+                                new Message {Id = 1,Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Tu me réponds ?"},
+                                new Message {Id = 1,Sender = 2,Receiver = 6,DiscussionId = 1,MessageText = "Arrêtes de me harceler"},
+                                new Message {Id = 1,Sender = 5,Receiver = 2,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Id = 1,Sender = 2,Receiver = 5,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Id = 1,Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Id = 1,Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut 111111111 comment tu vas ?"}
+
+                                
+                            );
+                        }
+                        if(context.Discussions.Count() == 0){
+                            context.Discussions.AddRange(
+                                new Discussion { Id = 1},
+                                new Discussion { Id = 2},
+                                new Discussion { Id = 3},
+                                new Discussion { Id = 4}
+                            );
+                        }
+                        if(context.UserDiscussions.Count() == 0){
+                            context.UserDiscussions.AddRange(
+                                new UserDiscussion {UserId = 2,DiscussionId = 1},
+                                new UserDiscussion {UserId = 6,DiscussionId = 1},
+                                new UserDiscussion {UserId = 2,DiscussionId = 2},
+                                new UserDiscussion {UserId = 5,DiscussionId = 2},
+                                new UserDiscussion {UserId = 3,DiscussionId = 3},
+                                new UserDiscussion {UserId = 4,DiscussionId = 3},
+                                new UserDiscussion {UserId = 6,DiscussionId = 4},
+                                new UserDiscussion {UserId = 1,DiscussionId = 4}
+                            );
+                        }
                         if (context.Games.Count() == 0) {
                             context.Games.AddRange(
                                 new Game { Id = 18603, Deck = @"Travel to Outland in the first expansion to the immensely popular World of Warcraft. 

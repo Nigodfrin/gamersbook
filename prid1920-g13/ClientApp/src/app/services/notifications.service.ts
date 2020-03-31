@@ -19,7 +19,8 @@ export class ChatService {
   }
 
   sendMessage(pseudo: string,message: string) {
-    this._hubConnection.invoke('SendMessage', 'bruno', message);
+    console.log(pseudo,message);
+    this._hubConnection.invoke('SendMessage', pseudo,this.authServ.currentUser.pseudo ,message);
   }
 
   private createConnection() {
@@ -28,7 +29,10 @@ export class ChatService {
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }
-
+  joinRoom(){
+    this._hubConnection.invoke('JoinRoom', this.authServ.currentUser.pseudo);
+  }
+  
   private startConnection(): void {
     this._hubConnection
       .start()
@@ -44,8 +48,8 @@ export class ChatService {
   }
 
   private registerOnServerEvents(): void {
-    this._hubConnection.on('ReceiveMessage', (data: any) => {
-      console.log(data);
+    this._hubConnection.on('ReceiveMessage', (data: any,data2:any) => {
+      console.log(data,data2);
     });
   }
 

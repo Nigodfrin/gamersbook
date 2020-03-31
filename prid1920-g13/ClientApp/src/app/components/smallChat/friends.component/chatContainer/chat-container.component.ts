@@ -34,12 +34,9 @@ export class ChatContainerComponent {
     console.log(this.index);
     this.closeDialog.emit(this.index);
   }
-  sendText(event){
-    const message = event.target.value;
-    event.target.value = '';
-    this.sendMessage.emit(message);
-
-
+  sendText(value: string){
+    const message = value;
+    this.sendMessage.emit({pseudo:this.user.pseudo,message:message});
   }
 
 }

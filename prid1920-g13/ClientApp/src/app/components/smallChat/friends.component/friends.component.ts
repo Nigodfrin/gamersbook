@@ -31,7 +31,10 @@ export class FriendsComponent implements OnInit {
         });
     }
     showChat(user: User){
-        this.chatBoxUser.push(user);
+        var index = this.chatBoxUser.indexOf(user);
+        if(index < 0) {
+            this.chatBoxUser.push(user);
+        }
     }
     filterUsers(){
         const filter = this.filter.toLowerCase();
@@ -50,7 +53,8 @@ export class FriendsComponent implements OnInit {
     closeDialog(index){
         this.chatBoxUser.splice(index,1);
     }
-    sendMessage(message){
-        this.notifServ.sendMessage('pseudo',message);
+    sendMessage(value:any){
+        console.log(value);
+        this.notifServ.sendMessage(value.pseudo,value.message);
     }
 }

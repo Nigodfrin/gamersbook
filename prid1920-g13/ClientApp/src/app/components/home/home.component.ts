@@ -16,12 +16,12 @@ export class HomeComponent {
 
     constructor(private chat: ChatService,private authServ: AuthenticationService){
       this.chat.connectionEstablished.subscribe(res => {
-        console.log(res);
+        this.chat.joinRoom();
         
       })
     }
     submit(){
-      this.chat.sendMessage('bruno','salut bruno');
+      this.chat.sendMessage('ben','salut');
     }
 
 }
