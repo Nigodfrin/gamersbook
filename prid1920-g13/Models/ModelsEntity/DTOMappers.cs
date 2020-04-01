@@ -18,8 +18,29 @@ namespace prid_1819_g13.Models {
                 Role = user.Role,
                 Token = user.Token,
                 PicturePath = user.PicturePath,
-                Games = user.Games.GamesToDTO()
+                Games = user.Games.GamesToDTO(),
+                Discussions = user.Discussions.DiscussionToDTO()
             };
+        }
+        public static DiscussionDTO DiscussionToDTO(this Discussion discussion){
+            return new DiscussionDTO{
+                Id = discussion.Id,
+                Participants = discussion.Participants.Select(u => u.Pseudo).ToList(),
+                Messages = discussion.Messages.MessageToDTO()
+            };
+        }
+         public static List<DiscussionDTO> DiscussionToDTO(this IEnumerable<Discussion> discussion) {
+            return discussion.Select(c => c.DiscussionToDTO()).ToList();
+        }
+        public static MessageDTO MessageToDTO(this Message message){
+            return new MessageDTO{
+                MessageText = message.MessageText,
+                Sender = message.Sender,
+                Receiver = message.Receiver
+            };
+        }
+         public static List<MessageDTO> MessageToDTO(this IEnumerable<Message> message) {
+            return message.Select(c => c.MessageToDTO()).ToList();
         }
         public static List<UserDTO> ToDTO(this IEnumerable<User> members) {
             return members.Select(m => m.ToDTO()).ToList();

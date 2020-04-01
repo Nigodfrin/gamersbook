@@ -1,5 +1,6 @@
 import {Component, TemplateRef, Input, Output, EventEmitter} from '@angular/core';
 import { User } from 'src/app/models/User';
+import { Discussion } from 'src/app/models/Discussion';
 
 @Component({
   selector: 'app-smallChatBox',
@@ -9,11 +10,14 @@ import { User } from 'src/app/models/User';
 export class ChatContainerComponent {
     @Input() index: number;
     @Input() user: User;
+    @Input() discussion: Discussion;
     @Output() closeDialog: EventEmitter<any> = new EventEmitter();
     @Output() sendMessage: EventEmitter<any> = new EventEmitter();
     private show : boolean = true;
 
-  constructor() {}
+  constructor() {
+    console.log(this.discussion);
+  }
 
   onHeaderClick(){
         if(this.show){

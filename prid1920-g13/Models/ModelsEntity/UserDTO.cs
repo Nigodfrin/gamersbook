@@ -14,5 +14,6 @@ namespace prid_1819_g13.Models {
         public Role Role { get; set; }
         public string Token {get;set;}
         public IList<GameDTO> Games {get;set;}
+        public IList<DiscussionDTO> Discussions {get;set;}
     }
 }

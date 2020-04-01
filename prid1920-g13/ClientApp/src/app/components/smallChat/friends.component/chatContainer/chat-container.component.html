@@ -11,7 +11,11 @@
         </div>
     </div>
     <div class="chatBox-body" id="chatBoxBody{{index}}">
-
+        <div *ngFor="let message of discussion.messages">
+            <div [ngClass]="(message.sender === user.id) ? 'receive-chat-message' : 'send-chat-message'">
+                {{message.messageText}}
+            </div>
+        </div>
     </div>
     <div class="chatBox-footer" id="chatBoxFooter{{index}}">
         <input class="inputFooter" #box (keyup.enter)="sendText(box.value)" type="text" placeholder="Type your message" />

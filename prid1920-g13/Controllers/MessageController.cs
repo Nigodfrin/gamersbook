@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using Neo4jClient;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using prid_1819_g13.Models;
+using Microsoft.EntityFrameworkCore;
+using PRID_Framework;
 
 namespace prid_1819_g13.Controllers
 {
@@ -18,15 +21,11 @@ namespace prid_1819_g13.Controllers
             _context = context;
         }
 
-        // [HttpPost("/send")]
-        // public async Task<IActionResult> sendMessage(Message message){
-           
-        // }
-        // [HttpGet]
-        // public async Task<ActionResult<List<Message>>> GetMessages(){
-            
-            
-        // }
-
+        [HttpPost("/send")]
+        public async Task<IActionResult> sendMessage(Message message){
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }

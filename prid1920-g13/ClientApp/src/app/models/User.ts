@@ -1,5 +1,6 @@
 import { EmailValidator } from "@angular/forms";
 import { Game } from "./Game";
+import { Discussion } from "./Discussion";
 export enum Role {
   Visitor = 0,
   Member = 1,
@@ -18,6 +19,7 @@ export class User {
     role: Role;
     token: string;
     games: Game[] = [];
+    discussions: Discussion[];
     constructor(data: any) {
       if (data) {
         this.id = data.id;
@@ -35,6 +37,8 @@ export class User {
         // data.games.forEach((game: Game) => {
         //   this.games.push(new Game(game));
         // });;
+        this.discussions = data.discussions;
+
       }
     }
     public get roleAsString(): string {

@@ -3,6 +3,10 @@ import { User } from "src/app/models/User";
 import { UserService } from "src/app/services/user.service";
 import * as _ from 'lodash';
 import { ChatService } from "src/app/services/notifications.service";
+import { Discussion } from "src/app/models/Discussion";
+import { DiscussionService } from "src/app/services/discussion.service";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { Message } from "@angular/compiler/src/i18n/i18n_ast";
 
 
 @Component({
@@ -18,8 +22,12 @@ export class FriendsComponent implements OnInit {
     showFriendsContainer: boolean = true;
     filter: string = "" ;
     filterConnectedUsers: User[] = [];
+    dicussions: Discussion[] = [];
     
-    constructor(private userService: UserService,private notifServ: ChatService){
+    constructor(private authServ: AuthenticationService,
+        private userService: UserService,
+        private notifServ: ChatService,
+        private discServ: DiscussionService){
         
     }
     ngOnInit(): void {
@@ -29,11 +37,25 @@ export class FriendsComponent implements OnInit {
             this.connectedFriends = res;
             this.filterConnectedUsers=res;
         });
+        this.discServ.getDiscussions(this.authServ.currentUser).subscribe(res => {
+            console.log(res);
+            this.dicussions = res;
+        });
     }
     showChat(user: User){
-        var index = this.chatBoxUser.indexOf(user);
-        if(index < 0) {
-            this.chatBoxUser.push(user);
+        if(this.getDiscussion(user)){
+            var index = this.chatBoxUser.indexOf(user);
+            if(index < 0) {
+                this.chatBoxUser.push(user);
+            }
+        }
+        else {
+            let d = new Discussion({message: [],participants:[user.pseudo,this.authServ.currentUser.pseudo]})
+            this.discServ.addDiscussion(d).subscribe(res => {
+                console.log(res);
+                d.id = res;
+                this.dicussions.push(d);
+            });
         }
     }
     filterUsers(){
@@ -56,5 +78,10 @@ export class FriendsComponent implements OnInit {
     sendMessage(value:any){
         console.log(value);
         this.notifServ.sendMessage(value.pseudo,value.message);
+    }
+    getDiscussion(u: User): Discussion{
+        const discussion = _.find(this.dicussions,d => _.some(d.participants,p => p === u.pseudo)) ;
+        console.log(discussion);
+        return discussion;
     }
 }

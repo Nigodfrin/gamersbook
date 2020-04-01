@@ -28,6 +28,7 @@
         </div>
         
     </div>
-    <app-smallChatBox (closeDialog)="closeDialog($event)" (sendMessage)="sendMessage($event)" *ngFor="let chatBox of chatBoxUser;let index = index" [user]="chatBox"
+    <app-smallChatBox (closeDialog)="closeDialog($event)" (sendMessage)="sendMessage($event)" 
+    *ngFor="let chatBox of chatBoxUser;let index = index"[discussion]="getDiscussion(chatBox)" [user]="chatBox"
         style="position: fixed;bottom:0px;" [style.right.px]="270*(index+1)" [index]="index"></app-smallChatBox>
 </article>

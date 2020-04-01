@@ -2,13 +2,15 @@ import { Message } from "./Message";
 import { User } from "./User";
 
 export class Discussion {
-    messageList: Message[];
-    participants: User [];
+    id: number;
+    messages: Message[];
+    participants: string [];
 
     constructor(data) {
         if(data){
-            this.messageList = data.messageList;
+            this.messages = data.messages;
             this.participants = data.participants;
+            this.id = data.id;
         }
     }
 }

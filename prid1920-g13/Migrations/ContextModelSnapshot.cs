@@ -14,22 +14,67 @@ namespace prid_1819_g13.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("prid_1819_g13.Discussion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Discussions");
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DiscussionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("Receiver")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sender")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscussionId");
+
+                    b.ToTable("Messages");
+                });
 
             modelBuilder.Entity("prid_1819_g13.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<int>("AuthorId");
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Body")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("Timestamp");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -43,21 +88,29 @@ namespace prid_1819_g13.Migrations
             modelBuilder.Entity("prid_1819_g13.Models.Game", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("Deck");
+                    b.Property<string>("Deck")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Expected_release_day");
+                    b.Property<int>("Expected_release_day")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Expected_release_month");
+                    b.Property<int>("Expected_release_month")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Expected_release_year");
+                    b.Property<int>("Expected_release_year")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Image");
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Platforms");
+                    b.Property<string>("Platforms")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -67,20 +120,27 @@ namespace prid_1819_g13.Migrations
             modelBuilder.Entity("prid_1819_g13.Models.Post", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<int?>("AcceptedPostId");
+                    b.Property<int?>("AcceptedPostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AuthorId");
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Body")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("ParentId");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("Timestamp");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -95,9 +155,11 @@ namespace prid_1819_g13.Migrations
 
             modelBuilder.Entity("prid_1819_g13.Models.PostTag", b =>
                 {
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("TagId");
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
 
                     b.HasKey("PostId", "TagId");
 
@@ -109,10 +171,12 @@ namespace prid_1819_g13.Migrations
             modelBuilder.Entity("prid_1819_g13.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -125,31 +189,41 @@ namespace prid_1819_g13.Migrations
             modelBuilder.Entity("prid_1819_g13.Models.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("BirthDate");
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<string>("LastName")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<string>("Password")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("PicturePath");
+                    b.Property<string>("PicturePath")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Pseudo")
                         .IsRequired()
+                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Reputation");
+                    b.Property<int>("Reputation")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Role");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -162,11 +236,28 @@ namespace prid_1819_g13.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("prid_1819_g13.Models.UserDiscussion", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DiscussionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "DiscussionId");
+
+                    b.HasIndex("DiscussionId");
+
+                    b.ToTable("UserDiscussions");
+                });
+
             modelBuilder.Entity("prid_1819_g13.Models.UserGames", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("GameId");
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "GameId");
 
@@ -177,11 +268,14 @@ namespace prid_1819_g13.Migrations
 
             modelBuilder.Entity("prid_1819_g13.Models.Vote", b =>
                 {
-                    b.Property<int>("AuthorId");
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PostId");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UpDown");
+                    b.Property<int>("UpDown")
+                        .HasColumnType("int");
 
                     b.HasKey("AuthorId", "PostId");
 
@@ -190,17 +284,28 @@ namespace prid_1819_g13.Migrations
                     b.ToTable("Votes");
                 });
 
+            modelBuilder.Entity("prid_1819_g13.Message", b =>
+                {
+                    b.HasOne("prid_1819_g13.Discussion", "Discussion")
+                        .WithMany("Messages")
+                        .HasForeignKey("DiscussionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("prid_1819_g13.Models.Comment", b =>
                 {
                     b.HasOne("prid_1819_g13.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("prid_1819_g13.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("prid_1819_g13.Models.Post", b =>
@@ -212,7 +317,8 @@ namespace prid_1819_g13.Migrations
                     b.HasOne("prid_1819_g13.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("prid_1819_g13.Models.Post", "ParentPost")
                         .WithMany("Reponses")
@@ -225,12 +331,29 @@ namespace prid_1819_g13.Migrations
                     b.HasOne("prid_1819_g13.Models.Post", "Post")
                         .WithMany("PostTags")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("prid_1819_g13.Models.Tag", "Tag")
                         .WithMany("PostTags")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("prid_1819_g13.Models.UserDiscussion", b =>
+                {
+                    b.HasOne("prid_1819_g13.Discussion", "ownedDiscussion")
+                        .WithMany("UserDiscussions")
+                        .HasForeignKey("DiscussionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("prid_1819_g13.Models.User", "User")
+                        .WithMany("UserDiscussions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("prid_1819_g13.Models.UserGames", b =>
@@ -238,12 +361,14 @@ namespace prid_1819_g13.Migrations
                     b.HasOne("prid_1819_g13.Models.Game", "ownedGame")
                         .WithMany("UserGames")
                         .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("prid_1819_g13.Models.User", "UserGame")
                         .WithMany("UserGames")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("prid_1819_g13.Models.Vote", b =>
@@ -251,12 +376,14 @@ namespace prid_1819_g13.Migrations
                     b.HasOne("prid_1819_g13.Models.User", "User")
                         .WithMany("Votes")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("prid_1819_g13.Models.Post", "Post")
                         .WithMany("Votes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -19,6 +19,7 @@ export class HomeComponent {
         this.chat.joinRoom();
         
       })
+      console.log(this.authServ.currentUser);
     }
     submit(){
       this.chat.sendMessage('ben','salut');
