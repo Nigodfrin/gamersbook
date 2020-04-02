@@ -6,7 +6,7 @@ namespace prid_1819_g13
 {
     public class NotificationsHub : Hub
     {
-        public async Task SendMessage(string user,string from, string msg)
+        public async Task SendMessage(string user,string from, MessageDTO msg)
         {
             await Clients.Group(user).SendAsync("ReceiveMessage", from, msg);
         }

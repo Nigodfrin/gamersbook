@@ -36,7 +36,7 @@ namespace prid_1819_g13.Models {
             return new MessageDTO{
                 MessageText = message.MessageText,
                 Sender = message.Sender,
-                Receiver = message.Receiver
+                Receiver = message.Receiver,
             };
         }
          public static List<MessageDTO> MessageToDTO(this IEnumerable<Message> message) {

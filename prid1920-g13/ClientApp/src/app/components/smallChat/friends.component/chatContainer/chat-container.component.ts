@@ -1,24 +1,32 @@
-import {Component, TemplateRef, Input, Output, EventEmitter} from '@angular/core';
+import {Component, TemplateRef, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { User } from 'src/app/models/User';
 import { Discussion } from 'src/app/models/Discussion';
+import { Message } from 'src/app/models/Message';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { MessageService } from 'src/app/services/message.service';
+import { ChatService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-smallChatBox',
   templateUrl: 'chat-container.component.html',
   styleUrls: ['chat-container.component.css']
 })
-export class ChatContainerComponent {
+export class ChatContainerComponent implements OnInit {
+
     @Input() index: number;
     @Input() user: User;
     @Input() discussion: Discussion;
     @Output() closeDialog: EventEmitter<any> = new EventEmitter();
     @Output() sendMessage: EventEmitter<any> = new EventEmitter();
     private show : boolean = true;
+    inputValue: string = '';
 
-  constructor() {
-    console.log(this.discussion);
+  constructor(private authServ: AuthenticationService,private messageService: MessageService) {
+    
   }
 
+  ngOnInit(): void {
+  }
   onHeaderClick(){
         if(this.show){
             this.show=false;
@@ -38,9 +46,13 @@ export class ChatContainerComponent {
     console.log(this.index);
     this.closeDialog.emit(this.index);
   }
-  sendText(value: string){
-    const message = value;
+  sendText(){
+    let message = new Message({messageText: this.inputValue,sender:this.authServ.currentUser.id,receiver: this.user.id});
+    this.inputValue = '';
+    console.log(message);
+    this.discussion.messages.push(message);
+    message.discussionId = this.discussion.id;
+    this.messageService.addMessage(message);
     this.sendMessage.emit({pseudo:this.user.pseudo,message:message});
   }
-
 }

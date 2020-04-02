@@ -21,7 +21,7 @@ namespace prid_1819_g13.Controllers
             _context = context;
         }
 
-        [HttpPost("/send")]
+        [HttpPost]
         public async Task<IActionResult> sendMessage(Message message){
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();

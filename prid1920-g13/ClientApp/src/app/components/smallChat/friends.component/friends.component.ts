@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { User } from "src/app/models/User";
 import { UserService } from "src/app/services/user.service";
 import * as _ from 'lodash';
@@ -6,7 +6,7 @@ import { ChatService } from "src/app/services/notifications.service";
 import { Discussion } from "src/app/models/Discussion";
 import { DiscussionService } from "src/app/services/discussion.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
-import { Message } from "@angular/compiler/src/i18n/i18n_ast";
+import { Message } from "src/app/models/Message";
 
 
 @Component({
@@ -14,7 +14,8 @@ import { Message } from "@angular/compiler/src/i18n/i18n_ast";
     templateUrl: './friends.component.html',
     styleUrls: ['./friends.component.css']
 })
-export class FriendsComponent implements OnInit {
+export class FriendsComponent implements OnInit,OnDestroy {
+   
     
     connectedFriends: User[] = [];
     friendsContainerHeight = 500;
@@ -24,7 +25,7 @@ export class FriendsComponent implements OnInit {
     filterConnectedUsers: User[] = [];
     dicussions: Discussion[] = [];
     
-    constructor(private authServ: AuthenticationService,
+    constructor(private chatServ: ChatService,private authServ: AuthenticationService,
         private userService: UserService,
         private notifServ: ChatService,
         private discServ: DiscussionService){
@@ -33,14 +34,20 @@ export class FriendsComponent implements OnInit {
     ngOnInit(): void {
         this.friendsContainerHeight = window.innerHeight;
         this.userService.getFriend().subscribe(res => {
-            console.log('test',res);
             this.connectedFriends = res;
             this.filterConnectedUsers=res;
         });
         this.discServ.getDiscussions(this.authServ.currentUser).subscribe(res => {
-            console.log(res);
             this.dicussions = res;
         });
+        this.chatServ.messageReceived.subscribe((msg: Message) => {
+            console.log("test reception message",msg);
+            this.dicussions.find(d => d.id === msg.discussionId).messages.push(msg);
+          });
+    }
+    ngOnDestroy(): void {
+        this.chatServ.leaveRoom();
+        console.log("test leave room");
     }
     showChat(user: User){
         if(this.getDiscussion(user)){

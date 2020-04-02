@@ -1,15 +1,17 @@
 import { User } from "./User";
 
 export class Message {
-    senderId: number;
-    receiverId: number;
+    sender: number;
+    receiver: number;
     messageText: string;
+    discussionId: number;
 
     constructor(data){
         if(data){
-            this.senderId = data.sender;
-            this.receiverId = data.receiver;
+            this.sender = data.sender;
+            this.receiver = data.receiver;
             this.messageText = data.messageText;
+            this.discussionId = data.discussionId;
         }
     }
 
