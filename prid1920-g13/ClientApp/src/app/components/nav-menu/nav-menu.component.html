@@ -1,65 +1,75 @@
 <header>
-  <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
-    <div class="container">
+  <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-dark nav-bg mb-3'>
       <a class="navbar-brand" [routerLink]='["/"]'>Code Overflow</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
+      <div style="margin-left: 100px;" class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow mr-auto">
           <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-dark" [routerLink]='["/"]'>Home</a>
+            <a class="nav-link text-light" [routerLink]='["/"]'>Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/postlist"]'>Post list</a>
+            <a class="nav-link text-light" [routerLink]='["/postlist"]'>Post list</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/searchGame"]'>Search Games</a>
+            <a class="nav-link text-light" [routerLink]='["/searchGame"]'>Search Games</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/createquestion"]'>Create Question</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/profile"]'>Profile</a>
+            <a class="nav-link text-light" [routerLink]='["/createquestion"]'>Create Question</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/taglist"]'>Tags</a>
+            <a class="nav-link text-light" [routerLink]='["/taglist"]'>Tags</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <input type="text" [(ngModel)]="userSearch" class="input" placeholder="search">
-            <button (click)="searchUser()">Search Users</button>
+          <li class="nav-item" style="display: flex;align-items: center; margin-left: 100px;" [routerLinkActive]='["link-active"]'>
+            <input [ngbTypeahead]="search" id="search" (keyup.enter)="searchUser()" type="text" [(ngModel)]="userSearch" class="input nav-input" placeholder="Search">
+            <div (click)="searchUser()" class="search-icon-nav">
+                <span class="material-icons">search</span>
+            </div>
           </li>
-
         </ul>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="margin-right: 250px;">
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/login"]'>
+            <a class="nav-link text-light" [routerLink]='["/login"]'>
               <span class="material-icons">exit_to_app</span>
               <span> Login </span>
             </a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
-            <a class="nav-link text-dark" [routerLink]='["/signup"]'>
+            <a class="nav-link text-light" [routerLink]='["/signup"]'>
               <span class="material-icons">queue</span>
               <span>Signup</span>
             </a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-dark" [routerLink]='' (click)='logout()'>
-              <span class="material-icons">power_settings_new</span>
-              <span> Logout </span>
+          <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right" *ngIf="currentUser">
+            <a class="nav-link text-light" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
+              {{authenticationService.currentUser.pseudo  | titlecase}}
             </a>
-              <span class="text-info">({{authenticationService.currentUser.pseudo}})
-                <button class="btn btn-secondary" [ngbTooltip]="tipContent" [autoClose]="'inside'" triggers="click" tooltipClass="customTooltip">
-                  Notifications <span class="badge badge-light">{{numNotif}}</span>
+            <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+                <div class="dropdownItem">
+                    <a [routerLink]='["/profile"]'>
+                      <span style="margin-right: 3px;" class="material-icons">account_circle</span>
+                      Profile</a>
+                </div>
+              <div class="dropdownItem">
+                <a class='dropdownItem-logout' (click)='logout()'>
+                <span style="margin-right: 2px;" class="material-icons">power_settings_new</span>
+                <span> Logout </span>
+              </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item" style="display: flex;
+          align-items: center; margin-left: 10px;" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
+              <mat-icon class="notif-icon" matBadgeSize="small" [ngbTooltip]="tipContent" [autoClose]="'inside'" triggers="click" tooltipClass="customTooltip" style="color: #fff;" matBadge="{{numNotif}}" matBadgeColor="accent">
+                  notification_important
                   <span class="sr-only">unread messages</span>
-                </button>
-              </span>
+                </mat-icon>
               <ng-template #tipContent>
                 <div  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
                   <div class="notif-item">
-                      <div style="width: 100%">{{notif.senderPseudo}} has invited you as friend !</div>
+                      <div style="width: 100%">{{notif.senderPseudo | titlecase}} has invited you as friend !</div>
                       <span>
                         <button class="btn btn-success btn-sm" (click)="acceptFriend(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
@@ -76,6 +86,5 @@
           </li>
         </ul>
       </div>
-    </div>
   </nav>
 </header>

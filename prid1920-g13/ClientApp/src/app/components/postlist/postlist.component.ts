@@ -42,44 +42,15 @@ export class PostListComponent implements OnInit {
   applyTagFilter(name: string) {
     this.selectedValue = "tags";
     this.filter = name;
-    this.withTags();
+    this.onValChange();
   }
-  public onValChange(val: string) {
-    this.selectedValue = val;
-  }
-  getAll(){
+  onValChange(){
     this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
       this.posts = posts;
       this.currentUser = this.authService.currentUser;
     })
   }
-  newest() {
-      this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
-        this.posts = posts;
-      })
-  }
-  unanswered(){
-    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
-      this.posts = posts;
-    })
-  }
-  onChange() {
-    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
-      this.posts = posts;
-    });
 
-}
-  votes() {
-    this.postService.filter(this.selectedValue,this.filter).subscribe((posts)  => {
-      this.posts = posts
-      console.log(posts);
-    });
-  }
-  withTags(){
-    this.postService.filter(this.selectedValue,this.filter).subscribe(posts => {
-      this.posts = posts;
-    });
-  }
   asOneRepInQuestion(question: Post): boolean{
     console.log(question);
       question.reponses.forEach(response => {

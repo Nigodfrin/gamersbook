@@ -1,58 +1,72 @@
-<section class="container">
-  <div class="row">
-    <h2 class="col-10">All Questions</h2>
-    <span class="col-2">
+<div style="display: flex;flex-direction: column;">
+  <div style="display: flex;justify-content: space-between;">
+    <h2>All Questions</h2>
+    <span>
       <button [disabled]="!currentUser" class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</button>
     </span>
-    <input [(ngModel)]="filter" placeholder="Search" class="col-3" (ngModelChange)="onChange()" type="text">
-    <mat-button-toggle-group #group="matButtonToggleGroup" class="offset-5" [value]="selectedValue" (change)="onValChange(group.value)">
-      <mat-button-toggle value="all" (click)="getAll()">All</mat-button-toggle>
-      <mat-button-toggle value="newest" (click)="newest()">Newest</mat-button-toggle>
-      <mat-button-toggle value="votes" (click)="votes()">Votes</mat-button-toggle>
-      <mat-button-toggle value="unanswered" (click)="unanswered()">Unanswered</mat-button-toggle>
-      <mat-button-toggle value="tags" (click)="withTags()">Tags</mat-button-toggle>
-    </mat-button-toggle-group>
   </div>
-  <div class="row">
-    <mat-card class="col-12" style="margin: 10px 0px;" *ngFor="let post of posts">
-      <mat-card-header>
-        <mat-card-title [ngClass]="(post.score >= 0) ? 'up' : 'down'"> Score : {{post.score}}</mat-card-title>
-        <mat-card-title [ngClass]="(post.maxScore >= 0) ? 'up' : 'down'">MaxScore : {{post.maxScore}}</mat-card-title>
-        <mat-card-title-group>
-          <mat-card-title>
-            <h4>
-              <a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
-            </h4>
-          </mat-card-title>
-          <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}} Reputation : {{post.user.reputation}} </mat-card-subtitle>
-        </mat-card-title-group>
-      </mat-card-header>
-      <mat-card-content>
-        <p>
-          {{(post.body.length>300)? (post.body | slice:0:300)+'...':(post.body)}}
-        </p>
-        <p>
-          <mat-chip-list>
-            <mat-chip  style="background-color: goldenrod" *ngFor="let tag of post.tags"> {{tag.name}}</mat-chip>
-          </mat-chip-list>
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <span [ngClass]="(post.acceptedPostId == null) ? 'notHere' : 'isHere'">Answer : {{post.reponses.length}}
-          <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline
-          </mat-icon>
-        </span>
-        <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
-          [routerLink]="['/readquestion',post.id]">See</button>
-          <span *ngIf="authService.isAdmin() || isAuthor(post)">
-            <button mat-icon-button tabindex="-1">
-              <mat-icon (click)="delete(post)">delete</mat-icon>
-            </button>
-            <button mat-icon-button tabindex="-1">
-              <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id]" >edit</mat-icon>
-            </button>
-          </span>
-      </mat-card-actions>
-    </mat-card>
+  <div style="display: flex;justify-content: space-between;">
+    <input [(ngModel)]="filter" placeholder="Search" (ngModelChange)="onValChange()" type="text">
+
+    <div class="btn-group btn-group-toggle" (change)="onValChange()" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedValue">
+        <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" (click)="getAll()" value="all"> All
+          </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" (click)="newest()" value="newest"> Newest
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" (click)="votes()" value="votes"> Votes
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" (click)="unanswered()" value="unanswered"> Unanswered
+        </label>
+        <label ngbButtonLabel class="btn-primary">
+          <input ngbButton type="radio" (click)="withTags()" value="tags"> Tags
+        </label>
+      </div>
   </div>
-</section>
+</div>
+<div style="display: flex;flex-direction: column;">
+  <mat-card class="col-12" style="margin: 10px 0px;" *ngFor="let post of posts">
+    <mat-card-header>
+      <mat-card-title [ngClass]="(post.score >= 0) ? 'up' : 'down'"> Score : {{post.score}}</mat-card-title>
+      <mat-card-title [ngClass]="(post.maxScore >= 0) ? 'up' : 'down'">MaxScore : {{post.maxScore}}</mat-card-title>
+      <mat-card-title-group>
+        <mat-card-title>
+          <h4>
+            <a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
+          </h4>
+        </mat-card-title>
+        <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}} Reputation :
+          {{post.user.reputation}} </mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        {{(post.body.length>300)? (post.body | slice:0:300)+'...':(post.body)}}
+      </p>
+      <p>
+        <mat-chip-list>
+          <mat-chip style="background-color: goldenrod" *ngFor="let tag of post.tags"> {{tag.name}}</mat-chip>
+        </mat-chip-list>
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <span [ngClass]="(post.acceptedPostId == null) ? 'notHere' : 'isHere'">Answer : {{post.reponses.length}}
+        <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline
+        </mat-icon>
+      </span>
+      <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
+        [routerLink]="['/readquestion',post.id]">See</button>
+      <span *ngIf="authService.isAdmin() || isAuthor(post)">
+        <button mat-icon-button tabindex="-1">
+          <mat-icon (click)="delete(post)">delete</mat-icon>
+        </button>
+        <button mat-icon-button tabindex="-1">
+          <mat-icon [routerLinkActive]='["link-active"]' [routerLink]="['/createquestion',post.id]">edit</mat-icon>
+        </button>
+      </span>
+    </mat-card-actions>
+  </mat-card>
+</div>

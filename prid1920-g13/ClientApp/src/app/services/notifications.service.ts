@@ -9,14 +9,17 @@ import { Message } from '../models/Message';
 export class ChatService {
   messageReceived = new EventEmitter<Message>();
   connectionEstablished = new EventEmitter<Boolean>();
+  refreshFriendsEvent = new EventEmitter<string[]>();
 
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
 
   constructor(private authServ: AuthenticationService) {
-    this.createConnection();
-    this.registerOnServerEvents();
-    this.startConnection();
+    if(authServ.currentUser){
+      this.createConnection();
+      this.registerOnServerEvents();
+      this.startConnection();
+    }
   }
 
   sendMessage(pseudo: string,message: Message) {
@@ -56,6 +59,13 @@ export class ChatService {
       console.log('signalr',data,data2);
       const message =  new Message(data2);
       this.messageReceived.emit(message);
+    });
+    this._hubConnection.on('refreshFriends',(data: string[]) => {
+      console.log('reception de la liste');
+      this.refreshFriendsEvent.emit(data);
+    });
+    this._hubConnection.on('test',(data) => {
+      console.log('reception du test',data);
     });
   }
 

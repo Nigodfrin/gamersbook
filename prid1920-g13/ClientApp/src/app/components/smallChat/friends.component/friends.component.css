@@ -5,6 +5,13 @@
     height: 10px;
     display: inline-block;
 }
+.badgeDisconnected {
+    background-color: grey !important;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
 .friendsContainerItem {
     height: 35px;
 }

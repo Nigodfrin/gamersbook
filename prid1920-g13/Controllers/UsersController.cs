@@ -28,7 +28,7 @@ namespace prid_1819_g13.Controllers
         {
             _context = context;
         }
-        [Authorized(Role.Admin)]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
@@ -67,7 +67,7 @@ namespace prid_1819_g13.Controllers
         }
         [HttpGet("search/{name}")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> userSearch(string name){
-            return (await _context.Users.Where(u => u.Pseudo.Contains(name)).ToListAsync()).ToDTO();
+            return (await _context.Users.Where(u => u.Pseudo.ToLower().Contains(name.ToLower())).ToListAsync()).ToDTO();
         }
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)

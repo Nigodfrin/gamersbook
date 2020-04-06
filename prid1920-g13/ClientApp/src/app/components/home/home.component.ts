@@ -15,10 +15,7 @@ export class HomeComponent {
 
 
     constructor(private chat: ChatService,private authServ: AuthenticationService){
-      this.chat.connectionEstablished.subscribe(res => {
-        console.log("test connexion");
-        this.chat.joinRoom();
-      })
+      
     }
 }
 

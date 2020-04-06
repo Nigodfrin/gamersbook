@@ -6,28 +6,51 @@ import { UserService } from 'src/app/services/user.service';
 import { Notif } from 'src/app/models/Notif';
 import {ToastService} from '../../Helpers/toast/toast.service';
 import * as _ from 'lodash';
+import { ChatService } from 'src/app/services/notifications.service';
+import {Observable} from 'rxjs';
+import {NgbTypeaheadConfig} from '@ng-bootstrap/ng-bootstrap';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./nav-menu.component.css']
+  styleUrls: ['./nav-menu.component.css'],
+  providers: [NgbTypeaheadConfig] 
 })
 export class NavMenuComponent {
   userSearch= "";
   isExpanded = false;
   notifications: Notif[] = [];
   numNotif: number = 0;
+  allUsers: User [] = [];
   constructor(
+    private chatServ: ChatService,
     private router: Router,
     private authenticationService: AuthenticationService,
     private userServ: UserService,
-    public toastService: ToastService
+    public toastService: ToastService,
+    config: NgbTypeaheadConfig
   ) 
   {
-    this.getNotifs();
+    config.showHint = true;
+    if(this.authenticationService.currentUser){
+      this.getNotifs();
+    }
     this.numNotif = this.notifications.length
+    this.userServ.getAll().subscribe(users => {
+      this.allUsers = users;
+    })
    }
+   search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.allUsers.filter(v => v.pseudo.toLowerCase().startsWith(term.toLocaleLowerCase()))
+        .map(u => u.pseudo)
+        .splice(0, 10))
+    )
    showNotifs(){
      document.getElementById('notifCompo').style.display = 'block'
    }
@@ -35,9 +58,10 @@ export class NavMenuComponent {
     this.isExpanded = false;
   }
   searchUser(){
-    console.log(this.userSearch);
-    this.router.navigate(['/users'], { queryParams: { name: this.userSearch } });    
-    this.userSearch = "";
+    if(this.userSearch){
+      this.router.navigate(['/users'], { queryParams: { name: this.userSearch } });    
+      this.userSearch = "";
+    }
   }
   toggle() {
     this.isExpanded = !this.isExpanded;
@@ -55,6 +79,7 @@ export class NavMenuComponent {
     });
   }
   logout() {
+    this.chatServ.leaveRoom();
     this.authenticationService.logout();
     this.router.navigate(['/login']);
   }

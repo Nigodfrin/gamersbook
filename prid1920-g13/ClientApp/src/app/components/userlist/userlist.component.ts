@@ -11,15 +11,13 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
     selector: 'app-userlist',
     templateUrl: './userlist.component.html',
-    styleUrls: ['./userlist.component.css']
+    styleUrls: ['./userlist.component.css'],
 })
 export class UserListComponent implements AfterViewInit, OnDestroy {
-    displayedColumns: string[] = ['pseudo','email', 'firstName','lastName', 'birthDate', 'role', 'actions'];
-    dataSource: MatTableDataSource<User> = new MatTableDataSource();
-    filter: string;
-    state: MatTableState;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+
+    filter: string = '';
+    users: User[] = [];
+    filterUsers: User[] = [];
     constructor(
         private userService: UserService,
         private stateService: StateService,
@@ -28,53 +26,27 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         public snackBar: MatSnackBar,
         private authService: AuthenticationService
     ) {
-        this.state = this.stateService.userListState;
+        
     }
     ngAfterViewInit(): void {
-        // lie le datasource au sorter et au paginator
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // définit le predicat qui doit être utilisé pour filtrer les membres
-        this.dataSource.filterPredicate = (data: User, filter: string) => {
-            const str = data.pseudo + ' ' + data.firstName + ' ' + data.birthDate + ' ' + data.roleAsString;
-            return str.toLowerCase().includes(filter);
-        };
-        // établit les liens entre le data source et l'état de telle sorte que chaque fois que 
-        // le tri ou la pagination est modifié l'état soit automatiquement mis à jour
-        this.state.bind(this.dataSource);
-        // récupère les données 
         this.refresh();
     }
     refresh() {
-        let name = this.router.snapshot.queryParamMap.get('name');
-        console.log(name);
-        this.userService.getUsers(name).subscribe(users => {
-            // assigne les données récupérées au datasource
-            this.dataSource.data = users;
-            // restaure l'état du datasource (tri et pagination) à partir du state
-            this.state.restoreState(this.dataSource);
-            // restaure l'état du filtre à partir du state
-            this.filter = this.state.filter;
+        let name: string;
+        this.router.queryParams.subscribe(queryParams => {
+            name = queryParams.name;
+            if(name){
+                this.userService.getUsers(name).subscribe(users => {
+                    this.users = users;
+                    this.filterUsers = users;
+                });
+            }
         });
-        // this.userService.getAll().subscribe(users => {
-        //     // assigne les données récupérées au datasource
-        //     this.dataSource.data = users;
-        //     // restaure l'état du datasource (tri et pagination) à partir du state
-        //     this.state.restoreState(this.dataSource);
-        //     // restaure l'état du filtre à partir du state
-        //     this.filter = this.state.filter;
-        // });
     }
     // appelée chaque fois que le filtre est modifié par l'utilisateur
     filterChanged(filterValue: string) {
-        // applique le filtre au datasource (et provoque l'utilisation du filterPredicate)
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        // sauve le nouveau filtre dans le state
-        this.state.filter = this.dataSource.filter;
-        // comme le filtre est modifié, les données aussi et on réinitialise la pagination
-        // en se mettant sur la première page
-        if (this.dataSource.paginator)
-            this.dataSource.paginator.firstPage();
+        const filter = filterValue.toLowerCase();
+        this.filterUsers = _.filter(this.users,user => user.firstName.toLowerCase().includes(filter) || user.lastName.toLowerCase().includes(filter)|| user.pseudo.toLowerCase().includes(filter));
     }
     addFriend(user: User){
         this.userService.addFriend(user).subscribe();
@@ -97,16 +69,13 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     }
     // appelée quand on clique sur le bouton "delete" d'un membre
     delete(user: User) {
-        const backup = this.dataSource.data;
-        this.dataSource.data = _.filter(this.dataSource.data, m => m.pseudo !== user.pseudo);
+
         const snackBarRef = this.snackBar.open(`User '${user.pseudo}' will be deleted`, 'Undo', { duration: 10000 });
         snackBarRef.afterDismissed().subscribe(res => {
             if (!res.dismissedByAction)
                 this.userService.delete(user).subscribe(res => {
                     this.refresh();
                 });
-            else
-                this.dataSource.data = backup;
         });
     }
     // appelée quand on clique sur le bouton "new user"
@@ -115,7 +84,6 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         const dlg = this.dialog.open(EditUserComponent, { data: { user, isNew: true } });
         dlg.beforeClose().subscribe(res => {
             if (res) {
-                this.dataSource.data = [...this.dataSource.data, new User(res)];
                 this.userService.add(res).subscribe(res => {
                     if (!res) {
                         this.snackBar.open(`There was an error at the server. The user has not been created! Please try again.`, 'Dismiss', { duration: 10000 });

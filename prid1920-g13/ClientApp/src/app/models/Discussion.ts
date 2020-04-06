@@ -3,7 +3,7 @@ import { User } from "./User";
 
 export class Discussion {
     id: number;
-    messages: Message[];
+    messages: Message[] = [];
     participants: string [];
 
     constructor(data) {
