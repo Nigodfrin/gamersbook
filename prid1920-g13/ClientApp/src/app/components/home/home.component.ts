@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
 import { Game } from 'src/app/models/Game';
 import { UserService } from 'src/app/services/user.service';
-import { ChatService } from 'src/app/services/notifications.service';
+import { SignalRService } from 'src/app/services/signalR.service';
 import { User } from 'src/app/models/User';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
@@ -14,7 +14,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class HomeComponent {
 
 
-    constructor(private chat: ChatService,private authServ: AuthenticationService){
+    constructor(private chat: SignalRService,private authServ: AuthenticationService){
       
     }
 }

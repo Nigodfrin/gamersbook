@@ -42,12 +42,19 @@ namespace prid_1819_g13.Controllers
             if(a == null){
                 return BadRequest();
             }
+            var notif = new NotificationNeo4J {
+                SenderPseudo = connectPseudo,
+                See = false,
+                Type = "acceptRelationship"
+            };
             this.Client.Cypher
             .Match("(ami:User),(me:User)-[h:Has]->(n:Notification)")
             .Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo)
             .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
             .AndWhere((NotificationNeo4J n) => n.SenderPseudo == user.Pseudo && n.Type == "Relationship")
             .Merge("(me)-[:friend]-(ami)")
+            .Create("(ami)-[:Has]->(n0:Notification {notif})")
+            .WithParam("notif",notif)
             .DetachDelete("n")
             .ExecuteWithoutResultsAsync()
             .Wait();
@@ -59,8 +66,7 @@ namespace prid_1819_g13.Controllers
             var connectPseudo = User.Identity.Name;
             this.Client.Cypher
             .Match("(me:User)-[h:Has]->(n:Notification)")
-            .Where((UserNeo4J sender) => sender.Pseudo == pseudo)
-            .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
+            .Where((UserNeo4J me) => me.Pseudo == connectPseudo)
             .AndWhere((NotificationNeo4J n) => n.SenderPseudo == pseudo && n.Type == "Relationship")
             .DetachDelete("n")
             .ExecuteWithoutResultsAsync()

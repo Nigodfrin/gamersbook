@@ -4,6 +4,7 @@ import { map, catchError } from "rxjs/operators";
 import { Post } from "../models/Post";
 import { of, Observable } from "rxjs";
 import { Tag } from "../models/Tag";
+import { Notif } from "../models/Notif";
 @Injectable({ providedIn: 'root' })
 export class NotifsService {
 
@@ -18,6 +19,17 @@ export class NotifsService {
           return of(false);
         })
       );
+  }
+  sendNotification(notif: Notif){
+    return this.http.post(`${this.baseUrl}api/notifsNeo4J`,notif)
+    .pipe(
+      map(res => true),
+      catchError(err => {
+        console.error(err);
+        return of(false);
+      })
+    );
+    
   }
 
 }

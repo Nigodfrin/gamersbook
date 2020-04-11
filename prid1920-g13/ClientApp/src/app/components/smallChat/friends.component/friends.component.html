@@ -22,7 +22,7 @@
         <div>
             <div *ngFor="let friend of filterAllFriends" style="height: 30px;" class="friendsContainerItem">
                 <div style="display: inline-block;color:white;" (click)="showChat(friend)">
-                    {{friend.firstName}} {{friend.lastName}}<div [ngClass]="isConnected(friend) ? 'badgeConnected' : 'badgeDisconnected' "   class="ml-3"></div>
+                    {{friend.pseudo}}<div [ngClass]="isConnected(friend) ? 'badgeConnected' : 'badgeDisconnected' "   class="ml-3"></div>
                 </div>
             </div>
         </div>

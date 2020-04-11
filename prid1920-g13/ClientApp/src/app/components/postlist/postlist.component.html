@@ -6,23 +6,22 @@
     </span>
   </div>
   <div style="display: flex;justify-content: space-between;">
-    <input [(ngModel)]="filter" placeholder="Search" (ngModelChange)="onValChange()" type="text">
-
+    <input class="filter-input" [(ngModel)]="filter" placeholder="Search" (ngModelChange)="onValChange()" type="text">
     <div class="btn-group btn-group-toggle" (change)="onValChange()" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedValue">
-        <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" (click)="getAll()" value="all"> All
+        <label ngbButtonLabel class="custom-btn">
+            <input ngbButton type="radio" value="all"> All
           </label>
-        <label ngbButtonLabel class="btn-primary">
-          <input ngbButton type="radio" (click)="newest()" value="newest"> Newest
+        <label ngbButtonLabel class="custom-btn">
+          <input ngbButton type="radio"  value="newest"> Newest
         </label>
-        <label ngbButtonLabel class="btn-primary">
-          <input ngbButton type="radio" (click)="votes()" value="votes"> Votes
+        <label ngbButtonLabel class="custom-btn">
+          <input ngbButton type="radio"  value="votes"> Votes
         </label>
-        <label ngbButtonLabel class="btn-primary">
-          <input ngbButton type="radio" (click)="unanswered()" value="unanswered"> Unanswered
+        <label ngbButtonLabel class="custom-btn">
+          <input ngbButton type="radio"  value="unanswered"> Unanswered
         </label>
-        <label ngbButtonLabel class="btn-primary">
-          <input ngbButton type="radio" (click)="withTags()" value="tags"> Tags
+        <label ngbButtonLabel class="custom-btn">
+          <input ngbButton type="radio"  value="tags"> Tags
         </label>
       </div>
   </div>

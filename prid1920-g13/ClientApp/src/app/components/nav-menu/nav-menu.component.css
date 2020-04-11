@@ -92,9 +92,13 @@ html {
   min-width: 300px;
   max-width: 300px;
   border: 1px solid #fff;
+  min-height: 250px;
 }
 .customTooltip .arrow::before {
   border-top-color: #565656;
+}
+.arrow{
+  background-color: #fff;
 }
 .tooltip.show{
   opacity: 1 !important;

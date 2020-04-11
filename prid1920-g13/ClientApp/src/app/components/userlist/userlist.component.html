@@ -21,11 +21,10 @@
                          {{user.firstName | titlecase}} {{user.lastName | titlecase}}
                     </div>            
                 </div>
-                <div class="btn-add-friend" (click)="addFriend(user)">
-                    <span class="material-icons">add</span>Add friend
+                <div class="btn-add-friend" *ngIf="friends" (click)="addFriend(user)">
+                    <span class="material-icons">{{isFriends(user) ? 'delete' :'add' }}</span> <div style="width: 100px">{{isFriends(user) ? 'Delete friend' : 'Add friend' }}</div>
                 </div>
             </div>
-
        </div>
     </div>
 </div>

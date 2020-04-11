@@ -30,7 +30,8 @@
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/ngx-simplemde/src/index.css",
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/Styles/custom.scss"
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js",

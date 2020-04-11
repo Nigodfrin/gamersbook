@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { User } from "src/app/models/User";
 import { UserService } from "src/app/services/user.service";
 import * as _ from 'lodash';
-import { ChatService } from "src/app/services/notifications.service";
+import { SignalRService } from "src/app/services/signalR.service";
 import { Discussion } from "src/app/models/Discussion";
 import { DiscussionService } from "src/app/services/discussion.service";
 import { AuthenticationService } from "src/app/services/authentication.service";
@@ -28,9 +28,9 @@ export class FriendsComponent implements OnInit, CanLoad {
     dicussions: Discussion[] = [];
     connectedFriends: string [] = [];
     
-    constructor(private chatServ: ChatService,private authServ: AuthenticationService,
+    constructor(private chatServ: SignalRService,private authServ: AuthenticationService,
         private userService: UserService,
-        private notifServ: ChatService,
+        private notifServ: SignalRService,
         private discServ: DiscussionService){
             this.chatServ.connectionEstablished.subscribe(res => {
                 console.log("test connexion");
@@ -71,7 +71,7 @@ export class FriendsComponent implements OnInit, CanLoad {
             }
         }
         else {
-            let d = new Discussion({message: [],participants:[user.pseudo,this.authServ.currentUser.pseudo]})
+            let d = new Discussion({messages: [],participants:[user.pseudo,this.authServ.currentUser.pseudo]})
             this.discServ.addDiscussion(d).subscribe(res => {
                 console.log(res);
                 d.id = res;

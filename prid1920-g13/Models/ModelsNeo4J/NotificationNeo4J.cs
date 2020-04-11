@@ -6,8 +6,6 @@ namespace prid_1819_g13
 {
     public class NotificationNeo4J
     {
-        [JsonProperty(PropertyName = "id")]
-        public int Id {get;set;}
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
         [JsonProperty(PropertyName= "from")]

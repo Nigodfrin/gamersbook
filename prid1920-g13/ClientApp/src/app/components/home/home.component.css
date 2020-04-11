@@ -3,7 +3,8 @@
     text-align: center;
     padding: 10px 15px;
     margin: 20px 0px;
-    background: rgb(240,194,6);
-    background: radial-gradient(circle, rgba(240,194,6,1) 48%, rgba(222,235,1,1) 64%);
+    background: rgb(86,86,86);
+    background: radial-gradient(circle, rgba(86,86,86,1) 31%, rgba(68,68,68,1) 69%);
     border-radius: 10px;
+    border: 1px solid #ffffff;
 }

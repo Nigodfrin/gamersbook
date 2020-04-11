@@ -4,12 +4,15 @@ import { User } from '../models/User';
 import { AuthenticationService } from './authentication.service';
 import * as signalR from '@aspnet/signalr';
 import { Message } from '../models/Message';
+import { Notif } from '../models/Notif';
 
 @Injectable({ providedIn: 'root' })
-export class ChatService {
+export class SignalRService {
+
   messageReceived = new EventEmitter<Message>();
   connectionEstablished = new EventEmitter<Boolean>();
   refreshFriendsEvent = new EventEmitter<string[]>();
+  refreshNotifEvent = new EventEmitter<Boolean>();
 
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
@@ -26,7 +29,10 @@ export class ChatService {
     console.log(pseudo,message);
     this._hubConnection.invoke('SendMessage', pseudo,this.authServ.currentUser.pseudo ,message);
   }
-
+  addFriendNotif(user: User,notif: Notif) {
+    console.log("testagain",user.pseudo);
+    this._hubConnection.invoke('RefreshNotif',user.pseudo,notif);
+  }
   private createConnection() {
     this._hubConnection = new HubConnectionBuilder()
       .withUrl('notificationsHub', {accessTokenFactory: () => { return this.authServ.currentUser.token} })
@@ -64,8 +70,9 @@ export class ChatService {
       console.log('reception de la liste');
       this.refreshFriendsEvent.emit(data);
     });
-    this._hubConnection.on('test',(data) => {
-      console.log('reception du test',data);
+    this._hubConnection.on('refreshNotif',() => {
+      console.log('reception des notifs');
+      this.refreshNotifEvent.emit(true);
     });
   }
 

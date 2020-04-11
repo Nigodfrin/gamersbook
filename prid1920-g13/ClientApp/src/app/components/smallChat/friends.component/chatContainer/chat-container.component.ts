@@ -4,7 +4,7 @@ import { Discussion } from 'src/app/models/Discussion';
 import { Message } from 'src/app/models/Message';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MessageService } from 'src/app/services/message.service';
-import { ChatService } from 'src/app/services/notifications.service';
+import { SignalRService } from 'src/app/services/signalR.service';
 
 @Component({
   selector: 'app-smallChatBox',

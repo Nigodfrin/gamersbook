@@ -8,6 +8,10 @@ import { StateService } from 'src/app/services/state.service';
 import { MatTableState } from 'src/app/helpers/mattable.state';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { SignalRService } from 'src/app/services/signalR.service';
+import { Notif } from 'src/app/models/Notif';
+import { StoreService } from '../Store/store.service';
+import { ApiService } from '../Store/api-store.service';
 @Component({
     selector: 'app-userlist',
     templateUrl: './userlist.component.html',
@@ -18,17 +22,24 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     filter: string = '';
     users: User[] = [];
     filterUsers: User[] = [];
+    friends: User [];
     constructor(
         private userService: UserService,
-        private stateService: StateService,
+        private stor: StoreService,
         private router: ActivatedRoute,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private chatService: SignalRService,
+        private apistore: ApiService
     ) {
-        
+        this.apistore.getFriends().subscribe(res => {
+            console.log(res);
+            this.friends = res;
+        });
     }
     ngAfterViewInit(): void {
+        
         this.refresh();
     }
     refresh() {
@@ -43,13 +54,24 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             }
         });
     }
+    isFriends(user: User){
+        return this.friends.some(u => u.pseudo === user.pseudo );
+    }
     // appelée chaque fois que le filtre est modifié par l'utilisateur
     filterChanged(filterValue: string) {
         const filter = filterValue.toLowerCase();
         this.filterUsers = _.filter(this.users,user => user.firstName.toLowerCase().includes(filter) || user.lastName.toLowerCase().includes(filter)|| user.pseudo.toLowerCase().includes(filter));
     }
     addFriend(user: User){
-        this.userService.addFriend(user).subscribe();
+        if(this.isFriends(user)){
+            this.userService.deleteFriend(user.id).subscribe();
+        }
+        else {
+            this.userService.addFriend(user).subscribe();
+        const notif = new Notif({from: this.authService.currentUser.pseudo,see: false,type:'Relationship'});
+        this.chatService.addFriendNotif(user,notif);
+        }
+        
     }
     // appelée quand on clique sur le bouton "edit" d'un membre
     edit(user: User) {

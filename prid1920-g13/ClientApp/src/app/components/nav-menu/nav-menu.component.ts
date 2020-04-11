@@ -6,10 +6,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Notif } from 'src/app/models/Notif';
 import {ToastService} from '../../Helpers/toast/toast.service';
 import * as _ from 'lodash';
-import { ChatService } from 'src/app/services/notifications.service';
+import { SignalRService } from 'src/app/services/signalR.service';
 import {Observable} from 'rxjs';
 import {NgbTypeaheadConfig} from '@ng-bootstrap/ng-bootstrap';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import { NotifsService } from 'src/app/services/notifs.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -25,12 +26,13 @@ export class NavMenuComponent {
   numNotif: number = 0;
   allUsers: User [] = [];
   constructor(
-    private chatServ: ChatService,
+    private chatServ: SignalRService,
     private router: Router,
     private authenticationService: AuthenticationService,
     private userServ: UserService,
     public toastService: ToastService,
-    config: NgbTypeaheadConfig
+    config: NgbTypeaheadConfig,
+    private notifServ: NotifsService
   ) 
   {
     config.showHint = true;
@@ -40,6 +42,11 @@ export class NavMenuComponent {
     this.numNotif = this.notifications.length
     this.userServ.getAll().subscribe(users => {
       this.allUsers = users;
+    })
+    this.chatServ.refreshNotifEvent.subscribe(res => {
+      if(res){
+        this.getNotifs();
+      }
     })
    }
    search = (text$: Observable<string>) =>
@@ -91,7 +98,6 @@ export class NavMenuComponent {
     }
     else {
       this.userServ.refuseFriend(notif.senderPseudo).subscribe(res => {
-        console.log("test");
         this.toastService.show(`${notif.senderPseudo} has been refused`, { classname: 'bg-danger text-light', delay: 5000 });
       });;
     }

@@ -19,5 +19,10 @@ namespace prid_1819_g13.Controllers
         {
         }
 
+        [HttpPost] 
+        public async Task SendNotification(NotificationNeo4J notif){
+            
+        }
+
     }
 }
