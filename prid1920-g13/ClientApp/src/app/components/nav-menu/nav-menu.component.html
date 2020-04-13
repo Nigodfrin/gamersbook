@@ -13,6 +13,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-light" [routerLink]='["/postlist"]'>Post list</a>
           </li>
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-light" [routerLink]='["/create-event"]'>Create Event</a>
+          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
             <a class="nav-link text-light" [routerLink]='["/searchGame"]'>Search Games</a>
           </li>
@@ -46,7 +49,7 @@
             <a class="nav-link text-light" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
               {{authenticationService.currentUser.pseudo  | titlecase}}
             </a>
-            <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+            <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu-custom">
                 <div class="dropdownItem">
                     <a [routerLink]='["/profile"]'>
                       <span style="margin-right: 3px;" class="material-icons">account_circle</span>

@@ -1,0 +1,79 @@
+<h1>Create an Event here</h1>
+<form id="frm" class="form container" *ngIf="frm" [formGroup]="frm" novalidate>
+    <div class="formGroup">
+      <label class="form-label">Name</label>
+      <input class="form-input-name" placeholder="Name" [formControl]="ctlName"
+        required />
+    </div>
+    <div class="formGroup">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" placeholder="Description" [formControl]="ctlDesc"
+        required></textarea>
+    </div>
+    <div style="display: flex;">
+        <div style="display: flex; flex-direction: column;width: 45%;justify-content: center;align-items: center;">
+            <label>Start of the event</label>
+            <div  style="display: flex;align-items: center;">
+              <input class="form-input" [minDate]="start" placeholder="yyyy-mm-dd"
+                     name="dp"  [formControl]="startDate" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append toggle-Calendar" >
+                <span class="material-icons" (click)="d.toggle()">calendar_today</span>
+              </div>
+              <ngb-timepicker [minuteStep]="15" style="margin-left: 10px;" [formControl]="ctlTimepickerStart" ></ngb-timepicker>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column;width: 45%;justify-content: center;align-items: center;">
+            <label>End of the Event</label>
+            <div style="display: flex;align-items: center;">
+              <input class="form-input" [minDate]="startDate.value" placeholder="yyyy-mm-dd"
+                     name="dp2"  [formControl]="endDate" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-append toggle-Calendar" >
+                <span class="material-icons" (click)="d2.toggle()">calendar_today</span>
+              </div>
+              <ngb-timepicker [minuteStep]="15" style="margin-left: 10px;" [formControl]="ctlTimepickerEnd" ></ngb-timepicker>
+            </div>
+          </div>
+    </div>
+    
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select [formControl]="ctlType" required>
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let type of types" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="row">
+      <label class="col-12">Add users</label>
+      <mat-form-field class="col-12">
+        <mat-chip-list selectable="false" #chipList aria-label="Users selection">
+          <mat-chip style="background-color: goldenrod" *ngFor="let friend of nFriends" [selectable]="false" [removable]="removable" (removed)="remove(friend)">
+            {{friend.pseudo}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="Add Users" #friendsInput [formControl]="ctrlFriends" [matAutocomplete]="friends"
+            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addTontags($event)">
+            <mat-error class="float-right" *ngIf="ctrlFriends.hasError('invalidInput')">invalid tag</mat-error>
+          </mat-chip-list>
+          <mat-hint>Use COMMA to separate your friends or choose them in the list</mat-hint>
+          <mat-autocomplete #friends="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.pseudo">
+            {{friend.pseudo}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div class="row formGroup">
+        <label class="form-label">Number of gamers researched</label>
+        <input class="col-12 form-control" type="number" [formControl]="ctlNumber"
+          required />
+      </div>
+    </div>
+    <!-- <div class="footer">
+      <button *ngIf="isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+        (click)="add()">Add</button>
+      <button *ngIf="!isNew" type="submit" mat-button form="frm" [disabled]="frm.pristine || frm.invalid || frm.pending"
+        (click)="update()">Update</button>
+    </div> -->
+  </form>

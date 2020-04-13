@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { SignalRService } from 'src/app/services/signalR.service';
 import { User } from 'src/app/models/User';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { EventGameService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-home',
@@ -14,8 +15,10 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class HomeComponent {
 
 
-    constructor(private chat: SignalRService,private authServ: AuthenticationService){
-      
+    constructor(private eventGame: EventGameService,private authServ: AuthenticationService){
+      this.eventGame.getEvents().subscribe(res => {
+        console.log("events",res);
+      })
     }
 }
 

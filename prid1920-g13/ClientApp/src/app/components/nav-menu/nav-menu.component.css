@@ -77,7 +77,7 @@ html {
 .notif-item:hover {
   opacity: 1 !important;
 }
-.dropdown-menu {
+.dropdown-menu-custom {
   background-color: #565656;
 }
 .dropdown-item {

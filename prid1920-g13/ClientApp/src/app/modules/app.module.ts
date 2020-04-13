@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient, HttpClientJsonpModule } from '@angular/common/http';
@@ -36,6 +36,8 @@ import { NotifsComponent } from '../components/nav-menu/notification-component/n
 import {ToastsContainer} from '../Helpers/toast/toast-container.component';
 import {FriendsComponent} from '../components/smallChat/friends.component/friends.component';
 import { ChatContainerComponent } from '../components/smallChat/friends.component/chatContainer/chat-container.component';
+import { CreateEventComponent } from '../components/create-event.component/create-event.component';
+import { MatDatepickerModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { ChatContainerComponent } from '../components/smallChat/friends.componen
     NotifsComponent,
     ToastsContainer,
     FriendsComponent,
-    ChatContainerComponent
+    ChatContainerComponent,
+    CreateEventComponent
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
   imports: [
@@ -82,7 +85,9 @@ import { ChatContainerComponent } from '../components/smallChat/friends.componen
     NgbModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    MatDatepickerModule,
+    NgbDateNativeAdapter
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,8 @@ import {
   MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
   MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule, 
   MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule,
-  MatButtonToggleModule,MatBadgeModule, MatAutocompleteModule
+  MatButtonToggleModule,MatBadgeModule, MatAutocompleteModule, MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 @NgModule({
   imports: [
@@ -13,14 +14,16 @@ import {
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
     MatSelectModule, MatCardModule, MatExpansionModule,MatListModule,MatChipsModule,
-    MatButtonToggleModule,MatBadgeModule,MatAutocompleteModule
+    MatButtonToggleModule,MatBadgeModule,MatAutocompleteModule,MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule,
     MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatTabsModule,
     MatSelectModule, MatCardModule,MatExpansionModule,MatListModule,MatChipsModule,
-    MatButtonToggleModule,MatBadgeModule,MatAutocompleteModule
+    MatButtonToggleModule,MatBadgeModule,MatAutocompleteModule,MatDatepickerModule,
+    MatNativeDateModule
   ],
 })
 export class SharedModule { }

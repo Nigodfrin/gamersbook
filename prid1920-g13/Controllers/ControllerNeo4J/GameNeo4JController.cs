@@ -22,10 +22,10 @@ namespace prid_1819_g13.Controllers
         public GameNeo4JController()
         {
         }
-        [HttpPost("{game}")]
-        public async Task addGame(GameDTO game)
-        {
+        // [HttpPost("{game}")]
+        // public async Task addGame(GameDTO game)
+        // {
 
-        }
+        // }
     }
 }

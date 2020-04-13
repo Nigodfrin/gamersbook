@@ -22,7 +22,7 @@ export class FriendsComponent implements OnInit, CanLoad {
     allFriends: User[] = [];
     friendsContainerHeight = 500;
     chatBoxUser: User[] = [];
-    showFriendsContainer: boolean = true;
+    showFriendsContainer: boolean = false;
     filter: string = "" ;
     filterAllFriends: User[] = [];
     dicussions: Discussion[] = [];
@@ -46,6 +46,7 @@ export class FriendsComponent implements OnInit, CanLoad {
         return this.authServ.currentUser ? true : false;
     }
     ngOnInit(): void {
+        document.getElementById('friends-container').style.marginRight = '-200px';
         this.friendsContainerHeight = window.innerHeight;
         this.userService.getFriend().subscribe(res => {
             this.allFriends = res;

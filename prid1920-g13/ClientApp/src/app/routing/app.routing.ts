@@ -14,6 +14,7 @@ import {TagListComponent} from '../components/taglist/taglist.component';
 import { AuthGuardAuthor } from '../services/authAuthor.guard';
 import { ProfileComponent } from '../components/profile-component/profile.component';
 import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
+import { CreateEventComponent } from '../components/create-event.component/create-event.component';
 
 
 
@@ -78,6 +79,11 @@ const appRoutes: Routes = [
     path: 'taglist',
     component: TagListComponent,
 
+  },
+  {
+    path: 'create-event',
+    component: CreateEventComponent,
+    data: {roles: [Role.Admin, Role.Member]}
   }
   ,
   { path: 'restricted', component: RestrictedComponent },
