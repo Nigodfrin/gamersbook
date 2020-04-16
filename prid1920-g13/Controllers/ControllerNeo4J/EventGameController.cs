@@ -37,5 +37,24 @@ namespace prid_1819_g13.Controllers
             }).ResultsAsync;
             return eg.ToList();
         }
+        [HttpPost]
+        public async Task CreateEvent(EventData eventData){
+            var pseudos = eventData.Participants.Select(u => u.Pseudo).ToArray();
+            await this.Client.ConnectAsync();
+            var gameName = eventData.Game.Name;
+            var eventgame = eventData.EventGame;
+            await this.Client.Cypher
+            .Create("(e:Event {eventdata})")
+            .WithParam("eventdata",eventgame)
+            .With("e")
+            .Match("(g:Game),(u2:User)")
+            .Where((GameNeo4J g) => g.Name == gameName)
+            .AndWhere("u2.pseudo in {pseudos}")
+            .WithParam("pseudos",pseudos)
+            .Merge("(g)<-[:About]-(e)")
+            .Merge("(u2)-[:Participate_In]->(e)")
+            .ExecuteWithoutResultsAsync();
+            
+        }
     }
 }

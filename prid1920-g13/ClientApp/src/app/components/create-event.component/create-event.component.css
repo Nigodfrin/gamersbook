@@ -1,23 +1,30 @@
 .toggle-Calendar {
     align-items: center;
     padding: 4px;
-    border: 1px solid white;
+    border: 1px solid goldenrod;
     background-color: #444444;
+    color: goldenrod;
 }
 .toggle-Calendar:hover {
     cursor: pointer;
-    background-color: #fff;
-    color: #565656;
+    background-color: goldenrod;
+    color: #444444;
+    border: 1px solid #fff;
+
 }
 .form-input {
     background-color: #444444;
     color: #fff;
-    border: 1px solid lightgray;
+    border: 1px solid goldenrod;
     border-radius: 500px 0px 0px 500px;
     padding: 0px 10px;
     width: 60%;
     outline: none;
     padding: 4px 10px;
+    transition: 0.5s;
+  }
+  .form-input:focus {
+    border: 1px solid #fff;
   }
   ngb-timepicker .ngb-tp-input-container {
   width: 2em;
@@ -26,32 +33,107 @@ ngb-timepicker .ngb-tp-input{
   padding: 0;
   font-size: 1rem;
   background-color: #444444;
-  border: 1px solid white;
+  border: 1px solid goldenrod;
   color: #fff;
 }
 .ngb-tp-chevron {
-    color: #fff;
+    color: goldenrod;
 }
 .ngb-tp-chevron:hover {
-    color: goldenrod;
+    color: #fff;
 }
 .form-textarea {
     display: block;
-    background-color: #444444;
+    background-color: #444444; 
     color: #fff;
-    border: 1px solid lightgray;
+    border: 1px solid goldenrod;
     min-height: 200px; 
     max-height: 350px;
-    width: 40%;
+    width: 90%;
+    outline: none;
+    transition: 0.5s;
+}
+.form-textarea:focus {
+    border: 1px solid #fff;
 }
 .form-input-name {
     background-color: #444444;
     color: #fff;
-    border: 1px solid lightgray;
-    border-radius: 500px 500px 500px 500px;
+    border: 1px solid goldenrod;
     padding: 0px 10px;
-    width: 40%;
+    width: 90%;
     outline: none;
     padding: 4px 10px;
     display: block;
+    transition: 0.5s;
+}
+#form-input-game{
+    background-color: #444444;
+    color: #fff;
+    border: 1px solid goldenrod;
+    padding: 0px 10px;
+    width: 100%;
+    outline: none;
+    padding: 4px 10px;
+    display: block;
+    transition: 0.5s;
+}
+#form-input-game:focus {
+    border: 1px solid #fff;
+}
+.form-input-name:focus {
+    border: 1px solid #fff;
+}
+.form-input-type {
+    background-color: #444444;
+    color: #fff;
+    border: 1px solid goldenrod;
+    padding: 0px 10px;
+    outline: none;
+    padding: 4px 10px;
+    display: block;
+    transition: 0.5s;
+}
+.form-input-type:focus {
+    border: 1px solid #fff;
+}
+#input-number-user {
+    background-color: #444444;
+    color: #fff;
+    border: 1px solid goldenrod;
+    padding: 0px 10px;
+    outline: none;
+    padding: 4px 10px;
+    display: block;
+    transition: 0.5s;
+}
+#input-number-user:focus {
+    border: 1px solid #fff;
+}
+#div-select-users .mat-chip-list-wrapper {
+    border: 1px solid goldenrod;
+    transition: 0.5s;
+    background-color: #444444;
+}
+#div-select-users .mat-chip-list-wrapper:focus-within {
+    border: 1px solid #fff;
+
+}
+
+#frm select:focus {
+    border: 1px solid #fff;
+}
+#div-select-users input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+}
+.mat-autocomplete-panel {
+    background-color: #444444 !important;
+    border: 1px solid goldenrod;
+    margin: 10px 0px;
+}
+.mat-option-text {
+    color: #fff;
 }

@@ -4,8 +4,8 @@ import { User } from "./User";
 
 export enum EventsType {
     Public,
-    AllFriends,
-    SelectedFriendsOrGroups
+    Friends,
+    ParticularFriend
 }
 export class EventGame {
     id: number;
@@ -16,8 +16,6 @@ export class EventGame {
     langue: string
     nbUsers: string
     eventType: EventsType
-    eventGame: Game
-    participants: User[]
     constructor(data) {
         if (data) {
             this.id = data.id,
@@ -27,9 +25,7 @@ export class EventGame {
                 this.end_date = data.end_date,
                 this.langue = data.langue,
                 this.nbUsers = data.nbUsers,
-                this.eventType = data.eventType,
-                this.eventGame = data.eventGame,
-                this.participants = data.participants
+                this.eventType = data.eventType
         }
     }
 }
