@@ -5,6 +5,8 @@ import { Post } from "../models/Post";
 import { of, Observable } from "rxjs";
 import { Tag } from "../models/Tag";
 import { Notif } from "../models/Notif";
+import { User } from "../models/User";
+import { NotifEvent } from "../models/NotifEvent";
 @Injectable({ providedIn: 'root' })
 export class NotifsService {
 
@@ -20,8 +22,9 @@ export class NotifsService {
         })
       );
   }
-  sendNotification(notif: Notif){
-    return this.http.post(`${this.baseUrl}api/notifsNeo4J`,notif)
+  sendNotification(notif: Notif,users: User[]){
+    var notifEvent = new NotifEvent({notif: notif,users:users});
+    return this.http.post(`${this.baseUrl}api/notifsNeo4J`,notifEvent)
     .pipe(
       map(res => true),
       catchError(err => {

@@ -2,26 +2,31 @@
 <form id="frm" class="form container" *ngIf="frm" [formGroup]="frm" novalidate>
   <div style="display: flex; width: 100%;">
       <div style="width: 55%;">
-            <label class="form-label">Name</label>
+        <div>
+           <label class="form-label">Name</label>
             <input class="form-input-name" [formControl]="ctlName" required />
+            <mat-error *ngIf="ctlName.hasError('required')&& (ctlName.dirty || ctlName.touched)">required</mat-error>
+        </div>
+        <div>
             <label class="form-label">Description</label>
             <textarea class="form-textarea" [formControl]="ctlDesc" required></textarea>
+            <mat-error *ngIf="ctlDesc.hasError('required')&& (ctlDesc.dirty || ctlDesc.touched)">required</mat-error>
+        </div>
         </div>
         <div style="width: 40%">
           <div style="display: flex; justify-content: space-between;">
             <div>
               <label for="select-type">Guest list</label>
               <select [formControl]="ctlType" required class="form-input-type" id="select-type">
-                <option *ngFor="let type of types;let index = index;" [value]="index">{{type}}</option>
+                <option *ngFor="let type of types;let index = index;" [value]="type">{{type}}</option>
               </select>
             </div>
             <div>
               <label>Number of gamers researched</label>
-              <input min="0" type="number" id="input-number-user" [formControl]="ctlNumber" required />
-              <mat-hint style="color: goldenrod;">0 for undefined</mat-hint>
+              <input min="1" type="number" id="input-number-user" [formControl]="ctlNumber"/>
             </div>
           </div>
-          <div id="div-select-users" *ngIf="frm.value.eventType === '2' ">
+          <div id="div-select-users" *ngIf="frm.value.eventType === 'ParticularFriend' ">
             <label >Add users</label>
             <mat-chip-list selectable="false" #chipList aria-label="Users selection">
               <mat-chip style="background-color: goldenrod" *ngFor="let friend of nFriends" [selectable]="false"
@@ -42,7 +47,8 @@
             </mat-autocomplete>
           </div>
           <label>Game</label>
-          <input #gameInput id="form-input-game" type="text" [formControl]="ctlGame" [matAutocomplete]="games"/>
+          <input #gameInput id="form-input-game" required type="text" [formControl]="ctlGame" [matAutocomplete]="games"/>
+          <mat-error *ngIf="ctlGame.hasError('required')&& (ctlGame.dirty || ctlGame.touched)">required</mat-error>
           <mat-autocomplete #games="matAutocomplete">
               <mat-option *ngFor="let game of filteredGames | async" [value]="game.name">
                 {{game.name}}
@@ -55,7 +61,7 @@
       <label>Start of the event</label>
       <div style="display: flex;align-items: center;">
         <input class="form-input" [minDate]="start" placeholder="yyyy-mm-dd" name="dp" [formControl]="startDate"
-          ngbDatepicker #d="ngbDatepicker">
+          ngbDatepicker #d="ngbDatepicker" required>
         <div class="input-group-append toggle-Calendar">
           <span class="material-icons" (click)="d.toggle()">calendar_today</span>
         </div>
@@ -67,7 +73,7 @@
       <label>End of the Event</label>
       <div style="display: flex;align-items: center;">
         <input class="form-input" [minDate]="startDate.value" placeholder="yyyy-mm-dd" name="dp2"
-          [formControl]="endDate" ngbDatepicker #d2="ngbDatepicker">
+          [formControl]="endDate" ngbDatepicker #d2="ngbDatepicker" required>
         <div class="input-group-append toggle-Calendar">
           <span class="material-icons" (click)="d2.toggle()">calendar_today</span>
         </div>

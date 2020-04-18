@@ -6,7 +6,7 @@ a.navbar-brand {
 .nav-input {
   background-color: #444444;
   color: #fff;
-  border: 1px solid lightgray;
+  border: 1px solid goldenrod;
   border-radius: 500px 0px 0px 500px;
   padding: 0px 10px;
   width: 60%;
@@ -33,14 +33,14 @@ a.navbar-brand {
 }
 .search-icon-nav {
   display: flex; 
-  border: 1px solid white; 
+  border: 1px solid goldenrod; 
   border-left: none;
   border-radius: 0px 500px 500px 0px;
   padding:0px 5px;
-  color: #fff;
+  color: goldenrod;
 }
 .search-icon-nav:hover {
-  background-color: #fff;
+  background-color: goldenrod;
   cursor: pointer;
   color: #444444 !important;
 
@@ -72,7 +72,7 @@ html {
 }
 .notif-item {
   padding: 5px 0px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid goldenrod;
 }
 .notif-item:hover {
   opacity: 1 !important;
@@ -91,18 +91,24 @@ html {
   color: #fff;
   min-width: 300px;
   max-width: 300px;
-  border: 1px solid #fff;
+  border: 1px solid goldenrod;
   min-height: 250px;
 }
 .customTooltip .arrow::before {
   border-top-color: #565656;
 }
-.arrow{
-  background-color: #fff;
-}
+
 .tooltip.show{
   opacity: 1 !important;
 }
 .notif-icon:hover {
   cursor: pointer;
+}
+.eventName {
+color: goldenrod !important;
+}
+.eventName:hover {
+  color: #fff !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
 }

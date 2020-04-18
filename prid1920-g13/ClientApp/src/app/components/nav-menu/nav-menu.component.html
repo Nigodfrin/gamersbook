@@ -52,12 +52,12 @@
             <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu-custom">
                 <div class="dropdownItem">
                     <a [routerLink]='["/profile"]'>
-                      <span style="margin-right: 3px;" class="material-icons">account_circle</span>
+                      <span style="margin-right: 3px;color: goldenrod" class="material-icons">account_circle</span>
                       Profile</a>
                 </div>
               <div class="dropdownItem">
                 <a class='dropdownItem-logout' (click)='logout()'>
-                <span style="margin-right: 2px;" class="material-icons">power_settings_new</span>
+                <span style="margin-right: 2px;color: goldenrod" class="material-icons">power_settings_new</span>
                 <span> Logout </span>
               </a>
               </div>
@@ -70,9 +70,27 @@
                   <span class="sr-only">unread messages</span>
                 </mat-icon>
               <ng-template #tipContent>
-                <div  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
-                  <div *ngIf="notif.type === Relationship; then relationship else acceptedRelation"></div>
-                  <ng-template #relationship>
+                <div [ngSwitch]="notif.type"  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
+                  <ng-container  *ngSwitchCase="'eventInvitation'">
+                    <div class="notif-item">
+                      <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has invited you to an <a class="eventName">Event</a> !</div>
+                      <span>
+                        <button class="btn btn-success btn-sm" (click)="acceptEvent(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>Accept</button>
+                        <button class="btn btn-danger btn-sm ml-1" (click)="acceptEvent(notif,false,index)"><svg class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                          <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
+                        </svg>Deny</button>
+                    </span>         
+                  </div>
+                  </ng-container>
+                  <ng-container  *ngSwitchCase="'acceptRelationship'">
+                      <div class="notif-item">
+                          <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has accepted your invitation</div>
+                          </div>
+                  </ng-container>
+                  <ng-container  *ngSwitchDefault>
                     <div class="notif-item">
                       <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has invited you as friend !</div>
                       <span>
@@ -85,12 +103,7 @@
                         </svg>Deny</button>
                     </span>         
                   </div>
-                  </ng-template>
-                  <ng-template #acceptedRelation>
-                      <div class="notif-item">
-                          <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has accepted your invitation</div>
-                          </div>
-                  </ng-template>
+                  </ng-container>
                   
               </div>
               </ng-template>

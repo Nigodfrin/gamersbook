@@ -15,6 +15,8 @@ import { Game } from "src/app/models/Game";
 import { EventGame } from "src/app/models/EventGame";
 import { EventData } from "src/app/models/EventData";
 import { EventGameService } from "src/app/services/event.service";
+import { Notif } from "src/app/models/Notif";
+import { NotifsService } from "src/app/services/notifs.service";
 
 
 @Component({
@@ -58,7 +60,7 @@ export class CreateEventComponent implements OnInit {
     'Slovaque','Slovène','Samoan','Shona','Somali','Albanais','Serbe','Swati','Sotho du Sud','Soundanais',
     'Suédois','Swahili','Tamoul','Télougou','Tadjik','Thaï','Tigrigna','Turkmène','Tagalog','Tswana','Tongien','Turc','Tsonga','Tatar','Twi','Tahitien','Ouïghour','Ukrainien',
     'Ourdou','Ouzbek','Venda','Vietnamien','Volapük','Wallon','Wolof','Xhosa','Yiddish','Yoruba','Zhuang','Chinois',
-    'Zoulou']
+    'Zoulou'].sort();
   
     public frm: FormGroup;
     public ctlDesc: FormControl;
@@ -76,13 +78,14 @@ export class CreateEventComponent implements OnInit {
     public start: NgbDateStruct;
 
 
+
     types: string[] = ['Public','Friends','ParticularFriend']
 
-    constructor(private eventService: EventGameService,private nbdAdapter: NgbDateNativeAdapter,private userServ: UserService,private fb: FormBuilder,private authServ: AuthenticationService){
+    constructor(private notifServ: NotifsService ,private eventService: EventGameService,private nbdAdapter: NgbDateNativeAdapter,private userServ: UserService,private fb: FormBuilder,private authServ: AuthenticationService){
       this.start = this.nbdAdapter.fromModel(new Date(Date.now()));
       this.startDate = fb.control(this.start,[Validators.required]);
-      this.endDate = fb.control('',[Validators.required]);
-      this.ctlName = fb.control('',Validators.required);
+      this.endDate = fb.control(this.start,[Validators.required]);
+      this.ctlName = fb.control('',[Validators.required]);
       this.ctlDesc = fb.control('',Validators.required);
       this.ctlType = fb.control(0,Validators.required);
       this.ctlNumber = fb.control('',Validators.required);
@@ -165,13 +168,20 @@ export class CreateEventComponent implements OnInit {
 const gametm = this.games.find(game => game.name === this.ctlGame.value);
 let startdate = this.nbdAdapter.toModel(this.frm.value.start_date);
 let enddate = this.nbdAdapter.toModel(this.frm.value.end_date);
-    Object.assign(this.frm.value,{start_date:startdate,end_date: enddate});
-    console.log(this.frm.value);
+    Object.assign(this.frm.value,{start_date:startdate,end_date: enddate,createdBy: this.authServ.currentUser.pseudo});
     const eg = new EventGame(this.frm.value);
-    const ev = Object.assign({},{eventGame:eg},{game:gametm},{participants: this.nFriends});
+    const ev = Object.assign({},{eventGame:eg},{game:gametm},{participants: [this.authServ.currentUser]});
     const eventData = new EventData(ev);
-    this.eventService.createEvent(eventData).subscribe();
     console.log(eventData);
+    this.eventService.createEvent(eventData).subscribe(res => {
+      if(this.frm.value.eventType === 'ParticularFriend'){
+        const notif = new Notif({see: false,senderPseudo: this.authServ.currentUser.pseudo,type: "eventInvitation",uuidEvent: res.id})
+        this.notifServ.sendNotification(notif,this.nFriends).subscribe(res => {
+
+        });
+      }
+    });
+    
   }
 
 }

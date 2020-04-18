@@ -11,6 +11,7 @@ import {Observable} from 'rxjs';
 import {NgbTypeaheadConfig} from '@ng-bootstrap/ng-bootstrap';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import { NotifsService } from 'src/app/services/notifs.service';
+import { EventGameService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,6 +27,7 @@ export class NavMenuComponent {
   numNotif: number = 0;
   allUsers: User [] = [];
   constructor(
+    private eventServ: EventGameService,
     private chatServ: SignalRService,
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -81,8 +83,38 @@ export class NavMenuComponent {
   }
   getNotifs(){
     this.userServ.getNotifs().subscribe(res => {
+      console.log(res);
       this.notifications = res;
       this.numNotif = res.length;
+    });
+  }
+  acceptEvent(notif: Notif,value: boolean,index: number){
+    if(value){
+      this.eventServ.acceptEvent(notif).subscribe(res => {
+        if(res){
+          this.toastService.show(`Your response has been send`, { classname: 'bg-success text-light', delay: 5000 });
+          this.notifications.splice(index,1);
+        }
+        else {
+          this.toastService.show(`An error occured please try again or contact the support`, { classname: 'bg-danger text-light', delay: 5000 });
+        }
+      });
+    }
+    else {
+      this.eventServ.refuseEvent(notif).subscribe(res => {
+        if(res){
+          this.toastService.show(`Your response has been send`, { classname: 'bg-success text-light', delay: 5000 });
+          this.notifications.splice(index,1);
+        }
+        else {
+          this.toastService.show(`An error occured please try again or contact the support`, { classname: 'bg-danger text-light', delay: 5000 });
+        }
+      });
+    }
+  }
+  getEvent(uuid :string){
+    this.eventServ.getEventById(uuid).subscribe(res => {
+      return res.name;
     });
   }
   logout() {

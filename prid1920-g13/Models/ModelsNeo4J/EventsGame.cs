@@ -29,6 +29,8 @@ public enum EventsType
         public int NbUsers{ get; set; }
         [JsonProperty(PropertyName = "eventType")]
         public string EventType { get; set;}
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set;}
 
     }
 }

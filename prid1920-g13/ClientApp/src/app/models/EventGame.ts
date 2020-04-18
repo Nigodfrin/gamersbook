@@ -8,7 +8,7 @@ export enum EventsType {
     ParticularFriend
 }
 export class EventGame {
-    id: number;
+    id: string;
     name: string
     description: string
     start_date: Date
@@ -16,6 +16,7 @@ export class EventGame {
     langue: string
     nbUsers: string
     eventType: EventsType
+    createdBy: string;
     constructor(data) {
         if (data) {
             this.id = data.id,
@@ -25,7 +26,8 @@ export class EventGame {
                 this.end_date = data.end_date,
                 this.langue = data.langue,
                 this.nbUsers = data.nbUsers,
-                this.eventType = data.eventType
+                this.eventType = data.eventType,
+                this.createdBy = data.createdBy
         }
     }
 }
