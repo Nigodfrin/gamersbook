@@ -22,10 +22,16 @@ namespace prid_1819_g13.Controllers
         public GameNeo4JController()
         {
         }
-        // [HttpPost("{game}")]
-        // public async Task addGame(GameDTO game)
-        // {
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GameNeo4J>>> getAllGames()
+        {
+            await this.Client.ConnectAsync();
+            var games = await this.Client.Cypher
+            .Match("(g:Game)")
+            .Return(g => g.As<GameNeo4J>())
+            .ResultsAsync;
 
-        // }
+            return games.ToList();
+        }
     }
 }

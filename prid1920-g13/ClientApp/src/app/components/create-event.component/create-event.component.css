@@ -56,6 +56,25 @@ ngb-timepicker .ngb-tp-input{
 .form-textarea:focus {
     border: 1px solid #fff;
 }
+.btn-add {
+    border: 1px solid goldenrod;
+    background-color: #444444;
+    color: white;
+    transition: 0.2s;
+    font-weight: 600;
+    width: 100px;
+    margin: auto;
+    padding: 5px 7px 5px 7px;
+}
+.btn-add:hover {
+    background-color: goldenrod;
+    color: #444444;
+}
+.btn-add:disabled {
+    background-color: #444444;
+    color: #fff;
+    opacity: 0.7;
+}
 .form-input-name {
     background-color: #444444;
     color: #fff;

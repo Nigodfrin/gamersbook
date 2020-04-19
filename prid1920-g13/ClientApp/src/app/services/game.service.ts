@@ -5,6 +5,7 @@ import { of, Observable } from "rxjs";
 import { Game } from "../models/Game";
 @Injectable({ providedIn: 'root' })
 export class GameService {
+    
   private baseUrl: string = "https://www.giantbomb.com/api";
   constructor(private http: HttpClient, @Inject('BASE_URL') private base: string) {
   }
@@ -22,6 +23,10 @@ export class GameService {
         })
       );
   }
+  getAllGames() {
+    return this.http.get<Game[]>(`${this.base}api/gameNeo4J`)
+      .pipe(map(res => res.map(m => new Game(m))));
+}
 
 
 

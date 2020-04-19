@@ -15,6 +15,7 @@ import { AuthGuardAuthor } from '../services/authAuthor.guard';
 import { ProfileComponent } from '../components/profile-component/profile.component';
 import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
 import { CreateEventComponent } from '../components/create-event.component/create-event.component';
+import { EventListComponent } from '../components/event-list-component/event-list.component';
 
 
 
@@ -84,6 +85,11 @@ const appRoutes: Routes = [
     path: 'create-event',
     component: CreateEventComponent,
     data: {roles: [Role.Admin, Role.Member]}
+  }
+  ,
+  {
+    path: 'event-list',
+    component: EventListComponent
   }
   ,
   { path: 'restricted', component: RestrictedComponent },

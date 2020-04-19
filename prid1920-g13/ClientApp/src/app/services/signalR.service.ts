@@ -26,11 +26,9 @@ export class SignalRService {
   }
 
   sendMessage(pseudo: string,message: Message) {
-    console.log(pseudo,message);
     this._hubConnection.invoke('SendMessage', pseudo,this.authServ.currentUser.pseudo ,message);
   }
   addFriendNotif(user: User,notif: Notif) {
-    console.log("testagain",user.pseudo);
     this._hubConnection.invoke('RefreshNotif',user.pseudo,notif);
   }
   private createConnection() {

@@ -1,0 +1,17 @@
+<label>Filter by game (max 5)</label>
+<input #InputData class="input-game" [formControl]="filter" [matAutocomplete]="datas" [matChipInputFor]="chipList"
+  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+  (matChipInputTokenEnd)="addTontags($event)">
+  <mat-hint style="color: goldenrod;">Use COMMA to separate data</mat-hint>
+<mat-chip-list selectable="false" #chipList aria-label="Users selection">
+    <mat-chip style="background-color: goldenrod" *ngFor="let data of badgeTab" [selectable]="false"
+      [removable]="removable" (removed)="remove(data)">
+      {{data.name}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <mat-autocomplete #datas="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let data of filteredData | async" [value]="data.name">
+      {{data.name}}
+    </mat-option>
+  </mat-autocomplete>

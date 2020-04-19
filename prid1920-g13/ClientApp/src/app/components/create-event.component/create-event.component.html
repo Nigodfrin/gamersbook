@@ -82,15 +82,15 @@
     </div>
     <div>
         <label for="select-langue">Langage</label>
-        <select [formControl]="ctlLang" required class="form-input-type" id="select-langue">
-          <option *ngFor="let langue of langages;let index = index;" [value]="langue">{{langue}}</option>
+        <select [formControl]="ctlLang" [value]="lang" required class="form-input-type" id="select-langue">
+          <option *ngFor="let langue of langages;let index = index;" [value]="langue.name">{{langue.name}}</option>
         </select>
       </div>
   </div>
-
-
-  <div class="footer">
-      <button 
-        (click)="add()">Add</button>
-    </div>
+  <div style="display: flex; justify-content: center;">
+    <mat-error *ngIf="frm.hasError('nbUsersError')">You must invited more friend</mat-error>
+      <button class="btn-add" [disabled]="frm.invalid"
+        (click)="add()">Create
+      </button>
+  </div>
 </form>

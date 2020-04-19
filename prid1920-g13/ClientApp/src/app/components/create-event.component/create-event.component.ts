@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from "@angular/core";
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from "@angular/material";
 import { COMMA } from "@angular/cdk/keycodes";
-import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormControl, FormGroup, FormBuilder, Validators, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
 import { User } from "src/app/models/User";
 import { StoreService } from "../Store/store.service";
@@ -45,22 +45,15 @@ export class CreateEventComponent implements OnInit {
     today = new Date(Date.now());
     games: Game[] = [];
     filteredGames: Observable<Game[]>;
-    langages =  ['Afar ','Abkhaze','Avestique','Afrikaans','Akan','Amharique','Aragonais','Arabe','Assamais','Avar',
-    'Aymara','Azéri','Bachkir','Biélorusse','Bulgare','Bihari','Bichelamar','Bambara','Bengali','Tibétain','Breton','Bosnien','Catalan',
-    'Tchétchène','Chamorro','Corse','Cri','Tchèque','Vieux-slave','Tchouvache','Gallois','Danois','Allemand','Maldivien','Dzongkha','Ewe','Grec moderne','Anglais','Espéranto',
-    'Espagnol','Estonien','Basque','Persan','Peul','Finnois','Fidjien','Féroïen','Français','Frison occidental','Irlandais','Écossais','Galicien','Guarani','Gujarati',
-    'Mannois','Haoussa','Hébreu','Hindi','Hiri motu','Croate','Créole haïtien','Hongrois','Arménien','Héréro',
-    'Interlingua','Indonésien','Occidental','Igbo','Yi','Inupiak','Ido','Islandais','Italien',
-    'Inuktitut','Japonais','Javanais','Géorgien','Kikongo','Kikuyu','Kuanyama','Kazakh','Groenlandais','Khmer','Kannada','Coréen','Kanouri','Cachemiri','Kurde','Komi','Cornique',
-    'Kirghiz','Latin','Luxembourgeois','Ganda','Limbourgeois','Lingala',
-    'Lao','Lituanien','Luba-katanga','Letton','Malgache','Marshallais','Maori de Nouvelle-Zélande',
-    'Macédonien','Malayalam','Mongol','Moldave','Marathi','Malais','Maltais','Birman','Nauruan','Norvégien Bokmål','Sindebele','Népalais','Ndonga','Néerlandais','Norvégien Nynorsk',
-    'Norvégien','Nrebele','Navajo','Chichewa','Occitan','Ojibwé','Oromo','Oriya','Ossète','Pendjabi','Pali','Polonais','Pachto','Portugais','Quechua','Créole Réunionnais',
-    'Romanche','Kirundi','Roumain','Russe','Kinyarwanda','Sanskrit','Sarde','Sindhi','Same du Nord','Sango','Serbo-croate','Cingalais',
-    'Slovaque','Slovène','Samoan','Shona','Somali','Albanais','Serbe','Swati','Sotho du Sud','Soundanais',
-    'Suédois','Swahili','Tamoul','Télougou','Tadjik','Thaï','Tigrigna','Turkmène','Tagalog','Tswana','Tongien','Turc','Tsonga','Tatar','Twi','Tahitien','Ouïghour','Ukrainien',
-    'Ourdou','Ouzbek','Venda','Vietnamien','Volapük','Wallon','Wolof','Xhosa','Yiddish','Yoruba','Zhuang','Chinois',
-    'Zoulou'].sort();
+    langages =  [{iso:'aa',name:'Afar'},{iso:'ab',name:'Abkhazian'},{iso:'ae',name:'Avestan'},{iso:'af',name:'Afrikaans'},{iso:'ak',name:'Akan'}, {iso:'am',name:'Amharic'},    {iso:'an',name:'Aragonese'},{iso:'ar',name:'Arabic'}, {iso:'as',name:'Assamese'},{iso:'av',name:'Avaric'},{iso:'ay',name:'Aymara'},    {iso:'az',name:'Azerbaijani'},    {iso:'ba',name:'Bashkir'},    {iso:'be',name:'Belarusian'},    {iso:'bg',name:'Bulgarian'},    {iso:'bh',name:'Bihari'},    {iso:'bi',name:'Bislama'},    {iso:'bm',name:'Bambara'},    {iso:'bn',name:'Bengali'},    {iso:'bo',name:'Tibetan'},    {iso:'br',name:'Breton'},    {iso:'bs',name:'Bosnian'},    {iso:'ca',name:'Catalan'},{iso:'ce',name:'Chechen'},    {iso:'ch',name:'Chamorro'},    {iso:'co',name:'Corsican'},    {iso:'cr',name:'Cree'},    {iso:'cs',name:'Czech'},    {iso:'cu',name:'Old Church Slavonic'}, {iso:'cv',name:'Chuvash'},    {iso:'cy',name:'Welsh'},    {iso:'da',name:'Danish'},    {iso:'de',name:'German'},    {iso:'dv',name:'Divehi'},    {iso:'dz',name:'Dzongkha'}, {iso:'ee',name:'Ewe'},    {iso:'el',name:'Greek'},    {iso:'en',name:'English'},    {iso:'eo',name:'Esperanto'},    {iso:'es',name:'Spanish'},    {iso:'et',name:'Estonian'},    {iso:'eu',name:'Basque'},    {iso:'fa',name:'Persian'},   {iso:'ff',name:'Fulah'},    {iso:'fi',name:'Finnish'},    {iso:'fj',name:'Fijian'},    {iso:'fo',name:'Faroese'},    {iso:'fr',name:'French'},
+    {iso:'fy',name:'Western Frisian'},{iso:'ga',name:'Irish'},    {iso:'gd',name:'Scottish Gaelic'},    {iso:'gl',name:'Galician'},    {iso:'gn',name:'Guarani'},    {iso:'gu',name:'Gujarati'},    {iso:'gv',name:'Manx'},    {iso:'ha',name:'Hausa'},   {iso:'he',name:'Hebrew'},    {iso:'hi',name:'Hindi'},
+    {iso:'ho',name:'Hiri Motu'},    {iso:'hr',name:'Croatian'},    {iso:'ht',name:'Haitian'},    {iso:'hu',name:'Hungarian'},    {iso:'hy',name:'Armenian'},    {iso:'hz',name:'Herero'},    {iso:'ia',name:'Interlingua'},    {iso:'id',name:'Indonesian'},    {iso:'ie',name:'Interlingue'},    {iso:'ig',name:'Igbo'},    {iso:'ii',name:'Sichuan Yi'},    {iso:'ik',name:'Inupiaq'},    {iso:'io',name:'Ido'},    {iso:'is',name:'Icelandic'},    {iso:'it',name:'Italian'},    {iso:'iu',name:'Inuktitut'},    {iso:'ja',name:'Japanese'},    {iso:'jv',name:'Javanese'},    {iso:'ka',name:'Georgian'},    {iso:'kg',name:'Kongo'},
+    {iso:'ki',name:'Kikuyu'},    {iso:'kj',name:'Kwanyama'},    {iso:'kk',name:'Kazakh'},    {iso:'kl',name:'Greenlandic'},    {iso:'km',name:'Khmer'},    {iso:'kn',name:'Kannada'},    {iso:'ko',name:'Korean'},    {iso:'kr',name:'Kanuri'},    {iso:'ks',name:'Kashmiri'},    {iso:'ku',name:'Kurdish'},    {iso:'kv',name:'Komi'},    {iso:'kw',name:'Cornish'},    {iso:'ky',name:'Kirghiz'},    {iso:'la',name:'Latin'},    {iso:'lb',name:'Luxembourgish'},    {iso:'lg',name:'Ganda'},    {iso:'li',name:'Limburgish'},    {iso:'ln',name:'Lingala'},    {iso:'lo',name:'Lao'},    {iso:'lt',name:'Lithuanian'},    {iso:'lu',name:'Luba'},
+    {iso:'lv',name:'Latvian'},    {iso:'mg',name:'Malagasy'},    {iso:'mh',name:'Marshallese'},    {iso:'mi',name:'Māori'},    {iso:'mk',name:'Macedonian'},    {iso:'ml',name:'Malayalam'},    {iso:'mn',name:'Mongolian'},    {iso:'mo',name:'Moldavian'},    {iso:'mr',name:'Marathi'},    {iso:'ms',name:'Malay'},    {iso:'mt',name:'Maltese'},    {iso:'my',name:'Burmese'},    {iso:'na',name:'Nauru'},    {iso:'nb',name:'Norwegian Bokmål'},    {iso:'nd',name:'North Ndebele'},    {iso:'ne',name:'Nepali'},    {iso:'ng',name:'Ndonga'},    {iso:'nl',name:'Dutch'},    {iso:'nn',name:'Norwegian Nynorsk'},    {iso:'no',name:'Norwegian'},    {iso:'nr',name:'South Ndebele'},    {iso:'nv',name:'Navajo'},    {iso:'ny',name:'Chichewa'},    {iso:'oc',name:'Occitan'},
+    {iso:'oj',name:'Ojibwa'},    {iso:'om',name:'Oromo'},    {iso:'or',name:'Oriya'},    {iso:'os',name:'Ossetian'},    {iso:'pa',name:'Panjabi'},    {iso:'pi',name:'Pāli'},    {iso:'pl',name:'Polish'},    {iso:'ps',name:'Pashto'},    {iso:'pt',name:'Portuguese'},    {iso:'qu',name:'Quechua'},    {iso:'rc',name:'Reunionese'},    {iso:'rm',name:'Romansh'},    {iso:'rn',name:'Kirundi'},    {iso:'ro',name:'Romanian'},    {iso:'ru',name:'Russian'},    {iso:'rw',name:'Kinyarwanda'},    {iso:'sa',name:'Sanskrit'},    {iso:'sc',name:'Sardinian'},    {iso:'sd',name:'Sindhi'},    {iso:'se',name:'Northern Sami'},    {iso:'sg',name:'Sango'},    {iso:'sh',name:'Serbo-Croatian'},    {iso:'si',name:'Sinhalese'},    {iso:'sk',name:'Slovak'},    {iso:'sl',name:'Slovenian'},    {iso:'sm',name:'Samoan'},   {iso:'sn',name:'Shona'},
+    {iso:'so',name:'Somali'},    {iso:'sq',name:'Albanian'},    {iso:'sr',name:'Serbian'},    {iso:'ss',name:'Swati'},    {iso:'st',name:'Sotho'},    {iso:'su',name:'Sundanese'},    {iso:'sv',name:'Swedish'},    {iso:'sw',name:'Swahili'},    {iso:'ta',name:'Tamil'},    {iso:'te',name:'Telugu'},    {iso:'tg',name:'Tajik'},    {iso:'th',name:'Thai'},    {iso:'ti',name:'Tigrinya'},    {iso:'tk',name:'Turkmen'},    {iso:'tl',name:'Tagalog'},    {iso:'tn',name:'Tswana'},
+    {iso:'to',name:'Tonga'},    {iso:'tr',name:'Turkish'},    {iso:'ts',name:'Tsonga'},    {iso:'tt',name:'Tatar'},    {iso:'tw',name:'Twi'},   {iso:'ty',name:'Tahitian'},    {iso:'ug',name:'Uighur'},    {iso:'uk',name:'Ukrainian'},    {iso:'ur',name:'Urdu'},   {iso:'uz',name:'Uzbek'},    {iso:'ve',name:'Venda'},   {iso:'vi',name:'Viêt Namese'},    {iso:'vo',name:'Volapük'},    {iso:'wa',name:'Walloon'},    {iso:'wo',name:'Wolof'},    {iso:'xh',name:'Xhosa'},    {iso:'yi',name:'Yiddish'},    {iso:'yo',name:'Yoruba'},
+    {iso:'za',name:'Zhuang'},    {iso:'zh',name:'Chinese'},    {iso:'zu',name:'Zulu'}];
   
     public frm: FormGroup;
     public ctlDesc: FormControl;
@@ -76,7 +69,7 @@ export class CreateEventComponent implements OnInit {
     public tmpTitle: string;
 
     public start: NgbDateStruct;
-
+  public lang: string = this.getLang().name;
 
 
     types: string[] = ['Public','Friends','ParticularFriend']
@@ -87,9 +80,9 @@ export class CreateEventComponent implements OnInit {
       this.endDate = fb.control(this.start,[Validators.required]);
       this.ctlName = fb.control('',[Validators.required]);
       this.ctlDesc = fb.control('',Validators.required);
-      this.ctlType = fb.control(0,Validators.required);
-      this.ctlNumber = fb.control('',Validators.required);
-      this.ctlLang = fb.control('',Validators.required);
+      this.ctlType = fb.control('Public',Validators.required);
+      this.ctlNumber = fb.control(0,Validators.required);
+      this.ctlLang = fb.control('',[]);
       this.ctlGame = fb.control('',Validators.required);
       this.ctlTimepickerStart = fb.control({hour: 13, minute: 30},[]);
       this.ctlTimepickerEnd = fb.control({hour: 14, minute: 30},[]);
@@ -99,6 +92,12 @@ export class CreateEventComponent implements OnInit {
       this.filteredGames = this.ctlGame.valueChanges.pipe(
         startWith(null),
         map((name: string | null) => name ? this._filterGame(name) : this.games.slice()));
+    }
+    getLang(){
+      const userLang = navigator.language.slice(0,2);
+      let lang = this.langages.find(l => l.iso === userLang);
+      console.log(lang);
+      return lang;
     }
     ngOnInit(): void {
       this.userServ.getFriend().subscribe(res => {
@@ -116,8 +115,13 @@ export class CreateEventComponent implements OnInit {
         nbUsers: this.ctlNumber,
         eventType: this.ctlType,
         langue: this.ctlLang
-      }, {});
+      },  );
     }
+    // crossValidations(group: FormGroup): ValidationErrors {
+    //   if(group.value.eventType === 'ParticularFriend' && this.nFriends.length < group.value.nbUsers){
+    //     return {nbUsersError: true};
+    //   }
+    // }
     addTontags(event: MatChipInputEvent): void {
       const input = event.input;
       const value = event.value;

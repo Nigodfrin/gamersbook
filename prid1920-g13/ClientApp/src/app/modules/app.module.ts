@@ -38,6 +38,8 @@ import {FriendsComponent} from '../components/smallChat/friends.component/friend
 import { ChatContainerComponent } from '../components/smallChat/friends.component/chatContainer/chat-container.component';
 import { CreateEventComponent } from '../components/create-event.component/create-event.component';
 import { MatDatepickerModule } from '@angular/material';
+import { EventListComponent } from '../components/event-list-component/event-list.component';
+import { InputBadgeComponent } from '../components/event-list-component/inputBadge/input-badge-component';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { MatDatepickerModule } from '@angular/material';
     ToastsContainer,
     FriendsComponent,
     ChatContainerComponent,
-    CreateEventComponent
+    CreateEventComponent,
+    EventListComponent,
+    InputBadgeComponent
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
   imports: [
@@ -82,7 +86,7 @@ import { MatDatepickerModule } from '@angular/material';
     SimplemdeModule.forRoot({}),
     ImageCropperModule,
     NguCarouselModule,
-    NgbModule
+    NgbModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
