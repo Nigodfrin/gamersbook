@@ -1,6 +1,6 @@
 <div style="display: flex;flex-direction: column;">
     <div class="filterDiv">
-        <input-badge [tableData]="games"></input-badge>
+        <input-badge (filterEvents)="applyFilter($event)" [tableData]="games"></input-badge>
         ami qui participe;
         jeu;
         date;

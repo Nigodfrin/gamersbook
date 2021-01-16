@@ -1,10 +1,11 @@
-import { Component, ViewChild, ElementRef, OnInit, Input, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Input, AfterViewInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
-import * as _ from 'lodash'; 
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
-import { COMMA } from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Game } from 'src/app/models/Game';
 
 @Component({
   selector: 'input-badge',
@@ -19,54 +20,57 @@ export class InputBadgeComponent implements OnInit {
   removable = true;
   addOnBlur = false;
   separatorKeysCodes: number[] = [COMMA];
-  badgeTab: any[] = [];
-  filteredData: Observable<any[]>;
-  filter: FormControl = new FormControl('',[]);
-  @Input() tableData: any[] = [];
+  badgeTab: Game[] = [];
+  filteredData: Observable<Game[]>;
+  filter: FormControl = new FormControl('', []);
+  @Input() tableData: Game[] = [];
+  @Output() filterEvents = new EventEmitter<Game[]>();
   @ViewChild('InputData', { static: false }) Input: ElementRef<HTMLInputElement>;
   @ViewChild('datas', { static: false }) matAutocomplete: MatAutocomplete;
-  
-  constructor(){  
+
+  constructor() {
     this.filteredData = this.filter.valueChanges.pipe(
       startWith(null),
-      map((user: string | null) => user ? this._filter(user) : this.tableData.slice()));
+      map((game: string | null) => game ? this._filter(game) : this.tableData.slice()));
   }
-  
-  ngOnInit(){
-    
+
+  ngOnInit() {
+
 
   }
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.tableData.filter(user => user.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.tableData.filter(game => game.name.toLowerCase().indexOf(filterValue) === 0);
   }
   addTontags(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-    const x = this.tableData.find(user => user.name.toLowerCase() == value.trim().toLowerCase());
-    if((value || '').trim() && x) {
+    const value = parseInt(event.value);
+    const x = this.tableData.find(game => game.id == value);
+    if ((value || '') && x) {
       this.badgeTab.push(x);
-      this.tableData = _.remove(this.tableData,user => user.pseudo != value.trim());
+      this.tableData = _.remove(this.tableData, game => game.id != value);
+      this.filterEvents.emit(this.badgeTab);
     }
     if (input) {
       input.value = '';
     }
-}
 
-remove(data: any): void {
-  const index = this.badgeTab.indexOf(data);
-  if (index >= 0) {
-    this.badgeTab.splice(index, 1);
-    this.tableData.push(data);
   }
-}
 
-selected(event: MatAutocompleteSelectedEvent): void {
-  const data = this.tableData.find(data => data.name.toLowerCase() == event.option.viewValue.toLowerCase());
-  const index = this.tableData.indexOf(data);
-  this.badgeTab.push(data);
-  this.tableData.splice(index,1);
-  this.Input.nativeElement.value = '';
-}
+  remove(data: any): void {
+    const index = this.badgeTab.indexOf(data);
+    if (index >= 0) {
+      this.badgeTab.splice(index, 1);
+      this.tableData.push(data);
+    }
+  }
 
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const data = this.tableData.find(data => data.id == parseInt(event.option.viewValue));
+    const index = this.tableData.indexOf(data);
+    this.badgeTab.push(data);
+    this.tableData.splice(index, 1);
+    this.Input.nativeElement.value = '';
+    this.filterEvents.emit(this.badgeTab);
+  }
 }

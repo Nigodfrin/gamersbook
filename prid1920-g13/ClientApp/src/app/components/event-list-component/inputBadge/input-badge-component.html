@@ -11,7 +11,7 @@
     </mat-chip>
   </mat-chip-list>
   <mat-autocomplete #datas="matAutocomplete" (optionSelected)="selected($event)">
-    <mat-option *ngFor="let data of filteredData | async" [value]="data.name">
+    <mat-option *ngFor="let data of filteredData | async" [value]="data.id">
       {{data.name}}
     </mat-option>
   </mat-autocomplete>

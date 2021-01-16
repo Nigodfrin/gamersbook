@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { EventGameService } from 'src/app/services/event.service';
 import { EventData } from 'src/app/models/EventData';
 import { EventGame } from 'src/app/models/EventGame';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'event-list',
@@ -29,6 +30,15 @@ games: Game[]= [];
             this.games = res;
         });
     }
+    applyFilter(games: Game[]){
+      games.map(x => this.eventsData.some(g => x.id === g.game.id) ? this._filterEvent(x): null);
+    }
+
+    _filterEvent(x: Game){
+      this.eventsData = this.eventsData.filter(e => e.game.id=== x.id);
+      console.log(this.eventsData,x);
+    }
+    
     
 }
 
