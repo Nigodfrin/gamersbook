@@ -26,7 +26,7 @@ namespace prid_1819_g13
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
             await Clients.All.SendAsync("refreshFriends",CONNECTED_USERS);
         }
-        public async Task RefreshNotif(string name,NotificationNeo4J notif){
+        public async Task RefreshNotif(string name,Notification notif){
             await Clients.Group(name).SendAsync("refreshNotif",notif);
         }
 

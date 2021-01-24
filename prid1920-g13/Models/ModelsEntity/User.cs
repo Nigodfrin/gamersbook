@@ -51,10 +51,11 @@ namespace prid_1819_g13.Models
         }
         [NotMapped]
         public virtual IList<UserDiscussion> UserDiscussions { get; set; } = new List<UserDiscussion>();
+
         [NotMapped]
         public IEnumerable<Discussion> Discussions
         {
-            get => UserDiscussions.Select(g => g.ownedDiscussion);
+            get => UserDiscussions.Select(g => g.OwnedDiscussion);
         }
 
         [NotMapped]

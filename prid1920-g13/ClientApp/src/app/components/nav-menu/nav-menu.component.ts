@@ -24,7 +24,7 @@ export class NavMenuComponent {
   userSearch= "";
   isExpanded = false;
   notifications: Notif[] = [];
-  numNotif: number = 0;
+  numNotif: number = this.notifications.length;
   allUsers: User [] = [];
   constructor(
     private eventServ: EventGameService,
@@ -90,10 +90,12 @@ export class NavMenuComponent {
   }
   acceptEvent(notif: Notif,value: boolean,index: number){
     if(value){
+      console.log(notif);
       this.eventServ.acceptEvent(notif).subscribe(res => {
         if(res){
           this.toastService.show(`Your response has been send`, { classname: 'bg-success text-light', delay: 5000 });
           this.notifications.splice(index,1);
+          // this.numNotif = this.notifications.length;
         }
         else {
           this.toastService.show(`An error occured please try again or contact the support`, { classname: 'bg-danger text-light', delay: 5000 });

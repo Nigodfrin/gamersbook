@@ -23,12 +23,12 @@ namespace prid_1819_g13.Controllers
         {
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameNeo4J>>> getAllGames()
+        public async Task<ActionResult<IEnumerable<Game>>> getAllGames()
         {
             await this.Client.ConnectAsync();
             var games = await this.Client.Cypher
             .Match("(g:Game)")
-            .Return(g => g.As<GameNeo4J>())
+            .Return(g => g.As<Game>())
             .ResultsAsync;
 
             return games.ToList();

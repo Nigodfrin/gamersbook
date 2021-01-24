@@ -21,20 +21,20 @@ namespace prid_1819_g13.Controllers
         {
         }
 
-        [HttpPost] 
-        public async Task SendNotification(InvitNotif invit){
+        // [HttpPost] 
+        // public async Task SendNotification(InvitNotif invit){
             
-            await this.Client.ConnectAsync();
-            var pseudos = invit.Users.Select(u => u.Pseudo).ToArray();
-            this.Client.Cypher
-            .Match("(u:User)")
-            .Where("u.pseudo in {pseudos}")
-            .WithParam("pseudos",pseudos)
-            .Create("(n:Notification {notif})<-[:Has]-(u)")
-            .WithParam("notif",invit.Notif)
-            .ExecuteWithoutResultsAsync().Wait();
+        //     await this.Client.ConnectAsync();
+        //     var pseudos = invit.Users.Select(u => u.Pseudo).ToArray();
+        //     this.Client.Cypher
+        //     .Match("(u:User)")
+        //     .Where("u.pseudo in {pseudos}")
+        //     .WithParam("pseudos",pseudos)
+        //     .Create("(n:Notification {notif})<-[:Has]-(u)")
+        //     .WithParam("notif",invit.Notif)
+        //     .ExecuteWithoutResultsAsync().Wait();
 
-        }
+        // }
 
     }
 }

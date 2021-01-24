@@ -13,7 +13,9 @@ namespace prid_1819_g13
         [Key]
         public int Id {get;set;}
         
+        [NotMapped]
         public virtual IList<UserDiscussion> UserDiscussions {get;set;} = new List<UserDiscussion>();
+        [NotMapped]
         public virtual IList<Message> Messages {get;set;} = new List<Message>();
 
         [NotMapped]

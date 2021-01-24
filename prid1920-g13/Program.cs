@@ -17,8 +17,6 @@ namespace prid_1819_g13
     {
         public static void Main(string[] args)
         {
-            // Neo4JConnection();
-            CreateNeo4JData();
             CreateWebHostBuilder(args).Build().Seed().Run();
         }
         public static async void CreateNeo4JData()

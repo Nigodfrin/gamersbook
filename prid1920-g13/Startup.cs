@@ -28,8 +28,8 @@ namespace prid_1819_g13
             services.AddDbContext<Context>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                // opt.UseSqlServer(Configuration.GetConnectionString("prid-1920-g13-mssql"));
-                opt.UseMySql(Configuration.GetConnectionString("prid-1920-g13-mysql"));
+                opt.UseSqlServer(Configuration.GetConnectionString("gamer-paradise"));
+                //opt.UseMySql(Configuration.GetConnectionString("prid-1920-g13-mysql"));
             });
             services.AddRazorPages();   
             // In production, the Angular files will be served from this directory

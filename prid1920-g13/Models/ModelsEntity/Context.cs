@@ -19,6 +19,9 @@ namespace prid_1819_g13.Models
         public DbSet<UserGames> UserGames {get;set;}        
         public DbSet<Message> Messages {get;set;}
         public DbSet<Discussion> Discussions {get;set;}        
+        public DbSet<Event> Events {get;set;}        
+        public DbSet<EventNotification> EventNotifications {get;set;}        
+        public DbSet<Notification> Notifications {get;set;}        
         public DbSet<UserDiscussion> UserDiscussions {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,6 +107,7 @@ namespace prid_1819_g13.Models
             .WithMany(u => u.UserGames)
             .HasForeignKey(u => u.GameId)
             .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<UserDiscussion>()
             .HasKey(ud => new { ud.UserId, ud.DiscussionId});
 
@@ -114,7 +118,7 @@ namespace prid_1819_g13.Models
             .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<UserDiscussion>()
-            .HasOne<Discussion>(d => d.ownedDiscussion)
+            .HasOne<Discussion>(d => d.OwnedDiscussion)
             .WithMany(u => u.UserDiscussions)
             .HasForeignKey(u => u.DiscussionId)
             .OnDelete(DeleteBehavior.Restrict);
