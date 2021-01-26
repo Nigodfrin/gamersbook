@@ -36,20 +36,22 @@ namespace prid_1819_g13.Models
         public Role Role { get; set; } = Role.Member;
         [NotMapped]
         public string Token { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
+        public virtual ICollection<UserGames> UserGames { get; set; } = new List<UserGames>();
+        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         [NotMapped]
-        public virtual IList<Vote> Votes { get; set; }
-        [NotMapped]
-        public virtual IList<Post> Posts { get; set; }
-        [NotMapped]
-        public virtual IList<Comment> Comments { get; set; }
-        [NotMapped]
-        public virtual IList<UserGames> UserGames { get; set; } = new List<UserGames>();
+        public IEnumerable<Event> Events
+        {
+            get => UserEvents.Select(g => g.Event);
+        }
         [NotMapped]
         public IEnumerable<Game> Games
         {
             get => UserGames.Select(g => g.ownedGame);
         }
-        [NotMapped]
         public virtual IList<UserDiscussion> UserDiscussions { get; set; } = new List<UserDiscussion>();
 
         [NotMapped]

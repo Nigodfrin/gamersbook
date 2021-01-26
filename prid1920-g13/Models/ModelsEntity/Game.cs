@@ -17,6 +17,7 @@ namespace prid_1819_g13.Models
         public int Expected_release_year {get;set;}
         public string Image { get; set; }
         public string Platforms { get; set; }
+        public virtual ICollection<Event> Events {get;set;}
         [NotMapped]
         public virtual IList<UserGames> UserGames { get; set; } = new List<UserGames>();
         [NotMapped]

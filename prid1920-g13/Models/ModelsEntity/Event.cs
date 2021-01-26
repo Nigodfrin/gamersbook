@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -25,11 +26,14 @@ public enum AccessType
         public int NbUsers{ get; set; }
         public AccessType AccessType { get; set;}
         public int CreatedByUserId { get; set;}
-        public User CreatedByUser {get;set;}
+        public virtual ICollection<UserEvent> UserEvents {get;set;} = new List<UserEvent>();
+        public virtual ICollection<Notification> Notifs {get;set;} = new List<Notification>();
         [NotMapped]
-        public IList<User> Participants {get;set;}
+        public IEnumerable<User> Participants
+        {
+            get => UserEvents.Select(ue => ue.User);
+        }
         public int GameId {get;set;}
-        [NotMapped]
-        public Game Game {get;set;}
+        public virtual Game Game {get;set;}
     }
 }

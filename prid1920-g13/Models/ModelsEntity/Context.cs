@@ -20,7 +20,6 @@ namespace prid_1819_g13.Models
         public DbSet<Message> Messages {get;set;}
         public DbSet<Discussion> Discussions {get;set;}        
         public DbSet<Event> Events {get;set;}        
-        public DbSet<EventNotification> EventNotifications {get;set;}        
         public DbSet<Notification> Notifications {get;set;}        
         public DbSet<UserDiscussion> UserDiscussions {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,6 +94,8 @@ namespace prid_1819_g13.Models
             
             modelBuilder.Entity<UserGames>()
             .HasKey(userGame => new { userGame.UserId, userGame.GameId});
+            modelBuilder.Entity<UserEvent>()
+            .HasKey(userEvent => new { userEvent.UserId, userEvent.EventId});
 
             modelBuilder.Entity<UserGames>()
             .HasOne<User>(user => user.UserGame)
@@ -129,7 +130,33 @@ namespace prid_1819_g13.Models
             .HasForeignKey(d => d.DiscussionId)
             .OnDelete(DeleteBehavior.Restrict);
 
-            
+            modelBuilder.Entity<UserEvent>()
+            .HasOne(u => u.User)
+            .WithMany(ue => ue.UserEvents)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserEvent>()
+            .HasOne(e => e.Event)
+            .WithMany(ue => ue.UserEvents)
+            .HasForeignKey(u => u.EventId)
+            .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Event>()
+            .HasOne(e => e.Game)
+            .WithMany(ue => ue.Events)
+            .HasForeignKey(u => u.GameId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+            .HasOne(u => u.Receiver)
+            .WithMany(u => u.Notifications)
+            .HasForeignKey(u => u.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+            .HasOne(u => u.Event)
+            .WithMany(u => u.Notifs)
+            .HasForeignKey(u => u.EventId)
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

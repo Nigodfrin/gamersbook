@@ -6,24 +6,20 @@ using prid_1819_g13.Models;
 
 namespace prid_1819_g13
 {
-    public enum NotificationTypes{
-        Friendship,
-        EventInvitation
-    }
+public enum NotificationTypes {
+    Friendship,
+    Event
+}
     public class Notification
     {
         [Key]
         public int Id {get;set;}
         public int SenderId {get;set;}
-        [NotMapped]
-        public User Sender {get;set;}
+        public int ReceiverId {get;set;}
+        public virtual User Receiver {get;set;}
+        public int? EventId {get;set;}
+        public virtual Event Event {get;set;}
         public bool See {get;set;}
-        public NotificationTypes NotificationType {get;set;}
-        public int? EventNotifId {get;set;}
-        [NotMapped]
-        public EventNotification EventNotif {get;set;}
-        public int? FriendshipNofitId {get;set;}
-        [NotMapped]
-        public FriendshipNotification FriendshipNotif {get;set;}
+        public virtual NotificationTypes NotificationType {get;set;}
     }
 }

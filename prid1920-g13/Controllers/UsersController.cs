@@ -92,7 +92,7 @@ namespace prid_1819_g13.Controllers
             _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
             var userN = await this.GetOneUser(newUser.Pseudo);
-            await new UserNeo4JController().CreateUser(userN.Value);
+            // await new UserNeo4JController().CreateUser(userN.Value);
             if (!res.IsEmpty)
                 return BadRequest(res);
 
