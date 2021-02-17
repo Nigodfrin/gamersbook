@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Controllers
 {
@@ -13,28 +14,26 @@ namespace prid_1819_g13.Controllers
     [ApiController]
     public class NotificationNeo4JController : ControllerBase
     {
-        public GraphClient Client = new GraphClient(new Uri("http://localhost:7474/db/data/"), "neo4j", "123")
+        private readonly Context _context;
+        public NotificationNeo4JController(Context context)
         {
-            JsonContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-        public NotificationNeo4JController()
-        {
+            _context = context;
         }
 
-        // [HttpPost] 
-        // public async Task SendNotification(InvitNotif invit){
-            
-        //     await this.Client.ConnectAsync();
-        //     var pseudos = invit.Users.Select(u => u.Pseudo).ToArray();
-        //     this.Client.Cypher
-        //     .Match("(u:User)")
-        //     .Where("u.pseudo in {pseudos}")
-        //     .WithParam("pseudos",pseudos)
-        //     .Create("(n:Notification {notif})<-[:Has]-(u)")
-        //     .WithParam("notif",invit.Notif)
-        //     .ExecuteWithoutResultsAsync().Wait();
-
-        // }
+        [HttpPost] 
+        public async Task<Notification> SendNotification(int id,int idReceiver,int eventId)
+        {
+            var notif = new Notification(){
+                SenderId = id,
+                ReceiverId = idReceiver,
+                NotificationType = NotificationTypes.Event,
+                EventId = eventId,
+                See = false
+            };
+            _context.Notifications.Add(notif);
+            var res = await _context.SaveChangesAsync();
+            return notif;
+        }
 
     }
 }

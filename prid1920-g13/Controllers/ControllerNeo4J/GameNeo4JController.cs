@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using prid_1819_g13.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace prid_1819_g13.Controllers
 {
@@ -15,23 +16,16 @@ namespace prid_1819_g13.Controllers
     [ApiController]
     public class GameNeo4JController : ControllerBase
     {
-        public GraphClient Client = new GraphClient(new Uri("http://localhost:7474/db/data/"), "neo4j", "123")
+        private readonly Context _context;
+        public GameNeo4JController(Context context)
         {
-            JsonContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
-        public GameNeo4JController()
-        {
+            _context = context;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> getAllGames()
+        public async Task<ActionResult<IEnumerable<Game>>> GetAllGames()
         {
-            await this.Client.ConnectAsync();
-            var games = await this.Client.Cypher
-            .Match("(g:Game)")
-            .Return(g => g.As<Game>())
-            .ResultsAsync;
-
-            return games.ToList();
+            var list = await _context.Games.ToListAsync();
+            return list;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace prid_1819_g13.Models
         public DbSet<Event> Events {get;set;}        
         public DbSet<Notification> Notifications {get;set;}        
         public DbSet<UserDiscussion> UserDiscussions {get;set;}        
+        public DbSet<Friendship> Friendships {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,6 +38,10 @@ namespace prid_1819_g13.Models
 
             modelBuilder.Entity<PostTag>()
             .HasKey(t => new { t.PostId, t.TagId });
+
+            modelBuilder.Entity<Friendship>()
+            .HasKey(f => new { f.AddresseeId, f.RequesterId  });
+
 
             modelBuilder.Entity<Comment>()
             .HasOne(c => c.User)

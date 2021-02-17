@@ -356,6 +356,115 @@ namespace prid_1819_g13.Controllers
             }
             return Ok();
         }
+        // [HttpGet("getFriends")]
+        // public async Task<ActionResult<IEnumerable<User>>> getFriends()
+        // {
+        //     var pseudo = User.Identity.Name;
+        //     var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            
+        // }
+        // [HttpPost("acceptFriend")]
+        // public async Task<IActionResult> acceptFriendship(UserNeo4J user){
+        //     await this.Client.ConnectAsync();
+        //     var connectPseudo = User.Identity.Name;
+        //     var ami = await this.Client.Cypher.Match("(ami:User)").Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo).Return(ami => ami.As<UserNeo4J>()).ResultsAsync;
+        //     var a = ami.ToList().FirstOrDefault();
+        //     if(a == null){
+        //         return BadRequest();
+        //     }
+        //     var notif = new NotificationNeo4J {
+        //         SenderPseudo = connectPseudo,
+        //         See = false,
+        //         Type = "acceptRelationship"
+        //     };
+        //     this.Client.Cypher
+        //     .Match("(ami:User),(me:User)-[h:Has]->(n:Notification)")
+        //     .Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo)
+        //     .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
+        //     .AndWhere((NotificationNeo4J n) => n.SenderPseudo == user.Pseudo && n.Type == "Relationship")
+        //     .Merge("(me)-[:friend]-(ami)")
+        //     .Create("(ami)-[:Has]->(n0:Notification {notif})")
+        //     .WithParam("notif",notif)
+        //     .DetachDelete("n")
+        //     .ExecuteWithoutResultsAsync()
+        //     .Wait();
+        //     return NoContent();
+        // }
+        // [HttpDelete("refuseFriend/{pseudo}")]
+        // public async Task<IActionResult> refuseFriendship (string pseudo){
+        //     await this.Client.ConnectAsync();
+        //     var connectPseudo = User.Identity.Name;
+        //     this.Client.Cypher
+        //     .Match("(me:User)-[h:Has]->(n:Notification)")
+        //     .Where((UserNeo4J me) => me.Pseudo == connectPseudo)
+        //     .AndWhere((NotificationNeo4J n) => n.SenderPseudo == pseudo && n.Type == "Relationship")
+        //     .DetachDelete("n")
+        //     .ExecuteWithoutResultsAsync()
+        //     .Wait();
+        //     return NoContent();
+        // }
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> deleteFriend(int id){
+        //     await this.Client.ConnectAsync();
+        //     var pseudo = User.Identity.Name;
+        //     this.Client.Cypher
+        //     .Match("(me:User)-[r:friend]-(oldFriend:User)")
+        //     .Where((UserNeo4J oldFriend) => oldFriend.Id == id)
+        //     .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
+        //     .Delete("r")
+        //     .ExecuteWithoutResultsAsync()
+        //     .Wait();
+        //     return NoContent();
+        // }
+        [HttpGet("{pseudo}")]
+        public async Task<List<GameDTO>> GetAll(string pseudo)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            var games = user.Games;
+            return games.GamesToDTO();
+        }
+        [HttpGet("notifications")]
+        public async Task<List<Notification>> GetNotifications()
+        {
+            var pseudo = User.Identity.Name;
+            
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            var notifications = user.Notifications.ToList();
+            return notifications;
+        }
+        // [HttpPost("addFriend")]
+        // public async Task AddFriend(UserDTO friend)
+        // {
+        //     var pseudo = User.Identity.Name;
+        //     await this.Client.ConnectAsync();
+        //     await this.Client.Cypher
+        //     .Match("(ami:User),(me:User)")
+        //     .Where((UserNeo4J ami) => ami.Pseudo == friend.Pseudo)
+        //     .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
+        //     .Create("(ami)-[:Has]->(n:Notification {type: 'Relationship', from: {user},see: false})")
+        //     .WithParam("user",pseudo)
+        //     .ExecuteWithoutResultsAsync();
+        // }
+        // [HttpPost]
+        // public async Task<ActionResult<GameDTO>> AddGameToUser(GameDTO data)
+        // {
+        //     var pseudo = User.Identity.Name;
+        //     if(pseudo == null){
+        //         return Unauthorized();
+        //     }
+        //                 var game = new Game(){
+        //         Id = data.Id,
+        //         Deck = data.Deck,
+        //         Expected_release_day = data.Expected_release_day,
+        //         Expected_release_month = data.Expected_release_month,
+        //         Expected_release_year = data.Expected_release_year,
+        //         Name = data.Name,
+        //         Image = data.Image
+        //     };
+
+        //     return NoContent();
+            
+        // }
     }
 
 }

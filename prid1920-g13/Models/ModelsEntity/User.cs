@@ -39,6 +39,7 @@ namespace prid_1819_g13.Models
         public virtual ICollection<Vote> Votes { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<User> Friends { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
         public virtual ICollection<UserGames> UserGames { get; set; } = new List<UserGames>();
         public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
