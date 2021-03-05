@@ -356,40 +356,27 @@ namespace prid_1819_g13.Controllers
             }
             return Ok();
         }
-        // [HttpGet("getFriends")]
-        // public async Task<ActionResult<IEnumerable<User>>> getFriends()
-        // {
-        //     var pseudo = User.Identity.Name;
-        //     var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
-            
-        // }
-        // [HttpPost("acceptFriend")]
-        // public async Task<IActionResult> acceptFriendship(UserNeo4J user){
-        //     await this.Client.ConnectAsync();
-        //     var connectPseudo = User.Identity.Name;
-        //     var ami = await this.Client.Cypher.Match("(ami:User)").Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo).Return(ami => ami.As<UserNeo4J>()).ResultsAsync;
-        //     var a = ami.ToList().FirstOrDefault();
-        //     if(a == null){
-        //         return BadRequest();
-        //     }
-        //     var notif = new NotificationNeo4J {
-        //         SenderPseudo = connectPseudo,
-        //         See = false,
-        //         Type = "acceptRelationship"
-        //     };
-        //     this.Client.Cypher
-        //     .Match("(ami:User),(me:User)-[h:Has]->(n:Notification)")
-        //     .Where((UserNeo4J ami) => ami.Pseudo == user.Pseudo)
-        //     .AndWhere((UserNeo4J me) => me.Pseudo == connectPseudo)
-        //     .AndWhere((NotificationNeo4J n) => n.SenderPseudo == user.Pseudo && n.Type == "Relationship")
-        //     .Merge("(me)-[:friend]-(ami)")
-        //     .Create("(ami)-[:Has]->(n0:Notification {notif})")
-        //     .WithParam("notif",notif)
-        //     .DetachDelete("n")
-        //     .ExecuteWithoutResultsAsync()
-        //     .Wait();
-        //     return NoContent();
-        // }
+        [HttpGet("getFriends")]
+        public async Task<ActionResult<List<UserDTO>>> GetFriends()
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            return user.Friends.ToDTO();
+        }
+        [HttpPost("acceptFriend")]
+        public async Task<IActionResult> AcceptFriendship(int id)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);    
+
+            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => f.AddresseeId == user.Id && f.RequesterId == id);
+            if(friendship == null)
+                return BadRequest();
+            friendship.IsAccepted = true;
+            _context.Entry(friendship).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
         // [HttpDelete("refuseFriend/{pseudo}")]
         // public async Task<IActionResult> refuseFriendship (string pseudo){
         //     await this.Client.ConnectAsync();
@@ -424,27 +411,34 @@ namespace prid_1819_g13.Controllers
             return games.GamesToDTO();
         }
         [HttpGet("notifications")]
-        public async Task<List<Notification>> GetNotifications()
+        public async Task<List<NotificationDTO>> GetNotifications()
         {
             var pseudo = User.Identity.Name;
             
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
             var notifications = user.Notifications.ToList();
-            return notifications;
+            return notifications.NotificationsToDTO();
         }
-        // [HttpPost("addFriend")]
-        // public async Task AddFriend(UserDTO friend)
-        // {
-        //     var pseudo = User.Identity.Name;
-        //     await this.Client.ConnectAsync();
-        //     await this.Client.Cypher
-        //     .Match("(ami:User),(me:User)")
-        //     .Where((UserNeo4J ami) => ami.Pseudo == friend.Pseudo)
-        //     .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
-        //     .Create("(ami)-[:Has]->(n:Notification {type: 'Relationship', from: {user},see: false})")
-        //     .WithParam("user",pseudo)
-        //     .ExecuteWithoutResultsAsync();
-        // }
+        [HttpPost("addFriend")]
+        public async Task<ActionResult> AddFriend(UserDTO friend)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+
+            var friendship = new Friendship(){
+                RequesterId = user.Id,
+                AddresseeId = friend.Id,
+            };
+            _context.Friendships.Add(friendship);
+            var notif = new Notification(){
+                SenderId = user.Id,
+                ReceiverId = friend.Id,
+                NotificationType = NotificationTypes.Friendship,
+            };
+            _context.Notifications.Add(notif);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
         // [HttpPost]
         // public async Task<ActionResult<GameDTO>> AddGameToUser(GameDTO data)
         // {

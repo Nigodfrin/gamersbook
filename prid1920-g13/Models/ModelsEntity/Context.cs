@@ -162,6 +162,19 @@ namespace prid_1819_g13.Models
             .WithMany(u => u.Notifs)
             .HasForeignKey(u => u.EventId)
             .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+            .HasMany(f => f.ReceievedFriendRequests)
+            .WithOne(u => u.Addressee)
+            .HasForeignKey(u => u.AddresseeId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+            .HasMany(f => f.SentFriendRequests)
+            .WithOne(u => u.Requester)
+            .HasForeignKey(u => u.RequesterId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

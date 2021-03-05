@@ -8,6 +8,7 @@ namespace prid_1819_g13.Models
         public virtual User Requester {get;set;}
         public int AddresseeId {get;set;}
         public virtual User Addressee {get;set;}
-        public DateTime CreatedDateTime {get;set;}
+        public DateTime CreatedDateTime {get;set;} = DateTime.Now;
+        public bool IsAccepted {get;set;} = false;
     } 
 }

@@ -12,8 +12,8 @@ export class UserService {
   
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-    refuseFriend(pseudo: string) {
-      return this.http.delete<boolean>(`${this.baseUrl}api/userNeo4J/refuseFriend/${pseudo}`)
+    refuseFriend(id: number) {
+      return this.http.delete<boolean>(`${this.baseUrl}api/users/refuseFriend/${id}`)
       .pipe(map(res => true),
       catchError(err => {
         console.error(err);
@@ -21,8 +21,8 @@ export class UserService {
       })
     );
     }
-    acceptFriend(pseudo: string) {
-      return this.http.post<boolean>(`${this.baseUrl}api/userNeo4J/acceptFriend`,{pseudo:pseudo})
+    acceptFriend(id: number) {
+      return this.http.post<boolean>(`${this.baseUrl}api/users/acceptFriend`,id)
       .pipe(map(res => true),
       catchError(err => {
         console.error(err);
@@ -35,7 +35,7 @@ export class UserService {
       .pipe(map(res => res.map(m => new User(m))));
   }
   getUserGames(pseudo: string) {
-    return this.http.get<User[]>(`${this.baseUrl}api/userNeo4J/${pseudo}`)
+    return this.http.get<User[]>(`${this.baseUrl}api/users/${pseudo}`)
       .pipe(map(res => res.map(m => new Game(m))));
   }
   getById(pseudo: string): Observable<User> {
@@ -45,7 +45,7 @@ export class UserService {
     );
   }
   getNotifs() {
-    return this.http.get<Notif[]>(`${this.baseUrl}api/userNeo4J/notifications`)
+    return this.http.get<Notif[]>(`${this.baseUrl}api/users/notifications`)
     .pipe(map(res => res.map(m => new Notif(m))));
   }
   public isPseudoAvailable(pseudo: string): Observable<boolean> {
@@ -104,7 +104,7 @@ export class UserService {
       .pipe(map(res => res.map(m => new User(m))));
   }
   public addFriend(user: User){
-    return this.http.post<User>(`${this.baseUrl}api/userNeo4J/addFriend`, user).pipe(
+    return this.http.post<User>(`${this.baseUrl}api/users/addFriend`, user).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -113,7 +113,7 @@ export class UserService {
     );
   }
   public deleteFriend(id: number){
-    return this.http.delete(`${this.baseUrl}api/userNeo4J/${id}`).pipe(
+    return this.http.delete(`${this.baseUrl}api/users/${id}`).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);
@@ -122,7 +122,7 @@ export class UserService {
     );
   }
   public getFriend(){
-    return this.http.get<User[]>(`${this.baseUrl}api/userNeo4J/getFriends`)
+    return this.http.get<User[]>(`${this.baseUrl}api/users/getFriends`)
       .pipe(map(res => res.map(m => new User(m))));
   }
   public getUserPostRep(userId:any){

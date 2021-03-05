@@ -137,5 +137,18 @@ namespace prid_1819_g13.Models {
          public static List<GameDTO> GamesToDTO(this IEnumerable<Game> games) {
             return games.Select(c => c.GameToDTO()).ToList();
         }
+        public static NotificationDTO NotificationToDTO(this Notification notif){
+            return new NotificationDTO{
+                CreatedOn = notif.CreatedOn,
+                EventId = notif.EventId,
+                NotificationType = notif.NotificationType,
+                See = notif.See,
+                ReceiverId = notif.ReceiverId,
+                SenderId = notif.SenderId
+            };
+        }
+         public static List<NotificationDTO> NotificationsToDTO(this IEnumerable<Notification> notifs) {
+            return notifs.Select(c => c.NotificationToDTO()).ToList();
+        }
     }
 }

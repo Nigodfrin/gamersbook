@@ -126,13 +126,13 @@ export class NavMenuComponent {
   }
   acceptFriend(notif: Notif, value: boolean,index: number){
     if(value){
-      this.userServ.acceptFriend(notif.senderPseudo).subscribe(res => {
-        this.toastService.show(`${notif.senderPseudo} has been accepted`, { classname: 'bg-success text-light', delay: 5000 });
+      this.userServ.acceptFriend(notif.senderId).subscribe(res => {
+        this.toastService.show(`Invitation has been accepted`, { classname: 'bg-success text-light', delay: 5000 });
       });
     }
     else {
-      this.userServ.refuseFriend(notif.senderPseudo).subscribe(res => {
-        this.toastService.show(`${notif.senderPseudo} has been refused`, { classname: 'bg-danger text-light', delay: 5000 });
+      this.userServ.refuseFriend(notif.senderId).subscribe(res => {
+        this.toastService.show(`Invitation has been refused`, { classname: 'bg-danger text-light', delay: 5000 });
       });;
     }
   }
