@@ -1,22 +1,23 @@
 <div style="display: flex;flex-direction: column;">
     <div class="filterDiv">
         <input-badge (filterEvents)="applyFilter($event)" [tableData]="games"></input-badge>
+        <!-- TO DO filter
         ami qui participe;
         jeu;
         date;
         heure;
-        langue;
+        langue; -->
     </div>
     <div *ngFor="let event of eventsData" class="card-event">
         <div class="card-event-header">
-          <h4>{{event.eventGame.name}}</h4>
+          <h4>{{event.name}}</h4>
         </div>
         <div class="card-event-body">
           <h5 class="card-title">{{event.game.name}}</h5>
-          <p class="card-text">{{event.eventGame.description}}pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp</p>
+          <p class="card-text">{{event.description}}</p>
           <div>
-              Start <span class="badge badge-pill badge-warning">{{event.eventGame.start_date | date: 'short'}}</span> End <span class="badge badge-pill badge-warning">{{event.eventGame.end_date | date: 'short'}}</span>
-              <br/>language : {{event.eventGame.langue}}
+              Start <span class="badge badge-pill badge-warning">{{event.start_date | date: 'short'}}</span> End <span class="badge badge-pill badge-warning">{{event.end_date | date: 'short'}}</span>
+              <br/>language : {{event.langue}}
           </div>
         </div>
       </div>

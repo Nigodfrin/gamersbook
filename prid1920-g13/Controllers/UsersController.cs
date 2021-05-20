@@ -29,7 +29,7 @@ namespace prid_1819_g13.Controllers
             _context = context;
         }
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
             return (await _context.Users.ToListAsync()).ToDTO();
@@ -44,7 +44,7 @@ namespace prid_1819_g13.Controllers
             {
                 return BadRequest();
             }
-             if (!string.IsNullOrWhiteSpace(data.PicturePath))
+            if (!string.IsNullOrWhiteSpace(data.PicturePath))
                 // On ajoute un timestamp à la fin de l'url pour générer un URL différent quand on change d'image
                 // car sinon l'image ne se rafraîchit pas parce que l'url ne change pas et le browser la prend dans la cache.
                 user.PicturePath = data.PicturePath + "?" + DateTime.Now.Ticks;
@@ -66,13 +66,14 @@ namespace prid_1819_g13.Controllers
             return NoContent();
         }
         [HttpGet("search/{name}")]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> userSearch(string name){
+        public async Task<ActionResult<IEnumerable<UserDTO>>> userSearch(string name)
+        {
             return (await _context.Users.Where(u => u.Pseudo.ToLower().Contains(name.ToLower())).ToListAsync()).ToDTO();
         }
         [HttpPost]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO data)
         {
-            
+
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Pseudo == data.Pseudo);
             if (user != null)
             {
@@ -120,17 +121,18 @@ namespace prid_1819_g13.Controllers
 
             _context.Votes.RemoveRange(user.Votes);
             var postsAccepted = await _context.Posts.Where(p => p.User.Id == user.Id && p.AcceptedPostId != null).ToListAsync();
-            foreach(var postAccepted in postsAccepted){
+            foreach (var postAccepted in postsAccepted)
+            {
                 postAccepted.AcceptedPostId = null;
                 _context.Entry(postAccepted).State = EntityState.Modified;
             }
             _context.SaveChanges();
             foreach (var post in user.Posts)
             {
-                if(post.Title == null){await DeleteR(post);}
-                else { DeleteQ(post);}
-                   
-                
+                if (post.Title == null) { await DeleteR(post); }
+                else { DeleteQ(post); }
+
+
             }
             _context.Comments.RemoveRange(user.Comments);
             _context.Users.Remove(user);
@@ -156,22 +158,22 @@ namespace prid_1819_g13.Controllers
         {
             _context.Comments.RemoveRange(question.Comments);
 
-                // supprime les reponses associé a une question
-                foreach (var rep in question.Reponses)
-                {
-                    //supprime les commentaire asssocié a une reponse
-                    _context.Comments.RemoveRange(rep.Comments);
-                    //supprime les votes
-                    _context.Votes.RemoveRange(rep.Votes);
-                    // supprime la réponse
-                    _context.Posts.Remove(rep);
-                }
-                // supprime les postTag associé a la question
-                _context.PostTags.RemoveRange(question.PostTags);
-                // supprime les votes associés à la question
-                _context.Votes.RemoveRange(question.Votes);
-                // supprime la question
-                _context.Posts.Remove(question);
+            // supprime les reponses associé a une question
+            foreach (var rep in question.Reponses)
+            {
+                //supprime les commentaire asssocié a une reponse
+                _context.Comments.RemoveRange(rep.Comments);
+                //supprime les votes
+                _context.Votes.RemoveRange(rep.Votes);
+                // supprime la réponse
+                _context.Posts.Remove(rep);
+            }
+            // supprime les postTag associé a la question
+            _context.PostTags.RemoveRange(question.PostTags);
+            // supprime les votes associés à la question
+            _context.Votes.RemoveRange(question.Votes);
+            // supprime la question
+            _context.Posts.Remove(question);
         }
 
         [AllowAnonymous]
@@ -235,7 +237,8 @@ namespace prid_1819_g13.Controllers
             return user;
         }
         [HttpGet("isAuthor/{id}")]
-        public async Task<ActionResult<bool>> isAuthor(int id){
+        public async Task<ActionResult<bool>> isAuthor(int id)
+        {
             var pseudo = User.Identity.Name;
             var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
             var post = await _context.Posts.FindAsync(id);
@@ -291,7 +294,8 @@ namespace prid_1819_g13.Controllers
         public async Task<ActionResult<IEnumerable<PostReponseDTO>>> getUserRep(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if(user == null){
+            if (user == null)
+            {
                 return BadRequest();
             }
             var posts = await _context.Posts.Where(post => post.User.Id == user.Id && post.Title == null).ToListAsync();
@@ -303,7 +307,8 @@ namespace prid_1819_g13.Controllers
         public async Task<ActionResult<IEnumerable<PostQuestionDTO>>> getUserQuest(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if(user == null){
+            if (user == null)
+            {
                 return BadRequest();
             }
             var posts = await _context.Posts.Where(post => post.AuthorId == user.Id && post.Title != null).ToListAsync();
@@ -314,7 +319,8 @@ namespace prid_1819_g13.Controllers
         public async Task<ActionResult<IEnumerable<CommentDTO>>> getUserComment(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if(user == null){
+            if (user == null)
+            {
                 return BadRequest();
             }
             var comments = await _context.Comments.Where(comment => comment.AuthorId == user.Id).ToListAsync();
@@ -322,12 +328,15 @@ namespace prid_1819_g13.Controllers
             return comments.ToDTO();
         }
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromForm] string pseudo, [FromForm]IFormFile picture) {
-            if (picture != null && picture.Length > 0) {
+        public async Task<IActionResult> Upload([FromForm] string pseudo, [FromForm] IFormFile picture)
+        {
+            if (picture != null && picture.Length > 0)
+            {
                 //var fileName = Path.GetFileName(picture.FileName);
                 var fileName = pseudo + "-" + DateTime.Now.ToString("yyyyMMddHHmmssff") + ".jpg";
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", fileName);
-                using (var fileSrteam = new FileStream(filePath, FileMode.Create)) {
+                using (var fileSrteam = new FileStream(filePath, FileMode.Create))
+                {
                     await picture.CopyToAsync(fileSrteam);
                 }
                 return Ok($"\"uploads/{fileName}\"");
@@ -335,7 +344,8 @@ namespace prid_1819_g13.Controllers
             return Ok();
         }
         [HttpPost("cancel")]
-        public IActionResult Cancel([FromBody] dynamic data) {
+        public IActionResult Cancel([FromBody] dynamic data)
+        {
             string picturePath = data.picturePath;
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", picturePath);
             if (System.IO.File.Exists(path))
@@ -344,12 +354,14 @@ namespace prid_1819_g13.Controllers
         }
 
         [HttpPost("confirm")]
-        public IActionResult Confirm([FromBody] dynamic data) {
+        public IActionResult Confirm([FromBody] dynamic data)
+        {
             string pseudo = data.pseudo;
             string picturePath = data.picturePath;
             string newPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", pseudo + ".jpg");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", picturePath);
-            if (System.IO.File.Exists(path)) {
+            if (System.IO.File.Exists(path))
+            {
                 if (System.IO.File.Exists(newPath))
                     System.IO.File.Delete(newPath);
                 System.IO.File.Move(path, newPath);
@@ -364,46 +376,60 @@ namespace prid_1819_g13.Controllers
             return user.Friends.ToDTO();
         }
         [HttpPost("acceptFriend")]
-        public async Task<IActionResult> AcceptFriendship(int id)
+        public async Task<IActionResult> AcceptFriendship([FromBody] int id)
         {
             var pseudo = User.Identity.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);    
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
 
             var friendship = await _context.Friendships.FirstOrDefaultAsync(f => f.AddresseeId == user.Id && f.RequesterId == id);
-            if(friendship == null)
-                return BadRequest();
+            if (friendship == null)
+                return NotFound();
             friendship.IsAccepted = true;
             _context.Entry(friendship).State = EntityState.Modified;
+            var relatedNotification = await _context.Notifications.FirstOrDefaultAsync(f => f.ReceiverId == user.Id && f.SenderId == id);
+            if (relatedNotification != null)
+            {
+                _context.Notifications.Remove(relatedNotification);
+            }
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok();
         }
-        // [HttpDelete("refuseFriend/{pseudo}")]
-        // public async Task<IActionResult> refuseFriendship (string pseudo){
-        //     await this.Client.ConnectAsync();
-        //     var connectPseudo = User.Identity.Name;
-        //     this.Client.Cypher
-        //     .Match("(me:User)-[h:Has]->(n:Notification)")
-        //     .Where((UserNeo4J me) => me.Pseudo == connectPseudo)
-        //     .AndWhere((NotificationNeo4J n) => n.SenderPseudo == pseudo && n.Type == "Relationship")
-        //     .DetachDelete("n")
-        //     .ExecuteWithoutResultsAsync()
-        //     .Wait();
-        //     return NoContent();
-        // }
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> deleteFriend(int id){
-        //     await this.Client.ConnectAsync();
-        //     var pseudo = User.Identity.Name;
-        //     this.Client.Cypher
-        //     .Match("(me:User)-[r:friend]-(oldFriend:User)")
-        //     .Where((UserNeo4J oldFriend) => oldFriend.Id == id)
-        //     .AndWhere((UserNeo4J me) => me.Pseudo == pseudo)
-        //     .Delete("r")
-        //     .ExecuteWithoutResultsAsync()
-        //     .Wait();
-        //     return NoContent();
-        // }
-        [HttpGet("{pseudo}")]
+        [HttpDelete("refuseFriend/{id}")]
+        public async Task<IActionResult> RefuseFriendship(int id)
+        {
+            var userPseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == userPseudo);
+
+            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => f.AddresseeId == user.Id && f.RequesterId == id);
+            if (friendship == null)
+                return NotFound();
+            _context.Friendships.Remove(friendship);
+            var relatedNotification = await _context.Notifications.FirstOrDefaultAsync(f => f.ReceiverId == user.Id && f.SenderId == id);
+            if (relatedNotification != null)
+            {
+                _context.Notifications.Remove(relatedNotification);
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpDelete("deleteFriend/{id}")]
+        public async Task<IActionResult> DeleteFriend(int id)
+        {
+            var userPseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == userPseudo);
+            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => (f.AddresseeId == user.Id && f.RequesterId == id || f.AddresseeId == id && f.RequesterId == user.Id) && f.IsAccepted);
+            if (friendship == null)
+                return NotFound();
+            _context.Friendships.Remove(friendship);
+            var relatedNotification = await _context.Notifications.FirstOrDefaultAsync(f => f.ReceiverId == user.Id && f.SenderId == id);
+            if (relatedNotification != null)
+            {
+                _context.Notifications.Remove(relatedNotification);
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpGet("getUserGames/{pseudo}")]
         public async Task<List<GameDTO>> GetAll(string pseudo)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
@@ -414,7 +440,7 @@ namespace prid_1819_g13.Controllers
         public async Task<List<NotificationDTO>> GetNotifications()
         {
             var pseudo = User.Identity.Name;
-            
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
             var notifications = user.Notifications.ToList();
             return notifications.NotificationsToDTO();
@@ -425,40 +451,39 @@ namespace prid_1819_g13.Controllers
             var pseudo = User.Identity.Name;
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
 
-            var friendship = new Friendship(){
+            var friendship = new Friendship()
+            {
                 RequesterId = user.Id,
                 AddresseeId = friend.Id,
             };
             _context.Friendships.Add(friendship);
-            var notif = new Notification(){
+            var notif = new Notification()
+            {
                 SenderId = user.Id,
                 ReceiverId = friend.Id,
                 NotificationType = NotificationTypes.Friendship,
             };
             _context.Notifications.Add(notif);
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok();
         }
-        // [HttpPost]
-        // public async Task<ActionResult<GameDTO>> AddGameToUser(GameDTO data)
-        // {
-        //     var pseudo = User.Identity.Name;
-        //     if(pseudo == null){
-        //         return Unauthorized();
-        //     }
-        //                 var game = new Game(){
-        //         Id = data.Id,
-        //         Deck = data.Deck,
-        //         Expected_release_day = data.Expected_release_day,
-        //         Expected_release_month = data.Expected_release_month,
-        //         Expected_release_year = data.Expected_release_year,
-        //         Name = data.Name,
-        //         Image = data.Image
-        //     };
-
-        //     return NoContent();
-            
-        // }
+        [HttpPost("addGameToUser")]
+        public async Task<ActionResult<GameDTO>> AddGameToUser(GameDTO data)
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userGame = new UserGames()
+            {
+                GameId = data.Id,
+                UserId = user.Id
+            };
+            await _context.UserGames.AddAsync(userGame);
+            return Ok();
+        }
     }
 
 }

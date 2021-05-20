@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 
 @Component({
   templateUrl: './createquestion.component.html',
+  styleUrls: ['./createquestion.component.css'],
 })
 export class CreateQuestionComponent implements OnInit {
   

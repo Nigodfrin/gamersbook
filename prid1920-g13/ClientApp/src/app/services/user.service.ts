@@ -31,13 +31,14 @@ export class UserService {
     );
     }
   getAll() {
-    return this.http.get<User[]>(`${this.baseUrl}api/users`)
+    return this.http.get<User[]>(`${this.baseUrl}api/users/all`)
       .pipe(map(res => res.map(m => new User(m))));
   }
   getUserGames(pseudo: string) {
-    return this.http.get<User[]>(`${this.baseUrl}api/users/${pseudo}`)
+    return this.http.get<Game[]>(`${this.baseUrl}api/users/getUserGames/${pseudo}`)
       .pipe(map(res => res.map(m => new Game(m))));
   }
+
   getById(pseudo: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
       map(m => !m ? null : new User(m)),
@@ -113,7 +114,8 @@ export class UserService {
     );
   }
   public deleteFriend(id: number){
-    return this.http.delete(`${this.baseUrl}api/users/${id}`).pipe(
+    console.log("delete",id);
+    return this.http.delete(`${this.baseUrl}api/users/deleteFriend/${id}`).pipe(
       map(res => true),
       catchError(err => {
         console.error(err);

@@ -9,6 +9,7 @@ import { EventGameService } from 'src/app/services/event.service';
 import { EventData } from 'src/app/models/EventData';
 import { EventGame } from 'src/app/models/EventGame';
 import * as _ from 'lodash';
+import { Event } from 'src/app/models/Event';
 
 @Component({
   selector: 'event-list',
@@ -17,12 +18,13 @@ import * as _ from 'lodash';
 })
 export class EventListComponent implements OnInit {
 
-eventsData: EventData[] = [];
+eventsData: Event[] = [];
 games: Game[]= [];
 
     constructor(private eventGame: EventGameService,private gameServ: GameService,private authServ: AuthenticationService){
       this.eventGame.getEvents().subscribe(res => {
         this.eventsData = res;
+        console.log(this.eventsData);
       });
     }
     ngOnInit(){
@@ -31,11 +33,11 @@ games: Game[]= [];
         });
     }
     applyFilter(games: Game[]){
-      games.map(x => this.eventsData.some(g => x.id === g.game.id) ? this._filterEvent(x): null);
+      games.map(x => this.eventsData.some(g => x.id === g.gameId) ? this._filterEvent(x): null);
     }
 
     _filterEvent(x: Game){
-      this.eventsData = this.eventsData.filter(e => e.game.id=== x.id);
+      this.eventsData = this.eventsData.filter(e => e.gameId=== x.id);
       console.log(this.eventsData,x);
     }
     

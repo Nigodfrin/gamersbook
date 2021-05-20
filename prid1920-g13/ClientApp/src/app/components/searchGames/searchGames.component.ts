@@ -39,7 +39,7 @@ export class SearchGamesComponent implements OnInit {
              image: game.image.medium_url,
         });
         console.log(jeu);
-        this.gamesService.addGameToUser(jeu).subscribe(res => {
+        this.gamesService.addGameToUser(jeu).subscribe(res => { 
             this.userService.getById(this.authService.currentUser.pseudo).subscribe(user => {
                 // sessionStorage.setItem('currentUser',JSON.stringify(user));
                 // this.authService.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));

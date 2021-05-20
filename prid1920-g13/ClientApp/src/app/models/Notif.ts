@@ -1,17 +1,22 @@
 export class Notif {
-    uuid: string;
-    type: string;
+    id: number;
     senderId: number;
     see: boolean;
-    uuidEvent: string;
+    receiverId: number;
+    notificationType: NotificationTypes;
+    eventId: number
+    createdOn: Date
 
     constructor(data){
         if(data){
-            this.uuid = data.uuid,
-            this.type = data.notificationType,
+            this.id = data.id,
+            this.notificationType = data.notificationType,
             this.senderId = data.senderId,
             this.see = data.see,
-            this.uuidEvent = data.uuidEvent
+            this.receiverId = data.receiverId,
+            this.createdOn = data.createdOn,
+            this.eventId = data.eventId
         }
     }
 }
+export enum NotificationTypes {Friendship, Event}

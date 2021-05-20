@@ -15,7 +15,7 @@ export class GameService {
   }
   public addGameToUser(game: Game) {
     console.log(game);
-    return this.http.post<Game>(`${this.base}api/userNeo4J`, game)
+    return this.http.post<Game>(`${this.base}api/game`, game)
       .pipe(map(res => true),
         catchError(err => {
           console.error(err);

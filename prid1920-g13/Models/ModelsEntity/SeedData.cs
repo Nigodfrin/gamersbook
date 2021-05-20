@@ -14,21 +14,21 @@ namespace prid_1819_g13.Models {
                         Console.Write("Seeding data ...");
                         if (context.Users.Count() == 0) {
                             context.Users.AddRange(
-                                new User { Id = 1, Pseudo = "ben", Password = TokenHelper.GetPasswordHash("ben"), LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com" },
-                                new User { Id = 2, Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
-                                new User { Id = 3, Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
-                                new User { Id = 4, Pseudo = "boris", Password = TokenHelper.GetPasswordHash("boris"), LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
-                                new User { Id = 5, Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" },
-                                new User { Id = 6, Pseudo = "Darknico", Password = TokenHelper.GetPasswordHash("123"), LastName = "Godfrin", FirstName = "Nicolas", Email = "nicolas.godfrin@live.be",BirthDate= new DateTime(1994,11,02) }
+                                new User { Pseudo = "ben", Password = TokenHelper.GetPasswordHash("ben"), LastName = "Penelle", FirstName = "Benoît", Email = "ben@test.com" },
+                                new User { Pseudo = "bruno", Password = TokenHelper.GetPasswordHash("bruno"), LastName = "Lacroix", FirstName = "Bruno", Email = "bruno@test.com" },
+                                new User { Pseudo = "admin", Password = TokenHelper.GetPasswordHash("admin"), LastName = "Administrator", FirstName = "Administrator", Email = "admin@test.com", Role = Role.Admin },
+                                new User { Pseudo = "boris", Password = TokenHelper.GetPasswordHash("boris"), LastName = "Verhaegen", FirstName = "Boris", Email = "boris@test.com", Role = Role.Admin },
+                                new User { Pseudo = "alain", Password = TokenHelper.GetPasswordHash("alain"), LastName = "Silovy", FirstName = "Alain", Email = "alain@test.com" },
+                                new User { Pseudo = "Darknico", Password = TokenHelper.GetPasswordHash("123"), LastName = "Godfrin", FirstName = "Nicolas", Email = "nicolas.godfrin@live.be",BirthDate= new DateTime(1994,11,02) }
                             );
                             context.SaveChanges();
                         }
                         if(context.Discussions.Count() == 0){
                             context.Discussions.AddRange(
-                                new Discussion { Id = 1},
-                                new Discussion { Id = 2},
-                                new Discussion { Id = 3},
-                                new Discussion { Id = 4}
+                                new Discussion { },
+                                new Discussion { },
+                                new Discussion { },
+                                new Discussion { }
                             );
                             context.SaveChanges();
                         }
@@ -47,13 +47,13 @@ namespace prid_1819_g13.Models {
                         }
                         if(context.Messages.Count() == 0){
                             context.Messages.AddRange(
-                                new Message {Id = 1,Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Salut bruno comment tu vas ?"},
-                                new Message {Id = 2,Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Tu me réponds ?"},
-                                new Message {Id = 3,Sender = 2,Receiver = 6,DiscussionId = 1,MessageText = "Arrêtes de me harceler"},
-                                new Message {Id = 4,Sender = 5,Receiver = 2,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
-                                new Message {Id = 5,Sender = 2,Receiver = 5,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
-                                new Message {Id = 6,Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut  comment tu vas ?"},
-                                new Message {Id = 7,Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut 111111111 comment tu vas ?"}
+                                new Message {Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Salut bruno comment tu vas ?"},
+                                new Message {Sender = 6,Receiver = 2,DiscussionId = 1,MessageText = "Tu me réponds ?"},
+                                new Message {Sender = 2,Receiver = 6,DiscussionId = 1,MessageText = "Arrêtes de me harceler"},
+                                new Message {Sender = 5,Receiver = 2,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Sender = 2,Receiver = 5,DiscussionId = 2,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut  comment tu vas ?"},
+                                new Message {Sender = 3,Receiver = 4,DiscussionId = 3,MessageText = "Salut 111111111 comment tu vas ?"}
                             );
                             context.SaveChanges();
                         }

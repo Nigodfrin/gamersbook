@@ -126,6 +126,7 @@ export class NavMenuComponent {
   }
   acceptFriend(notif: Notif, value: boolean,index: number){
     if(value){
+      console.log(notif)
       this.userServ.acceptFriend(notif.senderId).subscribe(res => {
         this.toastService.show(`Invitation has been accepted`, { classname: 'bg-success text-light', delay: 5000 });
       });

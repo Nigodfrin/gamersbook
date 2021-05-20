@@ -83,7 +83,9 @@ import { InputBadgeComponent } from '../components/event-list-component/inputBad
     BrowserAnimationsModule,
     SharedModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
-    SimplemdeModule.forRoot({}),
+    SimplemdeModule.forRoot({
+      
+    }),
     ImageCropperModule,
     NguCarouselModule,
     NgbModule,

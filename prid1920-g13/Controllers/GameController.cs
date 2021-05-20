@@ -32,16 +32,19 @@ namespace prid_1819_g13.Controllers
                 Expected_release_month = data.Expected_release_month,
                 Expected_release_year = data.Expected_release_year,
                 Deck = data.Deck,
-                Id = data.Id,
                 Image = data.Image
             };
+            _context.Games.Add(jeu);
+            var res = await _context.SaveChangesAsyncWithValidation();
+             var g = _context.Games.FirstOrDefault(game => game.Name == jeu.Name);
+
             var userGame = new UserGames(){
-                UserId = user.Id,GameId = data.Id
+                UserId = user.Id,GameId = g.Id
             };
             
             _context.UserGames.Add(userGame);
-            _context.Games.Add(jeu);
-            var res = await _context.SaveChangesAsyncWithValidation();
+            await _context.SaveChangesAsync();
+
             if (!res.IsEmpty)
                 return BadRequest(res);
 
