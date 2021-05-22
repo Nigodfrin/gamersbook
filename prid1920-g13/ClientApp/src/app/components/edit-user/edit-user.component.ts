@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
@@ -13,7 +13,9 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
     selector: 'app-edit-user-mat',
     templateUrl: './edit-user.component.html',
-    styleUrls: ['./edit-user.component.css']
+    styleUrls: ['./edit-user.component.css'],
+  encapsulation: ViewEncapsulation.None
+
 })
 export class EditUserComponent {
     public frm: FormGroup;

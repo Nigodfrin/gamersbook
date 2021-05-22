@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ViewEncapsulation } from '@angular/core';
 import { User } from 'src/app/models/User';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { PostService } from 'src/app/services/post.service';
@@ -11,7 +11,6 @@ import { MatDialog, MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/
 import * as _ from 'lodash';
 import { ImageCroppedEvent, CropperPosition, ImageCropperComponent } from 'ngx-image-cropper';
 import { SourceListMap } from 'source-list-map';
-import { constructor } from 'lodash';
 import { GameService } from 'src/app/services/game.service';
 import { Game } from 'src/app/models/Game';
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +18,9 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
     templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.css']
+    styleUrls: ['./profile.component.css'],
+  encapsulation: ViewEncapsulation.None
+
 })
 export class ProfileComponent implements OnInit {
 

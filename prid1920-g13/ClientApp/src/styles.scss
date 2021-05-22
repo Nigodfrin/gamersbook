@@ -3,26 +3,7 @@
 @import 'custom.scss';
 @import '../node_modules/bootstrap/scss/bootstrap';
 
-.center_div {
-    width: 100%;
-    max-width: 1024px;
-    margin: 0 auto; 
-} 
-nav.center_div {
-    margin-bottom: 25px;
-}
-.field-error {
-    float: right;
-}
 
-.header {
-    margin-bottom: 20px;
-}
-.footer {
-    margin-top: 20px;
-    display: inline-grid;
-    grid-template-columns: auto auto;
-}
 /* ovveride material ui theme */
 .mat-focused .mat-form-field-label {
     /*change color of label*/
@@ -38,3 +19,111 @@ nav.center_div {
    /*change color of underline when focused*/
    background-color: var(--secondaryLight) !important;;
   }
+  .mat-dialog-container {
+      background: var(--primaryDark);
+  }
+  
+  /* override badge style */
+  .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
+    right: -8px;
+}
+.mat-badge-small.mat-badge-after .mat-badge-content {
+    right: -16px;
+}
+.mat-badge-small.mat-badge-above .mat-badge-content {
+    top: -8px;
+}
+.mat-badge-small .mat-badge-content {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+.mat-badge-content.mat-badge-active {
+    -webkit-transform: none;
+    transform: none;
+}
+.mat-badge-small .mat-badge-content {
+    font-size: 9px;
+}
+.mat-badge-content {
+    position: absolute;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    -webkit-transition: -webkit-transform 200ms ease-in-out;
+    transition: -webkit-transform 200ms ease-in-out;
+    transition: transform 200ms ease-in-out;
+    transition: transform 200ms ease-in-out, -webkit-transform 200ms ease-in-out;
+    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+.mat-badge-content {
+    color: white;
+    background: goldenrod;
+}
+.mat-badge-content {
+    font-weight: 600;
+    font-size: 12px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-icon {
+    position: relative;
+}
+
+//   $dark-palette: (
+//  50: #FAFAFA,
+//  100:#F5F5F5,
+//  200:#EFEFEF,
+//  300:#E2E2E2,
+//  400:#BFBFBF,
+//  500:#A0A0A0,
+//  600:#777777,
+// 700:#636363,
+// 800: #444444,
+// 900:#232323,
+// contrast: (
+//     50: rgba(black, 0.87),
+//     100: rgba(black, 0.87),
+//     200: rgba(black, 0.87),
+//     300: white,
+//     400:white,
+//     500:white,
+//     600:white,
+//    700:white,
+//    800:white,
+//    900:white,
+//   )
+// );
+//   $goldenrod-palette: (
+//  50: #FAF6E1,
+//  100:#F2E6B3,
+//  200:#EAD783,
+//  300:#E3C955,
+//  400:#DfBC35,
+//  500:#DAB127,
+//  600:#DAA520,
+// 700:#D9951A,
+// 800: #D88616,
+// 900:#D46B0F,
+//  contrast: (
+//    50: rgba(black, 0.87),
+//    100: rgba(black, 0.87),
+//    200: rgba(black, 0.87),
+//    300: white,
+//    400:white,
+//    500:white,
+//    600:white,
+//   700:white,
+//   800:white,
+//   900:white,
+//  )
+// );
+// $my-primary: mat-palette($goldenrod-palette, 600);
+// $my-accent: mat-palette($dark-palette, A200, A100, A400);
+
+// $my-theme: mat-light-theme($my-primary,$my-accent);
+// @include angular-material-theme($my-theme);

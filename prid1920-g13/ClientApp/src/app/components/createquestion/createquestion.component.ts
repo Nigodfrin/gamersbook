@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ViewEncapsulation, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild, ViewEncapsulation, AfterViewInit, AfterViewChecked } from "@angular/core";
 import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn, Validators, ValidationErrors } from "@angular/forms";
 import { Tag } from "src/app/models/Tag";
 import { TagService } from "src/app/services/tag.service";
@@ -13,25 +13,17 @@ import { Observable } from "rxjs";
 import { MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
 import { startWith, map } from "rxjs/operators";
 import * as _ from 'lodash';
-import { SimplemdeComponent } from "ngx-simplemde";
-import { SimplemdeOptions } from "ngx-simplemde/src/config";
 
 @Component({
   templateUrl: './createquestion.component.html',
   styleUrls: ['./createquestion.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class CreateQuestionComponent implements OnInit, AfterViewInit {
+export class CreateQuestionComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('tags', { static: false }) matAutocomplete: MatAutocomplete;
-  @ViewChild('simplemde', { static: true }) private readonly simplemde: SimplemdeComponent;
-  options: SimplemdeOptions = {
-    options :{
 
-      toolbar: ['bold', 'italic', 'heading', '|', 'quote']
-    }
-  };
   visible = true;
   selectable = true;
   removable = true;
@@ -137,7 +129,7 @@ export class CreateQuestionComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     this.changeLinkTitle();
 
   }
@@ -154,23 +146,28 @@ export class CreateQuestionComponent implements OnInit, AfterViewInit {
     });
   }
   changeLinkTitle() {
+    try {
+      
+    } catch (error) {
+      
+    }
     document.getElementsByClassName("smdi-bold")[0].setAttribute("title", "bold (Ctrl+B)")
     document.getElementsByClassName("smdi-italic")[0].setAttribute("title", "italic (Ctrl+I)")
-    document.getElementsByClassName("smdi-strikethrough")[0].setAttribute("title", "strikethrough")
     document.getElementsByClassName("smdi-header")[0].setAttribute("title", "header (Ctrl+H)")
-    document.getElementsByClassName("smdi-code")[0].setAttribute("title", "code (Ctrl+Alt+C)")
     document.getElementsByClassName("smdi-quote-left")[0].setAttribute("title", "quote-left (Ctrl+')")
+    // document.getElementsByClassName("smdi-strikethrough")[0].setAttribute("title", "strikethrough")
+    // document.getElementsByClassName("smdi-code")[0].setAttribute("title", "code (Ctrl+Alt+C)")
     document.getElementsByClassName("smdi-list-ul")[0].setAttribute("title", "list (Ctrl+L)")
     document.getElementsByClassName("smdi-list-ol")[0].setAttribute("title", "list (Ctrl+Alt+L)")
-    document.getElementsByClassName("smdi-eraser")[0].setAttribute("title", "eraser (Ctrl+E)")
+    // document.getElementsByClassName("smdi-eraser")[0].setAttribute("title", "eraser (Ctrl+E)")
     document.getElementsByClassName("smdi-link")[0].setAttribute("title", "link (Ctrl+K)")
     document.getElementsByClassName("smdi-image")[0].setAttribute("title", "image (Ctrl+Alt+I)")
-    document.getElementsByClassName("smdi-table")[0].setAttribute("title", "table")
-    document.getElementsByClassName("smdi-line")[0].setAttribute("title", "line")
+    // document.getElementsByClassName("smdi-table")[0].setAttribute("title", "table")
+    // document.getElementsByClassName("smdi-line")[0].setAttribute("title", "line")
     document.getElementsByClassName("smdi-eye")[0].setAttribute("title", "see (Ctrl+P)")
-    document.getElementsByClassName("smdi-columns")[0].setAttribute("title", "columns (F9)")
-    document.getElementsByClassName("smdi-fullscreen")[0].setAttribute("title", "fullscreen (F11)")
-    document.getElementsByClassName("smdi-question")[0].setAttribute("title", "question")
+    // document.getElementsByClassName("smdi-columns")[0].setAttribute("title", "columns (F9)")
+    // document.getElementsByClassName("smdi-fullscreen")[0].setAttribute("title", "fullscreen (F11)")
+    // document.getElementsByClassName("smdi-question")[0].setAttribute("title", "question")
     document.getElementsByClassName("smdi-undo")[0].setAttribute("title", "undo (Ctrl+Z)")
     document.getElementsByClassName("smdi-redo")[0].setAttribute("title", "redo (Ctrl+Y)")
   }

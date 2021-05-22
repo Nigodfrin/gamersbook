@@ -9,7 +9,7 @@
   <div class="row formGroup">
     <label class="form-label" style="padding-left: 20px;">Body*</label>
     <div class="col-12">
-      <simplemde #simplemde class="simplemdeStyle" [options]="options" [formControl]="ctlBody"></simplemde>
+      <simplemde #simplemde class="simplemdeStyle" [options]="{ toolbar: ['bold', 'italic', 'heading', '|', 'quote','unordered-list','ordered-list','|','link','image','|','preview','undo','redo'] }" [formControl]="ctlBody"></simplemde>
     </div>
   </div>
   <div class="row">
