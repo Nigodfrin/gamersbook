@@ -1,0 +1,40 @@
+@import '~@angular/material/theming';
+@include mat-core();
+@import 'custom.scss';
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+.center_div {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto; 
+} 
+nav.center_div {
+    margin-bottom: 25px;
+}
+.field-error {
+    float: right;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+.footer {
+    margin-top: 20px;
+    display: inline-grid;
+    grid-template-columns: auto auto;
+}
+/* ovveride material ui theme */
+.mat-focused .mat-form-field-label {
+    /*change color of label*/
+    color: var(--primaryLight) !important;
+   }
+  
+.mat-form-field-underline {
+    /*change color of underline*/
+    background-color: var(--primaryLight) !important;
+  } 
+  
+.mat-form-field-ripple {
+   /*change color of underline when focused*/
+   background-color: var(--secondaryLight) !important;;
+  }

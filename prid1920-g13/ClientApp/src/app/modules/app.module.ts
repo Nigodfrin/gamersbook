@@ -22,7 +22,6 @@ import { TagListComponent} from '../components/taglist/taglist.component'
 import { PostListComponent } from '../components/postlist/postlist.component';
 import {ReadQuestion} from '../components/readquestion/readquestion.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { SimplemdeModule } from 'ngx-simplemde';
 import { EditCommentComponent } from '../components/edit-comment/edit-comment.component';
 import { CreateQuestionComponent } from '../components/createquestion/createquestion.component';
 import { EditTagComponent } from '../components/edit-tag/edit-tag.component';
@@ -40,6 +39,7 @@ import { CreateEventComponent } from '../components/create-event.component/creat
 import { MatDatepickerModule } from '@angular/material';
 import { EventListComponent } from '../components/event-list-component/event-list.component';
 import { InputBadgeComponent } from '../components/event-list-component/inputBadge/input-badge-component';
+import { SimplemdeModule } from 'ngx-simplemde';
 
 @NgModule({
   declarations: [
@@ -84,7 +84,9 @@ import { InputBadgeComponent } from '../components/event-list-component/inputBad
     SharedModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
     SimplemdeModule.forRoot({
-      
+      options: {
+        autosave: { enabled: true, uniqueId: 'MyUniqueID' },
+      },
     }),
     ImageCropperModule,
     NguCarouselModule,

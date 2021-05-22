@@ -1,25 +1,25 @@
 .isHere {
-    background-color: #28a745; 
+    background-color: var(--primaryLight); 
     padding: 0.6rem 0.75rem;
     border-radius: 5px;
     font-weight: 400;
     font-size: 1rem;
-    color: white;
+    color: var(--secondaryLight);
     margin-right: 10px;
 }
 .notHere {
-    border: 1px solid #28a745;;
+    border: 1px solid var(--primaryLight);
     padding: 0.6rem 0.75rem;
     font-weight: 400;
     border-radius: 5px;
     font-size: 1rem;
-    color: #28a745;
+    color: var(--primaryLight);
     vertical-align: middle;
     margin-right: 10px;
 
 }
 .up {
-    color: green;
+    color: var(--success);
     font-size: 16px;
 }
 .down {
@@ -27,20 +27,32 @@
     font-size: 16px;
 }
 .filter-input{
-    background-color: #444444;
-    color: #fff;
-    border: 1px solid #fff;
+    background-color: var(--primaryDark);
+    color: var(--secondaryLight);
+    border: 1px solid var(--secondaryLight);
     border-radius: 500px;
     padding: 0px 10px;
     width: 60%;
     outline: none;
 }
 .custom-btn {
-    color: #fff;
-    background-color: #444444;
-    border-color: #565656;
-    border: 1px solid #fff;
+    color: var(--secondaryLight);
+    background-color: var(--primaryDark);
+    border-color: var(--secondaryDark);
+    border: 1px solid var(--secondaryLight);
 }
-
-
+.post-card{
+    background: var(--primaryDark);
+    border: 1px solid var(--primaryLight);
+    margin: 10px 0px;
+}
+.btn-outline-goldenrod{
+    color: var(--primaryLight);
+    border:1px solid var(--primaryLight);
+}
+.btn-outline-goldenrod:hover {
+    color: var(--primaryDark);
+    background-color: var(--primaryLight);
+    border-color: var(--primaryLight);
+}
 

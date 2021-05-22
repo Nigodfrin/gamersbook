@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild, ViewEncapsulation, AfterViewInit } from "@angular/core";
 import { FormGroup, FormBuilder, FormControl, FormArray, ValidatorFn, Validators, ValidationErrors } from "@angular/forms";
 import { Tag } from "src/app/models/Tag";
 import { TagService } from "src/app/services/tag.service";
@@ -13,16 +13,25 @@ import { Observable } from "rxjs";
 import { MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
 import { startWith, map } from "rxjs/operators";
 import * as _ from 'lodash';
+import { SimplemdeComponent } from "ngx-simplemde";
+import { SimplemdeOptions } from "ngx-simplemde/src/config";
 
 @Component({
   templateUrl: './createquestion.component.html',
   styleUrls: ['./createquestion.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
-export class CreateQuestionComponent implements OnInit {
-  
+export class CreateQuestionComponent implements OnInit, AfterViewInit {
+
   @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('tags', { static: false }) matAutocomplete: MatAutocomplete;
-  
+  @ViewChild('simplemde', { static: true }) private readonly simplemde: SimplemdeComponent;
+  options: SimplemdeOptions = {
+    options :{
+
+      toolbar: ['bold', 'italic', 'heading', '|', 'quote']
+    }
+  };
   visible = true;
   selectable = true;
   removable = true;
@@ -52,22 +61,22 @@ export class CreateQuestionComponent implements OnInit {
       map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
   }
   addTontags(event: MatChipInputEvent): void {
-      const input = event.input;
-      const value = event.value;
-      const x = this.allTags.find(tag => tag.name == value.trim());
-      if((value || '').trim() && x) {
-        this.ntags.push(this.allTags.find(tag => tag.name == value.trim()));
-        this.allTags = _.remove(this.allTags,tag => tag.name != value.trim());
-      }
-      else {
-        this.tagsCtrl.setErrors({invalidInput: true});
-      }
-      if (input) {
-        input.value = '';
-      }
-      if(this.tagsCtrl.valid){
-        this.tagsCtrl.setValue(null);
-      }
+    const input = event.input;
+    const value = event.value;
+    const x = this.allTags.find(tag => tag.name == value.trim());
+    if ((value || '').trim() && x) {
+      this.ntags.push(this.allTags.find(tag => tag.name == value.trim()));
+      this.allTags = _.remove(this.allTags, tag => tag.name != value.trim());
+    }
+    else {
+      this.tagsCtrl.setErrors({ invalidInput: true });
+    }
+    if (input) {
+      input.value = '';
+    }
+    if (this.tagsCtrl.valid) {
+      this.tagsCtrl.setValue(null);
+    }
   }
 
   remove(tag: Tag): void {
@@ -81,7 +90,7 @@ export class CreateQuestionComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.ntags.push(this.allTags.find(tag => tag.name == event.option.viewValue));
-    this.allTags = _.remove(this.allTags,tag => tag.name != event.option.viewValue);
+    this.allTags = _.remove(this.allTags, tag => tag.name != event.option.viewValue);
     this.tagInput.nativeElement.value = '';
     this.tagsCtrl.setValue(null);
   }
@@ -97,7 +106,7 @@ export class CreateQuestionComponent implements OnInit {
       this.postService.getById(id).subscribe(post => {
         this.question = post;
         this.ntags = post.tags;
-       this.ctlBody = this.fb.control(post.body, [Validators.required]);
+        this.ctlBody = this.fb.control(post.body, [Validators.required]);
         this.ctlTitle = this.fb.control(post.title, [Validators.required]);;
         this.tmpBody = post.body;
         this.tmpTitle = post.title;
@@ -108,7 +117,7 @@ export class CreateQuestionComponent implements OnInit {
         }, {});
         this.tagService.getAll().subscribe(tags => {
           this.ntags.forEach(tag => {
-            tags = _.remove(tags,t =>  tag.name != t.name);
+            tags = _.remove(tags, t => tag.name != t.name);
           });
           this.allTags = tags;
         });
@@ -122,22 +131,47 @@ export class CreateQuestionComponent implements OnInit {
         body: this.ctlBody,
         title: this.ctlTitle,
         tags: this.tagsCtrl
-      },);
+      });
       this.tagService.getAll().subscribe(tags => {
         this.allTags = tags;
       });
     }
   }
+  ngAfterViewInit() {
+    this.changeLinkTitle();
+
+  }
   add() {
-    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value,this.ntags).subscribe( res => {
+    this.postService.addQuestion(this.ctlTitle.value, this.ctlBody.value, this.ntags).subscribe(res => {
       this.router.navigate(['/postlist']);
-    });      
+    });
   }
   update() {
     var id = this.route.snapshot.paramMap.get('id');
-    var post: Post = new Post({ id: id, body: this.ctlBody.value, title: this.ctlTitle.value,tags: this.ntags });
+    var post: Post = new Post({ id: id, body: this.ctlBody.value, title: this.ctlTitle.value, tags: this.ntags });
     this.postService.update(post).subscribe(res => {
       this.router.navigate(['/postlist']);
     });
+  }
+  changeLinkTitle() {
+    document.getElementsByClassName("smdi-bold")[0].setAttribute("title", "bold (Ctrl+B)")
+    document.getElementsByClassName("smdi-italic")[0].setAttribute("title", "italic (Ctrl+I)")
+    document.getElementsByClassName("smdi-strikethrough")[0].setAttribute("title", "strikethrough")
+    document.getElementsByClassName("smdi-header")[0].setAttribute("title", "header (Ctrl+H)")
+    document.getElementsByClassName("smdi-code")[0].setAttribute("title", "code (Ctrl+Alt+C)")
+    document.getElementsByClassName("smdi-quote-left")[0].setAttribute("title", "quote-left (Ctrl+')")
+    document.getElementsByClassName("smdi-list-ul")[0].setAttribute("title", "list (Ctrl+L)")
+    document.getElementsByClassName("smdi-list-ol")[0].setAttribute("title", "list (Ctrl+Alt+L)")
+    document.getElementsByClassName("smdi-eraser")[0].setAttribute("title", "eraser (Ctrl+E)")
+    document.getElementsByClassName("smdi-link")[0].setAttribute("title", "link (Ctrl+K)")
+    document.getElementsByClassName("smdi-image")[0].setAttribute("title", "image (Ctrl+Alt+I)")
+    document.getElementsByClassName("smdi-table")[0].setAttribute("title", "table")
+    document.getElementsByClassName("smdi-line")[0].setAttribute("title", "line")
+    document.getElementsByClassName("smdi-eye")[0].setAttribute("title", "see (Ctrl+P)")
+    document.getElementsByClassName("smdi-columns")[0].setAttribute("title", "columns (F9)")
+    document.getElementsByClassName("smdi-fullscreen")[0].setAttribute("title", "fullscreen (F11)")
+    document.getElementsByClassName("smdi-question")[0].setAttribute("title", "question")
+    document.getElementsByClassName("smdi-undo")[0].setAttribute("title", "undo (Ctrl+Z)")
+    document.getElementsByClassName("smdi-redo")[0].setAttribute("title", "redo (Ctrl+Y)")
   }
 }

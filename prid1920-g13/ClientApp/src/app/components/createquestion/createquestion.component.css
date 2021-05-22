@@ -1,3 +1,20 @@
+.simplemdeStyle {
+}
+
+/* override style of simplemde */
 .CodeMirror {
-    background: red !important;
+    background: var(--primaryDark) !important;
+    color: var(--secondaryLight);
+}
+.editor-toolbar a {
+    color: goldenrod !important;
+}
+.editor-statusbar {
+    color: goldenrod !important;
+}
+.editor-preview {
+    background: var(--primaryDark);
+}
+.editor-preview-side{
+    color: black;
 }

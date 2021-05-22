@@ -2,7 +2,7 @@
   <div style="display: flex;justify-content: space-between;">
     <h2>All Questions</h2>
     <span>
-      <button [disabled]="!currentUser" class="btn btn-primary" [routerLink]='["/createquestion"]'>Ask question</button>
+      <button [disabled]="!currentUser" class="btn btn-outline-goldenrod" [routerLink]='["/createquestion"]'>Ask question</button>
     </span>
   </div>
   <div style="display: flex;justify-content: space-between;">
@@ -26,15 +26,15 @@
       </div>
   </div>
 </div>
-<div style="display: flex;flex-direction: column;">
-  <mat-card class="col-12" style="margin: 10px 0px;" *ngFor="let post of posts">
+<div class="row">
+  <mat-card class="col-12 post-card" *ngFor="let post of posts">
     <mat-card-header>
       <mat-card-title [ngClass]="(post.score >= 0) ? 'up' : 'down'"> Score : {{post.score}}</mat-card-title>
       <mat-card-title [ngClass]="(post.maxScore >= 0) ? 'up' : 'down'">MaxScore : {{post.maxScore}}</mat-card-title>
       <mat-card-title-group>
         <mat-card-title>
           <h4>
-            <a [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
+            <a style="color: var(--primaryLight);" [routerLinkActive]='["link-active"]' [routerLink]="['/readquestion',post.id]">{{post.title}}</a>
           </h4>
         </mat-card-title>
         <mat-card-subtitle>{{post.timestamp | date: 'd MMM, y, h:mm:ss'}} by {{post.user.pseudo}} Reputation :
@@ -42,7 +42,7 @@
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
-      <p>
+      <p style="word-break: break-word;">
         {{(post.body.length>300)? (post.body | slice:0:300)+'...':(post.body)}}
       </p>
       <p>
@@ -56,7 +56,7 @@
         <mat-icon style="vertical-align: top; margin-left: 7px;" *ngIf="post.acceptedPostId != null">done_outline
         </mat-icon>
       </span>
-      <button class="btn btn-outline-success" [routerLinkActive]='["link-active"]'
+      <button class="btn btn-outline-goldenrod" [routerLinkActive]='["link-active"]'
         [routerLink]="['/readquestion',post.id]">See</button>
       <span *ngIf="authService.isAdmin() || isAuthor(post)">
         <button mat-icon-button tabindex="-1">
