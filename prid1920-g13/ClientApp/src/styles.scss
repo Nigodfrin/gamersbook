@@ -24,7 +24,7 @@
   }
   
   /* override badge style */
-  .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
+.mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
     right: -8px;
 }
 .mat-badge-small.mat-badge-after .mat-badge-content {
@@ -72,6 +72,11 @@
 }
 .mat-icon {
     position: relative;
+}
+
+/* override card theme */
+.mat-card {
+    background: #444444;
 }
 
 //   $dark-palette: (

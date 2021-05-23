@@ -9,7 +9,7 @@ import { MatTableState } from 'src/app/helpers/mattable.state';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SignalRService } from 'src/app/services/signalR.service';
-import { Notif } from 'src/app/models/Notif';
+import { Notif, NotificationTypes } from 'src/app/models/Notif';
 import { StoreService } from '../Store/store.service';
 import { ApiService } from '../Store/api-store.service';
 @Component({
@@ -68,7 +68,13 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         }
         else {
             this.userService.addFriend(user).subscribe();
-        const notif = new Notif({from: this.authService.currentUser.pseudo,see: false,type:'Relationship'});
+        const notif = new Notif({
+            notificationType: NotificationTypes.FriendshipInvitation,
+            senderId : this.authService.currentUser.id,
+            see : false,
+            receiverId : user.id,
+            createdOn : new Date(Date.now()),
+        });
         this.chatService.addFriendNotif(user,notif);
         }
         

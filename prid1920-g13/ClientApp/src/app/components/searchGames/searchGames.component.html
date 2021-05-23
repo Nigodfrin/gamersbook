@@ -1,11 +1,11 @@
 <form>
     <label>Search</label>
     <input type="text" [formControl]="ctlSearch">
-    <button mat-button color="primary" (click)="search()">Search</button>
+    <button mat-button  (click)="search()">Search</button>
 </form>
 <section *ngIf="searchedGames" class="container">
     <div class="row justify-content-center">
-        <mat-card class="col-lg-3 col-md-5 col-sm-9 gameCard" *ngFor="let game of searchedGames">
+        <mat-card  class="col-lg-3 col-md-5 col-sm-9 gameCard" *ngFor="let game of searchedGames">
             <mat-card-header>
               <mat-card-title title="{{game.name}}" style="font-size: 16px;"> {{(game.name.length>20)? (game.name | slice:0:20)+'...':(game.name)}}</mat-card-title>
               <mat-card-subtitle>{{game.expected_release_day}}/{{game.expected_release_month}}/{{game.expected_release_year}}</mat-card-subtitle>

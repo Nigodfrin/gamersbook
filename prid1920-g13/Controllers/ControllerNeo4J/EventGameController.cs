@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using prid_1819_g13.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace prid_1819_g13.Controllers
 {
@@ -69,6 +70,18 @@ namespace prid_1819_g13.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Event>> CreateEvent(Event eventData)
+        { 
+            _context.Events.Add(eventData);
+            await _context.SaveChangesAsync();
+            var e = _context.Events.FirstOrDefault(e => e.Name == eventData.Name && e.CreatedByUserId == eventData.CreatedByUserId);
+            if (e == null)
+            {
+                return NotFound();
+            }
+            return e;
+        }
+        [HttpPost("participationResponse")]
+        public async Task<ActionResult<Event>> ParticipationResponse(Event eventData)
         {
             _context.Events.Add(eventData);
             await _context.SaveChangesAsync();

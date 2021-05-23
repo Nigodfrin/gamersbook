@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
     constructor(private fb: FormBuilder,private router: ActivatedRoute,private gameService: GameService, private authService: AuthenticationService, private dialog: MatDialog, private userService: UserService) {
         if(this.router.snapshot.paramMap.get('id')){
             this.userId = this.router.snapshot.paramMap.get('id');
-            this.userService.getById(this.userId).subscribe(res => {
+            this.userService.getById(this.authService.currentUser.id).subscribe(res => {
                 this.userProfile = res;
             });
         }

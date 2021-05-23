@@ -16,7 +16,7 @@ export class Event
     langue: string
     nbUsers: string
     // accessType: AccessType
-    createdByUserId: string;
+    createdByUserId: number;
     gameId: number;
     game: Game;
     constructor(data) {

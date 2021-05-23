@@ -39,12 +39,13 @@ export class UserService {
       .pipe(map(res => res.map(m => new Game(m))));
   }
 
-  getById(pseudo: string): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}api/users/${pseudo}`).pipe(
+  getById(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}api/users/${userId}`).pipe(
       map(m => !m ? null : new User(m)),
       catchError(err => of(null))
     );
   }
+
   getNotifs() {
     return this.http.get<Notif[]>(`${this.baseUrl}api/users/notifications`)
     .pipe(map(res => res.map(m => new Notif(m))));

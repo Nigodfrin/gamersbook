@@ -23,8 +23,7 @@ export class NotifsService {
       );
   }
   sendNotification(notif: Notif,users: User[]){
-    var notifEvent = new NotifEvent({notif: notif,users:users});
-    return this.http.post(`${this.baseUrl}api/notifsNeo4J`,notifEvent)
+    return this.http.post(`${this.baseUrl}api/notification`,notif)
     .pipe(
       map(res => true),
       catchError(err => {

@@ -10,7 +10,7 @@ using prid_1819_g13.Models;
 
 namespace prid_1819_g13.Controllers
 {
-    [Route("api/notifsNeo4J")]
+    [Route("api/notification")]
     [ApiController]
     public class NotificationNeo4JController : ControllerBase
     {
@@ -21,15 +21,8 @@ namespace prid_1819_g13.Controllers
         }
 
         [HttpPost] 
-        public async Task<Notification> SendNotification(int id,int idReceiver,int eventId)
+        public async Task<Notification> SendNotification(Notification notif)
         {
-            var notif = new Notification(){
-                SenderId = id,
-                ReceiverId = idReceiver,
-                NotificationType = NotificationTypes.Event,
-                EventId = eventId,
-                See = false
-            };
             _context.Notifications.Add(notif);
             var res = await _context.SaveChangesAsync();
             return notif;

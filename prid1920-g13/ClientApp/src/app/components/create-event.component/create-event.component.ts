@@ -15,9 +15,10 @@ import { Game } from "src/app/models/Game";
 import { EventGame } from "src/app/models/EventGame";
 import { EventData } from "src/app/models/EventData";
 import { EventGameService } from "src/app/services/event.service";
-import { Notif } from "src/app/models/Notif";
+import { Notif, NotificationTypes } from "src/app/models/Notif";
 import { NotifsService } from "src/app/services/notifs.service";
 import { Event } from "src/app/models/Event";
+import { SignalRService } from "src/app/services/signalR.service";
 
 
 @Component({
@@ -75,7 +76,7 @@ export class CreateEventComponent implements OnInit {
 
   types: string[] = ['Public', 'Friends', 'ParticularFriend']
 
-  constructor(private notifServ: NotifsService, private eventService: EventGameService, private nbdAdapter: NgbDateNativeAdapter, private userServ: UserService, private fb: FormBuilder, private authServ: AuthenticationService) {
+  constructor(private hub: SignalRService,private notifServ: NotifsService, private eventService: EventGameService, private nbdAdapter: NgbDateNativeAdapter, private userServ: UserService, private fb: FormBuilder, private authServ: AuthenticationService) {
     this.start = this.nbdAdapter.fromModel(new Date(Date.now()));
     this.startDate = fb.control(this.start, [Validators.required]);
     this.endDate = fb.control(this.start, [Validators.required]);
@@ -173,15 +174,24 @@ export class CreateEventComponent implements OnInit {
     const gametm = this.games.find(game => game.name === this.ctlGame.value);
     let startdate = this.nbdAdapter.toModel(this.frm.value.start_date);
     let enddate = this.nbdAdapter.toModel(this.frm.value.end_date);
-    Object.assign(this.frm.value, { start_date: startdate, end_date: enddate, createdBy: this.authServ.currentUser.pseudo });
+    Object.assign(this.frm.value, { start_date: startdate, end_date: enddate, createdByUserId: this.authServ.currentUser.id });
     const ev = Object.assign({}, { ...this.frm.value }, { gameId: gametm.id });
     const eventData = new Event(ev);
     console.log(eventData);
     this.eventService.createEvent(eventData).subscribe(res => {
       if (this.frm.value.eventType === 'ParticularFriend') {
-        const notif = new Notif({ see: false, senderPseudo: this.authServ.currentUser.pseudo, type: "eventInvitation", uuidEvent: res.id })
-        this.notifServ.sendNotification(notif, this.nFriends).subscribe(res => {
-
+        this.nFriends.forEach(user => {
+          const notif = new Notif({ 
+            see: false, 
+            senderId: this.authServ.currentUser.id, 
+            notificationType: NotificationTypes.EventInvitation, 
+            eventId: res.id ,
+            receiverId: user.id,
+            createdOn: new Date(Date.now())
+          })
+          this.notifServ.sendNotification(notif, null).subscribe(res => {
+            this.hub.addFriendNotif(user,notif);
+          });
         });
       }
     });

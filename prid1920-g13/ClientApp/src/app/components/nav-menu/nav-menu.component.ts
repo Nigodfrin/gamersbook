@@ -3,7 +3,7 @@ import { User, Role } from '../../models/User';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { Notif } from 'src/app/models/Notif';
+import { Notif, NotificationTypes } from 'src/app/models/Notif';
 import {ToastService} from '../../Helpers/toast/toast.service';
 import * as _ from 'lodash';
 import { SignalRService } from 'src/app/services/signalR.service';
@@ -26,6 +26,7 @@ export class NavMenuComponent {
   notifications: Notif[] = [];
   numNotif: number = this.notifications.length;
   allUsers: User [] = [];
+  notiftype = NotificationTypes;
   constructor(
     private eventServ: EventGameService,
     private chatServ: SignalRService,
@@ -83,7 +84,6 @@ export class NavMenuComponent {
   }
   getNotifs(){
     this.userServ.getNotifs().subscribe(res => {
-      console.log(res);
       this.notifications = res;
       this.numNotif = res.length;
     });

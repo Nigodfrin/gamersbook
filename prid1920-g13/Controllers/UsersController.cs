@@ -90,9 +90,9 @@ namespace prid_1819_g13.Controllers
                 Email = data.Email,
                 PicturePath = data.PicturePath
             };
-            _context.Users.Add(newUser);
             var res = await _context.SaveChangesAsyncWithValidation();
-            var userN = await this.GetOneUser(newUser.Pseudo);
+
+            var userN = await this.GetOneUser(newUser.Id);
             // await new UserNeo4JController().CreateUser(userN.Value);
             if (!res.IsEmpty)
                 return BadRequest(res);
@@ -101,9 +101,9 @@ namespace prid_1819_g13.Controllers
         }
 
         [HttpGet("{pseudo}")]
-        public async Task<ActionResult<UserDTO>> GetOneUser(string pseudo)
+        public async Task<ActionResult<UserDTO>> GetOneUser(int pseudo)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(p => p.Pseudo == pseudo);
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == pseudo);
             if (user == null)
                 return NotFound();
             return user.ToDTO();
@@ -461,7 +461,7 @@ namespace prid_1819_g13.Controllers
             {
                 SenderId = user.Id,
                 ReceiverId = friend.Id,
-                NotificationType = NotificationTypes.Friendship,
+                NotificationType = NotificationTypes.FriendshipInvitation,
             };
             _context.Notifications.Add(notif);
             await _context.SaveChangesAsync();

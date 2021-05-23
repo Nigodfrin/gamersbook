@@ -9,7 +9,6 @@
     word-wrap: break-word;
     background-color: #565656;
     background-clip: border-box;
-    border: 1px solid rgba(218, 165, 32, 0.2);
     border-radius: 0.25rem;
     margin: 5px;
 }
@@ -27,6 +26,15 @@
     flex: 1 1 auto;
     min-height: 1px;
     padding: 1.25rem;
+    border: 1px solid rgba(218, 165, 32, 0.2);
+    display: flex;
+    justify-content: space-between;
+}
+.card-event-img {
+    width: auto;
+    max-width: 300px;
+    height: auto;
+    max-height: 200px;
 }
 .badge {
     font-size: 100%;

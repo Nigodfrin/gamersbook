@@ -1,24 +1,29 @@
 <div style="display: flex;flex-direction: column;">
-    <div class="filterDiv">
-        <input-badge (filterEvents)="applyFilter($event)" [tableData]="games"></input-badge>
-        <!-- TO DO filter
+  <div class="filterDiv">
+    <input-badge (filterEvents)="applyFilter($event)" [tableData]="games"></input-badge>
+    <!-- TO DO filter
         ami qui participe;
         jeu;
         date;
         heure;
         langue; -->
+  </div>
+  <div *ngFor="let event of eventsData" class="card-event">
+    <div class="card-event-header">
+      <h4>{{event.name}}</h4>
     </div>
-    <div *ngFor="let event of eventsData" class="card-event">
-        <div class="card-event-header">
-          <h4>{{event.name}}</h4>
+    <div class="card-event-body">
+      <div>
+        <h5 class="card-title">{{event.game.name}}</h5>
+        <p class="card-text">{{event.description}}</p>
+        <div>
+          Start <span class="badge badge-pill badge-warning">{{event.start_date | date: 'short'}}</span> End <span
+            class="badge badge-pill badge-warning">{{event.end_date | date: 'short'}}</span>
+          <br />language : {{event.langue}}
         </div>
-        <div class="card-event-body">
-          <h5 class="card-title">{{event.game.name}}</h5>
-          <p class="card-text">{{event.description}}</p>
-          <div>
-              Start <span class="badge badge-pill badge-warning">{{event.start_date | date: 'short'}}</span> End <span class="badge badge-pill badge-warning">{{event.end_date | date: 'short'}}</span>
-              <br/>language : {{event.langue}}
-          </div>
-        </div>
+        <button mat-button (click)="askParticipation(event)">Participate</button>
       </div>
+      <img class="card-event-img" src="{{event.game.image}}" alt={{event.game.name}} />
+    </div>
+  </div>
 </div>

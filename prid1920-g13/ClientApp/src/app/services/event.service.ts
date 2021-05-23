@@ -19,6 +19,15 @@ export class EventGameService {
     .pipe(map(res => new Event(res)),
     );
   }
+  askForParticipation(event: Event){
+    return  this.http.post<boolean>(`${this.baseUrl}api/events`,event)
+    .pipe(map(res => res),
+    catchError(err => {
+      console.error(err);
+      return of(false);
+    })    
+    );
+  }
   getEventById(uuid: string) {
     return this.http.get<EventGame>(`${this.baseUrl}api/events/${uuid}`)
     .pipe(map(res => new EventGame(res)),

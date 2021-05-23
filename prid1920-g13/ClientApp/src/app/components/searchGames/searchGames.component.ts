@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { GameService } from "src/app/services/game.service";
 import { Game } from "src/app/models/Game";
@@ -7,7 +7,8 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 
 @Component({
     templateUrl: './searchGames.component.html',
-    styleUrls: ['./searchGames.component.css']
+    styleUrls: ['./searchGames.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class SearchGamesComponent implements OnInit {
     
@@ -40,7 +41,7 @@ export class SearchGamesComponent implements OnInit {
         });
         console.log(jeu);
         this.gamesService.addGameToUser(jeu).subscribe(res => { 
-            this.userService.getById(this.authService.currentUser.pseudo).subscribe(user => {
+            this.userService.getById(this.authService.currentUser.id).subscribe(user => {
                 // sessionStorage.setItem('currentUser',JSON.stringify(user));
                 // this.authService.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
             });

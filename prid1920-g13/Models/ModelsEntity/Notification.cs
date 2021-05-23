@@ -7,8 +7,7 @@ using prid_1819_g13.Models;
 namespace prid_1819_g13
 {
 public enum NotificationTypes {
-    Friendship,
-    Event
+    FriendshipInvitation,RequestFriendshipResponse, EventInvitation,RequestEventParticipation
 }
     public class Notification
     {

@@ -19,4 +19,9 @@ export class Notif {
         }
     }
 }
-export enum NotificationTypes {Friendship, Event}
+export enum NotificationTypes {
+    FriendshipInvitation,
+    RequestFriendshipResponse, 
+    EventInvitation,
+    RequestEventParticipation
+}

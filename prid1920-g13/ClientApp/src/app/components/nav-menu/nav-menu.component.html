@@ -73,8 +73,8 @@
                   <span class="sr-only">unread messages</span>
                 </mat-icon>
               <ng-template #tipContent>
-                <div [ngSwitch]="notif.type"  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
-                  <ng-container  *ngSwitchCase="'eventInvitation'">
+                <div [ngSwitch]="notif.notificationType"  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
+                  <ng-container  *ngSwitchCase="notiftype.EventInvitation">
                     <div class="notif-item">
                       <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has invited you to an <a class="eventName">Event</a> !</div>
                       <span>
@@ -88,7 +88,12 @@
                     </span>         
                   </div>
                   </ng-container>
-                  <ng-container  *ngSwitchCase="'acceptRelationship'">
+                  <ng-container  *ngSwitchCase="notiftype.RequestFriendshipResponse">
+                      <div class="notif-item">
+                          <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has accepted your invitation</div>
+                          </div>
+                  </ng-container>
+                  <ng-container  *ngSwitchCase="notiftype.RequestEventParticipation">
                       <div class="notif-item">
                           <div style="width: 100%"><b>{{notif.senderPseudo | titlecase}}</b> has accepted your invitation</div>
                           </div>

@@ -31,6 +31,9 @@ export class SignalRService {
   addFriendNotif(user: User,notif: Notif) {
     this._hubConnection.invoke('RefreshNotif',user.pseudo,notif);
   }
+  askForParticipation(user: string,notif: Notif) {
+    this._hubConnection.invoke('RefreshNotif',user,notif);
+  }
   private createConnection() {
     this._hubConnection = new HubConnectionBuilder()
       .withUrl('notificationsHub', {accessTokenFactory: () => { return this.authServ.currentUser.token} })
