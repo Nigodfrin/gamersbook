@@ -18,7 +18,7 @@
             <div>
               <label for="select-type">Guest list</label>
               <select [formControl]="ctlType" required class="form-input-type" id="select-type">
-                <option *ngFor="let type of types;let index = index;" [value]="type">{{type}}</option>
+                <option *ngFor="let type of types;let index = index;" [value]="index">{{type}}</option>
               </select>
             </div>
             <div>
@@ -26,7 +26,7 @@
               <input min="1" type="number" id="input-number-user" [formControl]="ctlNumber"/>
             </div>
           </div>
-          <div id="div-select-users" *ngIf="frm.value.eventType === 'ParticularFriend' ">
+          <div id="div-select-users" *ngIf="frm.value.accessType === '2' ">
             <label >Add users</label>
             <mat-chip-list selectable="false" #chipList aria-label="Users selection">
               <mat-chip style="background-color: goldenrod" *ngFor="let friend of nFriends" [selectable]="false"

@@ -8,16 +8,9 @@ using Newtonsoft.Json.Converters;
 
 namespace prid_1819_g13.Models
 {
-public enum AccessType
-{
-    Public,
-    Friends,
-    ParticularFriend
-}
-    public class Event
+    public class EventDTO
     {
-        [Key]
-        public int Id { get; set; }
+         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Start_date {get;set;}
@@ -26,14 +19,8 @@ public enum AccessType
         public int NbUsers{ get; set; }
         public AccessType AccessType { get; set;}
         public int CreatedByUserId { get; set;}
-        public virtual ICollection<UserEvent> UserEvents {get;set;} = new List<UserEvent>();
-        public virtual ICollection<Notification> Notifs {get;set;} = new List<Notification>();
-        [NotMapped]
-        public IEnumerable<User> Participants
-        {
-            get => UserEvents.Select(ue => ue.User);
-        }
+        public List<UserDTO> Participants {get;set;}
         public int GameId {get;set;}
-        public virtual Game Game {get;set;}
+        public virtual GameDTO Game {get;set;}
     }
 }

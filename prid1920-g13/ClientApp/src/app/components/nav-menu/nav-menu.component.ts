@@ -91,7 +91,7 @@ export class NavMenuComponent {
   acceptEvent(notif: Notif,value: boolean,index: number){
     if(value){
       console.log(notif);
-      this.eventServ.acceptEvent(notif).subscribe(res => {
+      this.eventServ.acceptEvent(notif,true).subscribe(res => {
         if(res){
           this.toastService.show(`Your response has been send`, { classname: 'bg-success text-light', delay: 5000 });
           this.notifications.splice(index,1);
@@ -133,6 +133,18 @@ export class NavMenuComponent {
     }
     else {
       this.userServ.refuseFriend(notif.senderId).subscribe(res => {
+        this.toastService.show(`Invitation has been refused`, { classname: 'bg-danger text-light', delay: 5000 });
+      });;
+    }
+  }
+  respondToEventParticipationRequest(notif: Notif, value: boolean,index: number){
+    if(value){
+      this.eventServ.acceptEvent(notif,true).subscribe(res => {
+        this.toastService.show(`Invitation has been accepted`, { classname: 'bg-success text-light', delay: 5000 });
+      });
+    }
+    else {
+      this.eventServ.acceptEvent(notif,false).subscribe(res => {
         this.toastService.show(`Invitation has been refused`, { classname: 'bg-danger text-light', delay: 5000 });
       });;
     }

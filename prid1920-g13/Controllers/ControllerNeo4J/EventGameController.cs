@@ -25,7 +25,12 @@ namespace prid_1819_g13.Controllers
         [HttpGet]
         public async Task<ActionResult<List<EventDTO>>> GetEvents()
         {
-            var events = _context.Events.Where(e => e.AccessType == AccessType.Public);
+            var pseudo = User.Identity.Name;
+            var user = _context.Users.FirstOrDefault(u => u.Pseudo == pseudo);
+            var events = _context.Events.AsEnumerable().Where(e => e.AccessType == AccessType.Public 
+                                            || user.Id == e.CreatedByUserId
+                                            || (e.AccessType == AccessType.Friends && user.Friends.Any(u => u.Id == e.CreatedByUserId))
+                                            );
             if(events == null){
                 return NotFound();
             }
@@ -91,6 +96,40 @@ namespace prid_1819_g13.Controllers
                 return NotFound();
             }
             return e;
+        }
+        [HttpPost("respondToEventRequest/{accepted}")] 
+        public async Task<ActionResult<NotificationDTO>> RespondToEventRequest(bool accepted,NotificationDTO notif)
+        {
+            var evenement = _context.Events.FirstOrDefault(e => e.Id == notif.EventId);
+            var notification = _context.Notifications.FirstOrDefault(n => n.Id == notif.Id);
+            if(!accepted){
+                _context.Notifications.Remove(notification);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            var ue = new UserEvent()
+            {
+                EventId = (int)notif.EventId
+            };
+
+            if(evenement == null){
+                return BadRequest();
+            }
+            switch(notif.NotificationType)
+            {
+                case NotificationTypes.EventInvitation:
+                    ue.UserId = (int)notif.ReceiverId;
+                    break;
+                case NotificationTypes.RequestEventParticipation:
+                    ue.UserId = (int)notif.SenderId;
+                    break;
+                default:
+                    return BadRequest();
+            }
+            _context.Notifications.Remove(notification);
+            _context.UserEvent.Add(ue);
+            var res = await _context.SaveChangesAsync();
+            return notif;
         }
     }
 }

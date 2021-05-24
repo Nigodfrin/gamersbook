@@ -442,7 +442,7 @@ namespace prid_1819_g13.Controllers
             var pseudo = User.Identity.Name;
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
-            var notifications = user.Notifications.ToList();
+            var notifications = user.Notifications.Where(n => n.Sender.Pseudo != pseudo).ToList();
             return notifications.NotificationsToDTO();
         }
         [HttpPost("addFriend")]

@@ -9,7 +9,7 @@ import { EventGameService } from 'src/app/services/event.service';
 import { EventData } from 'src/app/models/EventData';
 import { EventGame } from 'src/app/models/EventGame';
 import * as _ from 'lodash';
-import { Event } from 'src/app/models/Event';
+import { AccessType, Event } from 'src/app/models/Event';
 import { Notif, NotificationTypes } from 'src/app/models/Notif';
 import { NotifsService } from 'src/app/services/notifs.service';
 
@@ -22,6 +22,7 @@ export class EventListComponent implements OnInit {
 
 eventsData: Event[] = [];
 games: Game[]= [];
+types = AccessType;
 
     constructor(private eventGame: EventGameService,
       private userService: UserService,

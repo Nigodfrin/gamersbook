@@ -43,7 +43,13 @@ namespace prid_1819_g13.Models
         public virtual ICollection<Friendship> ReceievedFriendRequests { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
         public virtual ICollection<UserGames> UserGames { get; set; } = new List<UserGames>();
-        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public virtual ICollection<Notification> NotificationsReceived { get; set; } = new List<Notification>();
+        public virtual ICollection<Notification> NotificationsSend { get; set; } = new List<Notification>();
+        [NotMapped]
+        public virtual IEnumerable<Notification> Notifications 
+        {
+            get => NotificationsReceived.Concat(NotificationsSend);
+        }
         [NotMapped]
         public virtual ICollection<User> Friends {
         get

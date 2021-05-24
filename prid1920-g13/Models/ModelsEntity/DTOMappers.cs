@@ -174,10 +174,14 @@ namespace prid_1819_g13.Models
             {
                 CreatedOn = notif.CreatedOn,
                 EventId = notif.EventId,
+                Evenement = notif.Event != null ? notif.Event.EventToDTO() : null,
                 NotificationType = notif.NotificationType,
                 See = notif.See,
                 ReceiverId = notif.ReceiverId,
-                SenderId = notif.SenderId
+                Receiver = notif.Receiver.ToDTO(),
+                SenderId = notif.SenderId,
+                Sender = notif.Sender.ToDTO(),
+                Id = notif.Id
             };
         }
         public static List<NotificationDTO> NotificationsToDTO(this IEnumerable<Notification> notifs)
@@ -187,21 +191,21 @@ namespace prid_1819_g13.Models
 
         public static EventDTO EventToDTO(this Event ev)
         {
-            return new EventDTO { 
-                CreatedByUserId = ev.CreatedByUserId, 
-                Name = ev.Name, 
+            return new EventDTO
+            {
+                CreatedByUserId = ev.CreatedByUserId,
+                Name = ev.Name,
                 AccessType = ev.AccessType,
                 Description = ev.Description,
                 End_date = ev.End_date,
                 Game = ev.Game.GameToDTO(),
-                 Id = ev.Id,
-                 Langue = ev.Langue,
-                 NbUsers = ev.NbUsers,
-                 Start_date = ev.Start_date,
-                 GameId = ev.GameId,
-                 Participants = ev.Participants.ToDTO(),
-                 
-                };
+                Id = ev.Id,
+                Langue = ev.Langue,
+                NbUsers = ev.NbUsers,
+                Start_date = ev.Start_date,
+                GameId = ev.GameId,
+                Participants = ev.UserEvents.Select(ue => ue.User).ToDTO(),
+            };
         }
         public static List<EventDTO> EventsToDTO(this IEnumerable<Event> events)
         {

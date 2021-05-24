@@ -17,7 +17,7 @@ import { EventData } from "src/app/models/EventData";
 import { EventGameService } from "src/app/services/event.service";
 import { Notif, NotificationTypes } from "src/app/models/Notif";
 import { NotifsService } from "src/app/services/notifs.service";
-import { Event } from "src/app/models/Event";
+import { AccessType, Event } from "src/app/models/Event";
 import { SignalRService } from "src/app/services/signalR.service";
 
 
@@ -82,7 +82,7 @@ export class CreateEventComponent implements OnInit {
     this.endDate = fb.control(this.start, [Validators.required]);
     this.ctlName = fb.control('', [Validators.required]);
     this.ctlDesc = fb.control('', Validators.required);
-    this.ctlType = fb.control('Public', Validators.required);
+    this.ctlType = fb.control(0, Validators.required);
     this.ctlNumber = fb.control(0, Validators.required);
     this.ctlLang = fb.control('', []);
     this.ctlGame = fb.control('', Validators.required);
@@ -98,7 +98,6 @@ export class CreateEventComponent implements OnInit {
   getLang() {
     const userLang = navigator.language.slice(0, 2);
     let lang = this.langages.find(l => l.iso === userLang);
-    console.log(lang);
     return lang;
   }
   ngOnInit(): void {
@@ -177,9 +176,10 @@ export class CreateEventComponent implements OnInit {
     Object.assign(this.frm.value, { start_date: startdate, end_date: enddate, createdByUserId: this.authServ.currentUser.id });
     const ev = Object.assign({}, { ...this.frm.value }, { gameId: gametm.id });
     const eventData = new Event(ev);
+    eventData.accessType = Number.parseInt(this.frm.value.accessType);
     console.log(eventData);
     this.eventService.createEvent(eventData).subscribe(res => {
-      if (this.frm.value.eventType === 'ParticularFriend') {
+      if (eventData.accessType === AccessType.ParticularFriend) {
         this.nFriends.forEach(user => {
           const notif = new Notif({ 
             see: false, 

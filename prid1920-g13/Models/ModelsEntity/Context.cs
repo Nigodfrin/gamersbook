@@ -23,6 +23,7 @@ namespace prid_1819_g13.Models
         public DbSet<Notification> Notifications {get;set;}        
         public DbSet<UserDiscussion> UserDiscussions {get;set;}        
         public DbSet<Friendship> Friendships {get;set;}        
+        public DbSet<UserEvent> UserEvent {get;set;}        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -153,8 +154,14 @@ namespace prid_1819_g13.Models
 
             modelBuilder.Entity<Notification>()
             .HasOne(u => u.Receiver)
-            .WithMany(u => u.Notifications)
+            .WithMany(u => u.NotificationsReceived)
             .HasForeignKey(u => u.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+            .HasOne(u => u.Sender)
+            .WithMany(u => u.NotificationsSend)
+            .HasForeignKey(u => u.SenderId)
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Notification>()
@@ -162,6 +169,7 @@ namespace prid_1819_g13.Models
             .WithMany(u => u.Notifs)
             .HasForeignKey(u => u.EventId)
             .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<User>()
             .HasMany(f => f.ReceievedFriendRequests)
             .WithOne(u => u.Addressee)

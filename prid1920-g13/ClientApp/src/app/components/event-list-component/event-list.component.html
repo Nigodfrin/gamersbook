@@ -11,6 +11,7 @@
   <div *ngFor="let event of eventsData" class="card-event">
     <div class="card-event-header">
       <h4>{{event.name}}</h4>
+      <span class="badge badge-pill badge-warning">{{types[event.accessType] }}</span>
     </div>
     <div class="card-event-body">
       <div>

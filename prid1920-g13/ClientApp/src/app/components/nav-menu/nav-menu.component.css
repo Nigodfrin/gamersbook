@@ -103,10 +103,10 @@ html {
 .notif-icon:hover {
   cursor: pointer;
 }
-.eventName {
+.notificationLink {
 color: goldenrod !important;
 }
-.eventName:hover {
+.notificationLink:hover {
   color: #fff !important;
   text-decoration: underline !important;
   cursor: pointer !important;

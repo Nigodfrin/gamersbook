@@ -6,6 +6,7 @@ import { of } from "rxjs";
 import { EventGame } from "../models/EventGame";
 import { Notif } from "../models/Notif";
 import { Event } from "../models/Event";
+import { truncate } from "fs";
 @Injectable({ providedIn: 'root' })
 export class EventGameService {
   constructor(private http: HttpClient,@Inject('BASE_URL') private baseUrl: string) {
@@ -33,9 +34,9 @@ export class EventGameService {
     .pipe(map(res => new EventGame(res)),
     );
   }
-  acceptEvent(notif: Notif) {
+  acceptEvent(notif: Notif,accepted: boolean) {
     console.log(notif)
-    return this.http.post<boolean>(`${this.baseUrl}api/events/acceptInvit`,notif)
+    return this.http.post<boolean>(`${this.baseUrl}api/events/respondToEventRequest/${accepted}`,notif)
     .pipe(map(res => true),
     catchError(err => {
       console.error(err);

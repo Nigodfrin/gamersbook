@@ -21,12 +21,13 @@ namespace prid_1819_g13.Controllers
         }
 
         [HttpPost] 
-        public async Task<Notification> SendNotification(Notification notif)
+        public async Task<Notification> AddNotification(Notification notif)
         {
             _context.Notifications.Add(notif);
             var res = await _context.SaveChangesAsync();
             return notif;
         }
+
 
     }
 }
