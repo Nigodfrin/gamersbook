@@ -3,20 +3,20 @@ a.navbar-brand {
   text-align: center;
 }
 .nav-input {
-  background-color: #444444;
-  color: #fff;
-  border: 1px solid goldenrod;
+  background-color: var(--primaryDark);
+  color: var(--secondaryLight);
+  border: 1px solid var(--primaryLight);
   border-radius: 500px 0px 0px 500px;
   padding: 0px 10px;
   width: 60%;
   outline: none;
 }
 .dropdownItem {
-  color: #fff !important;
+  color: var(--secondaryLight)!important;
   padding: 3px 5px;
 }
 .dropdownItem > a {
-  color: #fff !important;
+  color: var(--secondaryLight) !important;
   text-decoration: none;
   padding: 3px 5px;
   cursor: pointer;
@@ -24,7 +24,7 @@ a.navbar-brand {
   justify-content: left;
 }
 .dropdownItem:hover {
-  background-color: #444444 !important;
+  background-color: var(--primaryDark) !important;
 }
 .dropdownItem-logout{
  display: flex;
@@ -32,24 +32,24 @@ a.navbar-brand {
 }
 .search-icon-nav {
   display: flex; 
-  border: 1px solid goldenrod; 
+  border: 1px solid var(--primaryLight); 
   border-left: none;
   border-radius: 0px 500px 500px 0px;
   padding:0px 5px;
-  color: goldenrod;
+  color: var(--primaryLight);
+  background-color: var(--primaryDark);
 }
 .search-icon-nav:hover {
-  background-color: goldenrod;
+  background-color: var(--primaryLight);
   cursor: pointer;
-  color: #444444 !important;
+  color: var(--primaryDark) !important;
 
 }
 .search-icon-nav :hover{
-  color: #444444 !important;
-
+  color: var(--primaryDark)!important;
 }
 .nav-bg{
-  background-color: #444444 !important;
+  background-color: var(--primaryDark) !important;
 }
 html {
   font-size: 14px;
@@ -71,30 +71,30 @@ html {
 }
 .notif-item {
   padding: 5px 0px;
-  border-bottom: 1px solid goldenrod;
+  border-bottom: 1px solid var(--primaryLight);
 }
 .notif-item:hover {
   opacity: 1 !important;
 }
 .dropdown-menu-custom {
-  background-color: #565656;
+  background-color: var(--secondaryDark);
 }
 .dropdown-item {
-  color: #fff !important;
+  color: var(--secondaryLight)!important;
 }
 .dropdown-item.active {
-  background-color: #444444;
+  background-color: var(--primaryDark);
 }
 .customTooltip .tooltip-inner {
-  background-color: #565656;
-  color: #fff;
+  background-color: var(--secondaryDark);
+  color: var(--secondaryLight);
   min-width: 300px;
   max-width: 300px;
-  border: 1px solid goldenrod;
+  border: 1px solid var(--primaryLight);
   min-height: 250px;
 }
 .customTooltip .arrow::before {
-  border-top-color: #565656;
+  border-top-color:var(--secondaryDark);
 }
 
 .tooltip.show{
@@ -104,10 +104,10 @@ html {
   cursor: pointer;
 }
 .notificationLink {
-color: goldenrod !important;
+color: var(--primaryLight) !important;
 }
 .notificationLink:hover {
-  color: #fff !important;
+  color: var(--secondaryLight) !important;
   text-decoration: underline !important;
   cursor: pointer !important;
 }

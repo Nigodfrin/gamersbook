@@ -40,7 +40,15 @@ import { MatDatepickerModule } from '@angular/material';
 import { EventListComponent } from '../components/event-list-component/event-list.component';
 import { InputBadgeComponent } from '../components/event-list-component/inputBadge/input-badge-component';
 import { SimplemdeModule } from 'ngx-simplemde';
-
+import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction'; // a plugin
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  dayGridPlugin,
+  interactionPlugin,
+  timeGridPlugin
+]);
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +85,7 @@ import { SimplemdeModule } from 'ngx-simplemde';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     HttpClientJsonpModule,
+    FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutes,

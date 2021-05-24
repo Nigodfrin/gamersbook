@@ -1,131 +1,165 @@
 <header>
-  <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-dark nav-bg mb-3'>
-      <a class="navbar-brand" [routerLink]='["/"]'>Code Overflow</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div style="margin-left: 100px;" class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
-        <ul class="navbar-nav flex-grow mr-auto">
-          <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-light" [routerLink]='["/"]'>Home</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-light" [routerLink]='["/postlist"]'>Post list</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-light" [routerLink]='["/create-event"]'>Create Event</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-light" [routerLink]='["/event-list"]'>Events</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-light" [routerLink]='["/searchGame"]'>Search Games</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-            <a class="nav-link text-light" [routerLink]='["/createquestion"]'>Create Question</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-light" [routerLink]='["/taglist"]'>Tags</a>
-          </li>
-          <li class="nav-item" style="display: flex;align-items: center; margin-left: 100px;" [routerLinkActive]='["link-active"]'>
-            <input [ngbTypeahead]="search" id="search" (keyup.enter)="searchUser()" type="text" [(ngModel)]="userSearch" class="input nav-input" placeholder="Search">
-            <div (click)="searchUser()" class="search-icon-nav">
-                <span class="material-icons">search</span>
+  <nav class='navbar navbar-expand-sm navbar-toggleable-sm  navbar-dark nav-bg mb-3'>
+    <a class="navbar-brand" [routerLink]='["/"]'>Code Overflow</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+      aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div  class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
+      <ul class="navbar-nav flex-grow mr-auto">
+        <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <a class="nav-link text-light" [routerLink]='["/"]'>Home</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <a class="nav-link text-light" [routerLink]='["/postlist"]'>Post list</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <a class="nav-link text-light" [routerLink]='["/create-event"]'>Create Event</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <a class="nav-link text-light" [routerLink]='["/event-list"]'>Events</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
+          <a class="nav-link text-light" [routerLink]='["/searchGame"]'>Search Games</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
+          <a class="nav-link text-light" [routerLink]='["/createquestion"]'>Create Question</a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <a class="nav-link text-light" [routerLink]='["/taglist"]'>Tags</a>
+        </li>
+        <form class="form-inline my-2 my-lg-0">
+          <input [ngbTypeahead]="search" id="search" (keyup.enter)="searchUser()"[(ngModel)]="userSearch"
+          class="input nav-input"   type="search" placeholder="Search" aria-label="Search">
+          <button  (click)="searchUser()" class="search-icon-nav" type="submit"> <span class="material-icons">search</span></button>
+        </form>
+        <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
+          <a class="nav-link text-light" [routerLink]='["/login"]'>
+            <span class="material-icons">exit_to_app</span>
+            <span> Login </span>
+          </a>
+        </li>
+        <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
+          <a class="nav-link text-light" [routerLink]='["/signup"]'>
+            <span class="material-icons">queue</span>
+            <span>Signup</span>
+          </a>
+        </li>
+        <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right" *ngIf="currentUser">
+          <a class="nav-link text-light" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
+            {{authenticationService.currentUser.pseudo | titlecase}}
+          </a>
+          <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3"
+            class="dropdown-menu-custom">
+            <div class="dropdownItem">
+              <a [routerLink]='["/profile"]'>
+                <span style="margin-right: 3px;color: goldenrod" class="material-icons">account_circle</span>
+                Profile</a>
             </div>
-          </li>
-        </ul>
-        <ul class="navbar-nav" style="margin-right: 250px;">
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
-            <a class="nav-link text-light" [routerLink]='["/login"]'>
-              <span class="material-icons">exit_to_app</span>
-              <span> Login </span>
-            </a>
-          </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!currentUser">
-            <a class="nav-link text-light" [routerLink]='["/signup"]'>
-              <span class="material-icons">queue</span>
-              <span>Signup</span>
-            </a>
-          </li>
-          <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right" *ngIf="currentUser">
-            <a class="nav-link text-light" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
-              {{authenticationService.currentUser.pseudo  | titlecase}}
-            </a>
-            <div style="background-color: #565656;" ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu-custom">
-                <div class="dropdownItem">
-                    <a [routerLink]='["/profile"]'>
-                      <span style="margin-right: 3px;color: goldenrod" class="material-icons">account_circle</span>
-                      Profile</a>
-                </div>
-              <div class="dropdownItem">
-                <a class='dropdownItem-logout' (click)='logout()'>
+            <div class="dropdownItem">
+              <a class='dropdownItem-logout' (click)='logout()'>
                 <span style="margin-right: 2px;color: goldenrod" class="material-icons">power_settings_new</span>
                 <span> Logout </span>
               </a>
-              </div>
             </div>
-          </li>
-          <li class="nav-item" style="display: flex;
+          </div>
+        </li>
+        <li class="nav-item" style="display: flex;
           align-items: center; margin-left: 10px;" [routerLinkActive]='["link-active"]' *ngIf="currentUser">
-              <mat-icon class="notif-icon" matBadgeSize="small" [ngbTooltip]="tipContent" [autoClose]="'inside'" triggers="click" tooltipClass="customTooltip" style="color: #fff;" matBadge="{{numNotif}}" matBadgeColor="accent">
-                  notification_important
-                  <span class="sr-only">unread messages</span>
-                </mat-icon>
-              <ng-template #tipContent>
-                <div [ngSwitch]="notif.notificationType"  *ngFor="let notif of notifications;let index = index;" class="notifContainer">
-                  <ng-container  *ngSwitchCase="notiftype.EventInvitation">
-                    <div class="notif-item">
-                      <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has invited you to an <a class="notificationLink">Event</a> !</div>
-                      <span>
-                        <button class="btn btn-success btn-sm" (click)="acceptEvent(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                        </svg>Accept</button>
-                        <button class="btn btn-danger btn-sm ml-1" (click)="acceptEvent(notif,false,index)"><svg class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                          <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
-                        </svg>Deny</button>
-                    </span>         
-                  </div>
-                  </ng-container>
-                  <ng-container  *ngSwitchCase="notiftype.RequestFriendshipResponse">
-                      <div class="notif-item">
-                          <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has accepted your invitation</div>
-                          </div>
-                  </ng-container>
-                  <ng-container  *ngSwitchCase="notiftype.RequestEventParticipation">
-                      <div class="notif-item">
-                          <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> want to partipate to <a class="notificationLink">{{notif.evenement.name | titlecase}}</a></div>
-                          </div>
-                          <span>
-                            <button class="btn btn-success btn-sm" (click)="respondToEventParticipationRequest(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                            </svg>Accept</button>
-                            <button class="btn btn-danger btn-sm ml-1" (click)="respondToEventParticipationRequest(notif,false,index)"><svg class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                              <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
-                            </svg>Deny</button>
-                        </span>  
-                  </ng-container>
-                  <ng-container  *ngSwitchDefault>
-                    <div class="notif-item">
-                      <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has invited you as friend !</div>
-                      <span>
-                        <button class="btn btn-success btn-sm" (click)="acceptFriend(notif,true,index)"><svg class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                        </svg>Accept</button>
-                        <button class="btn btn-danger btn-sm ml-1" (click)="acceptFriend(notif,false,index)"><svg class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                          <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"/>
-                        </svg>Deny</button>
-                    </span>         
-                  </div>
-                  </ng-container>
-                  
-              </div>
-              </ng-template>
-          </li>
-        </ul>
-      </div>
+          <mat-icon class="notif-icon" matBadgeSize="small" [ngbTooltip]="tipContent" [autoClose]="'inside'"
+            triggers="click" tooltipClass="customTooltip" style="color: #fff;" matBadge="{{numNotif}}"
+            matBadgeColor="accent">
+            notification_important
+            <span class="sr-only">unread messages</span>
+          </mat-icon>
+          <ng-template #tipContent>
+            <div [ngSwitch]="notif.notificationType" *ngFor="let notif of notifications;let index = index;"
+              class="notifContainer">
+              <ng-container *ngSwitchCase="notiftype.EventInvitation">
+                <div class="notif-item">
+                  <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has invited you to an <a
+                      class="notificationLink">Event</a> !</div>
+                  <span>
+                    <button class="btn btn-success btn-sm" (click)="acceptEvent(notif,true,index)"><svg
+                        class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"
+                          clip-rule="evenodd" />
+                      </svg>Accept</button>
+                    <button class="btn btn-danger btn-sm ml-1" (click)="acceptEvent(notif,false,index)"><svg
+                        class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
+                          clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                          d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
+                          clip-rule="evenodd" />
+                      </svg>Deny</button>
+                  </span>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="notiftype.RequestFriendshipResponse">
+                <div class="notif-item">
+                  <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has accepted your invitation</div>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="notiftype.RequestEventParticipation">
+                <div class="notif-item">
+                  <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> want to partipate to <a
+                      class="notificationLink">{{notif.evenement.name | titlecase}}</a></div>
+                </div>
+                <span>
+                  <button class="btn btn-success btn-sm"
+                    (click)="respondToEventParticipationRequest(notif,true,index)"><svg class="bi bi-check"
+                      width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"
+                        clip-rule="evenodd" />
+                    </svg>Accept</button>
+                  <button class="btn btn-danger btn-sm ml-1"
+                    (click)="respondToEventParticipationRequest(notif,false,index)"><svg class="bi bi-x" width="1.2em"
+                      height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
+                        clip-rule="evenodd" />
+                      <path fill-rule="evenodd"
+                        d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
+                        clip-rule="evenodd" />
+                    </svg>Deny</button>
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <div class="notif-item">
+                  <div style="width: 100%"><b>{{notif.sender.pseudo | titlecase}}</b> has invited you as friend !</div>
+                  <span>
+                    <button class="btn btn-success btn-sm" (click)="acceptFriend(notif,true,index)"><svg
+                        class="bi bi-check" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"
+                          clip-rule="evenodd" />
+                      </svg>Accept</button>
+                    <button class="btn btn-danger btn-sm ml-1" (click)="acceptFriend(notif,false,index)"><svg
+                        class="bi bi-x" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                          d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
+                          clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                          d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
+                          clip-rule="evenodd" />
+                      </svg>Deny</button>
+                  </span>
+                </div>
+              </ng-container>
+
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
   </nav>
 </header>
