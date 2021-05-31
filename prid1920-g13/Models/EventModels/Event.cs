@@ -12,7 +12,7 @@ public enum AccessType
 {
     Public,
     Friends,
-    ParticularFriend
+    Private
 }
     public class Event
     {

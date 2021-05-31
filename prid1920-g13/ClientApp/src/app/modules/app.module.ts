@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbDateNativeAdapter, NgbTimepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient, HttpClientJsonpModule } from '@angular/common/http';
@@ -40,18 +40,17 @@ import { MatDatepickerModule } from '@angular/material';
 import { EventListComponent } from '../components/event-list-component/event-list.component';
 import { InputBadgeComponent } from '../components/event-list-component/inputBadge/input-badge-component';
 import { SimplemdeModule } from 'ngx-simplemde';
-import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
-import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction'; // a plugin
-FullCalendarModule.registerPlugins([ // register FullCalendar plugins
-  dayGridPlugin,
-  interactionPlugin,
-  timeGridPlugin
-]);
+import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar!
+import { ProfileEventsCalendarComponent } from '../components/profile-component/profile-events-component/profile-events-calendar.component';
+import { DatePipe } from '@angular/common';
+import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
+import { EventDetailsComponent } from '../components/event-details-component/event-details.component';
+import { UserLineComponent } from '../components/Ui-components/user-line/user-line.component';
+
 @NgModule({
   declarations: [
     AppComponent,
+    UserLineComponent,
     NavMenuComponent,
     HomeComponent,
     EditTagComponent,
@@ -78,14 +77,16 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     ChatContainerComponent,
     CreateEventComponent,
     EventListComponent,
-    InputBadgeComponent
+    InputBadgeComponent,
+    ProfileEventsCalendarComponent,
+    EventDetailsComponent,
   ],
   entryComponents: [EditUserComponent,EditCommentComponent,EditTagComponent,DialogCropper],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    FullCalendarModule,
     HttpClientModule,
     HttpClientJsonpModule,
-    FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutes,
@@ -104,7 +105,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     MatDatepickerModule,
-    NgbDateNativeAdapter
+    NgbDateNativeAdapter,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

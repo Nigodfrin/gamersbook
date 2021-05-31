@@ -2,7 +2,9 @@
 @include mat-core();
 @import 'custom.scss';
 @import '../node_modules/bootstrap/scss/bootstrap';
-
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
 
 /* ovveride material ui theme */
 .mat-focused .mat-form-field-label {

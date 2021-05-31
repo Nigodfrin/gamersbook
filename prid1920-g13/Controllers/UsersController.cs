@@ -375,6 +375,14 @@ namespace prid_1819_g13.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
             return user.Friends.ToDTO();
         }
+        [HttpGet("getEvents")]
+        public async Task<ActionResult<List<EventDTO>>> getUserEvents()
+        {
+            var pseudo = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Pseudo == pseudo);
+            var createdByuser = _context.Events.Where(e => e.CreatedByUserId == user.Id).AsEnumerable();
+            return user.Events.Concat(createdByuser).EventsToDTO();
+        }
         [HttpPost("acceptFriend")]
         public async Task<IActionResult> AcceptFriendship([FromBody] int id)
         {

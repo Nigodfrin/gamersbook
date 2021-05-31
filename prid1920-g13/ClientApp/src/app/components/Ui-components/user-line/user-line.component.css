@@ -1,0 +1,23 @@
+.btn-add-friend{
+    color: #565656;
+    display: flex;
+    padding: 4px 5px;
+    align-items: center;
+    border: 1px solid #444444;
+    transition: 0.4s;
+    background-color: #fff !important;
+    border-radius: 20px;
+}
+.btn-add-friend:hover {
+    background-color: #565656 !important;
+    color: #fff;
+    cursor: pointer;
+}
+.small-img-user-item{
+    min-width: 50px; 
+    min-height: 50px;
+    max-width: 50px; 
+    max-height: 50px;
+    border-radius: 50%;
+    vertical-align: middle;
+}

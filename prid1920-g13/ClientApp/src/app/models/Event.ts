@@ -4,7 +4,7 @@ import { User } from "./User";
 export enum AccessType {
     Public,
     Friends,
-    ParticularFriend
+    Private
 }
 
 export class Event

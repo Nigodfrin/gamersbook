@@ -22,7 +22,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     filter: string = '';
     users: User[] = [];
     filterUsers: User[] = [];
-    friends: User [];
+    friends: User[];
     constructor(
         private userService: UserService,
         private stor: StoreService,
@@ -39,14 +39,14 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
         });
     }
     ngAfterViewInit(): void {
-        
+
         this.refresh();
     }
     refresh() {
         let name: string;
         this.router.queryParams.subscribe(queryParams => {
             name = queryParams.name;
-            if(name){
+            if (name) {
                 this.userService.getUsers(name).subscribe(users => {
                     this.users = users;
                     this.filterUsers = users;
@@ -54,30 +54,30 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
             }
         });
     }
-    isFriends(user: User){
-        return this.friends.some(u => u.pseudo === user.pseudo );
+    isFriends(user: User) {
+        return this.friends.some(u => u.pseudo === user.pseudo);
     }
     // appelée chaque fois que le filtre est modifié par l'utilisateur
     filterChanged(filterValue: string) {
         const filter = filterValue.toLowerCase();
-        this.filterUsers = _.filter(this.users,user => user.firstName.toLowerCase().includes(filter) || user.lastName.toLowerCase().includes(filter)|| user.pseudo.toLowerCase().includes(filter));
+        this.filterUsers = _.filter(this.users, user => user.firstName.toLowerCase().includes(filter) || user.lastName.toLowerCase().includes(filter) || user.pseudo.toLowerCase().includes(filter));
     }
-    addFriend(user: User){
-        if(this.isFriends(user)){
+    addFriend(user: User) {
+        if (this.isFriends(user)) {
             this.userService.deleteFriend(user.id).subscribe();
         }
         else {
             this.userService.addFriend(user).subscribe();
-        const notif = new Notif({
-            notificationType: NotificationTypes.FriendshipInvitation,
-            senderId : this.authService.currentUser.id,
-            see : false,
-            receiverId : user.id,
-            createdOn : new Date(Date.now()),
-        });
-        this.chatService.addFriendNotif(user,notif);
+            const notif = new Notif({
+                notificationType: NotificationTypes.FriendshipInvitation,
+                senderId: this.authService.currentUser.id,
+                see: false,
+                receiverId: user.id,
+                createdOn: new Date(Date.now()),
+            });
+            this.chatService.addFriendNotif(user, notif);
         }
-        
+
     }
     // appelée quand on clique sur le bouton "edit" d'un membre
     edit(user: User) {

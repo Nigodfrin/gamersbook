@@ -29,9 +29,9 @@ export class EventGameService {
     })    
     );
   }
-  getEventById(uuid: string) {
-    return this.http.get<EventGame>(`${this.baseUrl}api/events/${uuid}`)
-    .pipe(map(res => new EventGame(res)),
+  getEventById(id: string) {
+    return this.http.get<Event>(`${this.baseUrl}api/events/${id}`)
+    .pipe(map(res => new Event(res)),
     );
   }
   acceptEvent(notif: Notif,accepted: boolean) {

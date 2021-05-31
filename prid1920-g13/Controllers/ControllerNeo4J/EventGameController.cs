@@ -27,29 +27,27 @@ namespace prid_1819_g13.Controllers
         {
             var pseudo = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.Pseudo == pseudo);
-            var events = _context.Events.AsEnumerable().Where(e => e.AccessType == AccessType.Public 
+            var events = _context.Events.AsEnumerable().Where(e => e.AccessType == AccessType.Public
                                             || user.Id == e.CreatedByUserId
                                             || (e.AccessType == AccessType.Friends && user.Friends.Any(u => u.Id == e.CreatedByUserId))
                                             );
-            if(events == null){
+            if (events == null)
+            {
                 return NotFound();
             }
 
             return events.EventsToDTO();
         }
-        //         [HttpGet("{uuid}")]
-        //         public async Task<ActionResult<EventsGame>> GetEvent(string uuid){
-        //             await this.Client.ConnectAsync();
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EventDTO>> GetEvent(int id)
+        {
+            var e = _context.Events.FirstOrDefault(e => e.Id == id);
+            if(e == null){
+                return NotFound();
+            }
+            return e.EventToDTO();
 
-        //             var eg = await this.Client.Cypher
-        //             .Match("(e:Event)")
-        //             .Where((EventsGame e) => e.Id == uuid)
-        //             .Return(e => e.As<EventsGame>())
-        //             .ResultsAsync;
-
-        //             return eg.ToList().FirstOrDefault();
-
-        //         }
+        }
         //         [HttpPost("acceptInvit")]
         //         public async Task acceptInvit(NotificationNeo4J notif){
         //             var pseudo = User.Identity.Name;
@@ -75,7 +73,7 @@ namespace prid_1819_g13.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Event>> CreateEvent(Event eventData)
-        { 
+        {
             _context.Events.Add(eventData);
             await _context.SaveChangesAsync();
             var e = _context.Events.FirstOrDefault(e => e.Name == eventData.Name && e.CreatedByUserId == eventData.CreatedByUserId);
@@ -97,12 +95,13 @@ namespace prid_1819_g13.Controllers
             }
             return e;
         }
-        [HttpPost("respondToEventRequest/{accepted}")] 
-        public async Task<ActionResult<NotificationDTO>> RespondToEventRequest(bool accepted,NotificationDTO notif)
+        [HttpPost("respondToEventRequest/{accepted}")]
+        public async Task<ActionResult<NotificationDTO>> RespondToEventRequest(bool accepted, NotificationDTO notif)
         {
             var evenement = _context.Events.FirstOrDefault(e => e.Id == notif.EventId);
             var notification = _context.Notifications.FirstOrDefault(n => n.Id == notif.Id);
-            if(!accepted){
+            if (!accepted)
+            {
                 _context.Notifications.Remove(notification);
                 await _context.SaveChangesAsync();
                 return NoContent();
@@ -112,10 +111,11 @@ namespace prid_1819_g13.Controllers
                 EventId = (int)notif.EventId
             };
 
-            if(evenement == null){
+            if (evenement == null)
+            {
                 return BadRequest();
             }
-            switch(notif.NotificationType)
+            switch (notif.NotificationType)
             {
                 case NotificationTypes.EventInvitation:
                     ue.UserId = (int)notif.ReceiverId;

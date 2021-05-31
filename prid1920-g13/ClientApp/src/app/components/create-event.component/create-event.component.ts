@@ -3,17 +3,13 @@ import * as _ from 'lodash';
 import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from "@angular/core";
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from "@angular/material";
 import { COMMA } from "@angular/cdk/keycodes";
-import { FormControl, FormGroup, FormBuilder, Validators, ValidationErrors } from "@angular/forms";
+import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { User } from "src/app/models/User";
-import { StoreService } from "../Store/store.service";
-import { ApiService } from "../Store/api-store.service";
 import { UserService } from "src/app/services/user.service";
-import { NgbDateAdapter, NgbDate, NgbDateNativeAdapter, NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
+import { NgbDateNativeAdapter, NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { Game } from "src/app/models/Game";
-import { EventGame } from "src/app/models/EventGame";
-import { EventData } from "src/app/models/EventData";
 import { EventGameService } from "src/app/services/event.service";
 import { Notif, NotificationTypes } from "src/app/models/Notif";
 import { NotifsService } from "src/app/services/notifs.service";
@@ -76,7 +72,13 @@ export class CreateEventComponent implements OnInit {
 
   types: string[] = ['Public', 'Friends', 'ParticularFriend']
 
-  constructor(private hub: SignalRService,private notifServ: NotifsService, private eventService: EventGameService, private nbdAdapter: NgbDateNativeAdapter, private userServ: UserService, private fb: FormBuilder, private authServ: AuthenticationService) {
+  constructor(private hub: SignalRService,
+    private notifServ: NotifsService, 
+    private eventService: EventGameService, 
+    private nbdAdapter: NgbDateNativeAdapter,
+    private userServ: UserService, 
+    private fb: FormBuilder, 
+    private authServ: AuthenticationService) {
     this.start = this.nbdAdapter.fromModel(new Date(Date.now()));
     this.startDate = fb.control(this.start, [Validators.required]);
     this.endDate = fb.control(this.start, [Validators.required]);
@@ -84,10 +86,10 @@ export class CreateEventComponent implements OnInit {
     this.ctlDesc = fb.control('', Validators.required);
     this.ctlType = fb.control(0, Validators.required);
     this.ctlNumber = fb.control(0, Validators.required);
-    this.ctlLang = fb.control('', []);
+    this.ctlLang = fb.control(this.getLang(), []);
     this.ctlGame = fb.control('', Validators.required);
-    this.ctlTimepickerStart = fb.control({ hour: 13, minute: 30 }, []);
-    this.ctlTimepickerEnd = fb.control({ hour: 14, minute: 30 }, []);
+    this.ctlTimepickerStart = fb.control({ hour: 12, minute: 0 }, []);
+    this.ctlTimepickerEnd = fb.control({ hour: 13, minute: 0 }, []);
     this.filteredFriends = this.ctrlFriends.valueChanges.pipe(
       startWith(null),
       map((user: string | null) => user ? this._filter(user) : this.allFriends.slice()));
@@ -105,7 +107,6 @@ export class CreateEventComponent implements OnInit {
       this.allFriends = res;
     });
     this.userServ.getUserGames(this.authServ.currentUser.pseudo).subscribe(games => {
-      console.log(games);
       this.games = games;
     });
     this.frm = this.fb.group({
@@ -115,7 +116,9 @@ export class CreateEventComponent implements OnInit {
       end_date: this.endDate,
       nbUsers: this.ctlNumber,
       accessType: this.ctlType,
-      langue: this.ctlLang
+      langue: this.ctlLang,
+      start_time: this.ctlTimepickerStart,
+      end_time: this.ctlTimepickerEnd
     });
   }
   // crossValidations(group: FormGroup): ValidationErrors {
@@ -158,7 +161,6 @@ export class CreateEventComponent implements OnInit {
     this.allFriends.splice(index, 1);
     this.friendsInput.nativeElement.value = '';
     this.ctrlFriends.setValue(null);
-    console.log("test", this.allFriends);
   }
 
   private _filter(value: string): User[] {
@@ -171,15 +173,16 @@ export class CreateEventComponent implements OnInit {
   }
   add() {
     const gametm = this.games.find(game => game.name === this.ctlGame.value);
-    let startdate = this.nbdAdapter.toModel(this.frm.value.start_date);
-    let enddate = this.nbdAdapter.toModel(this.frm.value.end_date);
+    let startdate = this.createDate({...this.frm.value.start_date,...this.frm.value.start_time})
+    let enddate = this.createDate({...this.frm.value.end_date,...this.frm.value.end_time})
+    debugger
     Object.assign(this.frm.value, { start_date: startdate, end_date: enddate, createdByUserId: this.authServ.currentUser.id });
     const ev = Object.assign({}, { ...this.frm.value }, { gameId: gametm.id });
     const eventData = new Event(ev);
     eventData.accessType = Number.parseInt(this.frm.value.accessType);
     console.log(eventData);
     this.eventService.createEvent(eventData).subscribe(res => {
-      if (eventData.accessType === AccessType.ParticularFriend) {
+      if (eventData.accessType === AccessType.Private) {
         this.nFriends.forEach(user => {
           const notif = new Notif({ 
             see: false, 
@@ -196,6 +199,9 @@ export class CreateEventComponent implements OnInit {
       }
     });
 
+  }
+  createDate({year,month,day,hour,minute,second}):Date{
+    return new Date(year,month,day,hour,minute,second)
   }
 
 }

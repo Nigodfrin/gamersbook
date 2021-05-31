@@ -989,6 +989,32 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
+"@fullcalendar/angular@^4.4.0":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/angular/-/angular-4.4.2.tgz#2dbdff7081ce06da08587f5abd0d6ecfd7934291"
+  integrity sha512-i4N7fItl6HBMMZPEad7tYhm1FYC3ALt8tWdpOn0RvQKZdQHCrVxY9qE7pWhdr/ekbBkPrf60njXV5mRorw18/A==
+  dependencies:
+    "@fullcalendar/core" "~4.4.0"
+    fast-deep-equal "^3.1.1"
+    tslib "^1.9.0"
+
+"@fullcalendar/core@^4.4.0", "@fullcalendar/core@~4.4.0":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-4.4.2.tgz#864abe98cce4497a163c01a8fc30389f15d3d4e1"
+  integrity sha512-vq7KQGuAJ1ieFG5tUqwxwUwmXYtblFOTjHaLAVHo6iEPB52mS7DS45VJfkhaQmX4+5/+BHRpg82G1qkuAINwtg==
+
+"@fullcalendar/daygrid@^4.4.0", "@fullcalendar/daygrid@~4.4.0":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-4.4.2.tgz#568bfb3c7cc97f83b57cf3aef0fa3ed1bf6eda16"
+  integrity sha512-axjfMhxEXHShV3r2TZjf+2niJ1C6LdAxkHKmg7mVq4jXtUQHOldU5XsjV0v2lUAt1urJBFi2zajfK8798ukL3Q==
+
+"@fullcalendar/timegrid@^4.4.0":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-4.4.2.tgz#9d5b26204cd2b0928e7498c54f758a6d07b15191"
+  integrity sha512-M5an7qii8OUmI4ogY47k5pn2j/qUbLp6sa6Vo0gO182HR5pb9YtrEZnoQhnScok+I0BkDkLFzMQoiAMTjBm2PQ==
+  dependencies:
+    "@fullcalendar/daygrid" "~4.4.0"
+
 "@istanbuljs/schema@^0.1.2":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
@@ -5563,13 +5589,12 @@ ngx-markdown@^8.2.1:
     prismjs "^1.16.0"
     tslib "^1.9.0"
 
-ngx-simplemde@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-simplemde/-/ngx-simplemde-10.0.0.tgz#78f7816262cfa3582920d85aac6c8fdb14476f9b"
-  integrity sha512-JbunEyUmajQ6Pk2Li0gw0PG7mbj5ARoUFSBYOWtj4rBw5HZPKEAZxcLpw/xqDa9u29Ep3MH0d45e38G4OHm0og==
+ngx-simplemde@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ngx-simplemde/-/ngx-simplemde-1.1.1.tgz#b91bf3bdb47d285ff2bd0249136a269e3db75306"
+  integrity sha512-LLfrZ2hQ92WK19YXtWrsuE3viXQRd0TQ9FVdxupXrJ9/1IigyrC64kFYGyKxACIImL7NbEMu3lBTTpO/cBznPg==
   dependencies:
     simplemde-antd "^1.0.0"
-    tslib "^2.0.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -8565,7 +8590,9 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zone.js@~0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.9.1.tgz#e37c6e5c54c13fae4de26b5ffe8d8e9212da6d9b"
-  integrity sha512-GkPiJL8jifSrKReKaTZ5jkhrMEgXbXYC+IPo1iquBjayRa0q86w3Dipjn8b415jpitMExe9lV8iTsv8tk3DGag==
+zone.js@~0.11.4:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.11.4.tgz#0f70dcf6aba80f698af5735cbb257969396e8025"
+  integrity sha512-DDh2Ab+A/B+9mJyajPjHFPWfYU1H+pdun4wnnk0OcQTNjem1XQSZ2CDW+rfZEUDjv5M19SBqAkjZi0x5wuB5Qw==
+  dependencies:
+    tslib "^2.0.0"

@@ -1,0 +1,19 @@
+<section *ngIf="event" style="padding: 10px;display: flex;justify-content: center; max-height: calc(100vh - 75px);overflow: auto;">
+  <img src="{{event.game.image}}" />
+  <div style="display: flex;flex-direction: column;">
+    <h4>{{event.name}}</h4>
+    <div>{{event.description}}</div>
+    <div>{{event.start_date | date: 'long'}}</div>
+    <div>{{event.end_date | date: 'long'}}</div>
+    <div>{{event.langue}}</div>
+    <div>{{createByUser?.pseudo}}</div>
+    <div style="max-height:75%;display: flex;flex-direction: column; align-items: center;width: 300px;background-color: goldenrod;">
+        <h5 style="color: #444444;">Participants</h5>
+        <div style="overflow: auto;width: inherit;">
+          <ng-container *ngFor="let user of event.participants">
+            <app-user-line [user]="user" [showAction]="isCreator()" (action)="deleteUser(user)" ></app-user-line>
+          </ng-container>
+        </div>
+    </div>
+  </div>
+</section>

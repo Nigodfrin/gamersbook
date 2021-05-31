@@ -68,6 +68,7 @@ export class NavMenuComponent {
     this.isExpanded = false;
   }
   searchUser(){
+    console.log('coucou',this.userSearch)
     if(this.userSearch){
       this.router.navigate(['/users'], { queryParams: { name: this.userSearch } });    
       this.userSearch = "";

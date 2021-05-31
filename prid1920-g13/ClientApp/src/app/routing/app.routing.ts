@@ -16,6 +16,7 @@ import { ProfileComponent } from '../components/profile-component/profile.compon
 import { SearchGamesComponent } from '../components/searchGames/searchGames.component';
 import { CreateEventComponent } from '../components/create-event.component/create-event.component';
 import { EventListComponent } from '../components/event-list-component/event-list.component';
+import { EventDetailsComponent } from '../components/event-details-component/event-details.component';
 
 
 
@@ -92,6 +93,7 @@ const appRoutes: Routes = [
     component: EventListComponent
   }
   ,
+  {path: 'event/:id', component: EventDetailsComponent},
   { path: 'restricted', component: RestrictedComponent },
   { path: '**', component: UnknownComponent }
 ];

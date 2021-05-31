@@ -28,7 +28,6 @@
               "node_modules/prismjs/themes/prism-okaidia.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.scss",
               "src/custom.scss",
               "src/stylesSimplemde.less"

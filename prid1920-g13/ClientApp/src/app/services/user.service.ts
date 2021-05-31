@@ -7,6 +7,7 @@ import { of, Observable } from 'rxjs';
 import { Post } from '../models/Post';
 import { Game } from '../models/Game';
 import { Notif } from '../models/Notif';
+import { Event } from '../models/Event';
 @Injectable({ providedIn: 'root' })
 export class UserService {
   
@@ -49,6 +50,10 @@ export class UserService {
   getNotifs() {
     return this.http.get<Notif[]>(`${this.baseUrl}api/users/notifications`)
     .pipe(map(res => res.map(m => new Notif(m))));
+  }
+  getEvents() {
+    return this.http.get<Event[]>(`${this.baseUrl}api/users/getEvents`)
+    .pipe(map(res => res.map(m => new Event(m))));
   }
   public isPseudoAvailable(pseudo: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}api/users/available/${pseudo}`);

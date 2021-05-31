@@ -29,7 +29,7 @@
           <a class="nav-link text-light" [routerLink]='["/taglist"]'>Tags</a>
         </li>
         <form class="form-inline my-2 my-lg-0">
-          <input [ngbTypeahead]="search" id="search" (keyup.enter)="searchUser()"[(ngModel)]="userSearch"
+          <input [ngbTypeahead]="search" id="search" [ngModelOptions]="{standalone: true}" (keyup.enter)="searchUser()"[(ngModel)]="userSearch"
           class="input nav-input"   type="search" placeholder="Search" aria-label="Search">
           <button  (click)="searchUser()" class="search-icon-nav" type="submit"> <span class="material-icons">search</span></button>
         </form>

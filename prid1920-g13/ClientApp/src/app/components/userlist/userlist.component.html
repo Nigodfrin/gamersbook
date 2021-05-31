@@ -11,20 +11,11 @@
 <div class="row">
     <div class="col-sm-12">
        <div style="display: flex; flex-wrap: wrap;">
-            <div style="padding: 6px 4px;;background-color: #444444 ;display: flex; align-items: center;min-width: 500px;margin: 10px;" *ngFor="let user of filterUsers">
-                <img class="small-img-user-item image-responsive" [src]="user.picturePath ? user.picturePath : 'uploads/unknown-user.jpg'">
-                <div class="ml-3 mr-3" style="width: 60%;color: #fff">
-                    <div style="font-size: 1.2em;font-weight: bold;">
-                         {{user.pseudo | titlecase}}
-                    </div>
-                    <div>
-                         {{user.firstName | titlecase}} {{user.lastName | titlecase}}
-                    </div>            
-                </div>
-                <div class="btn-add-friend" *ngIf="friends" (click)="addFriend(user)">
-                    <span class="material-icons">{{isFriends(user) ? 'delete' :'add' }}</span> <div style="width: 100px">{{isFriends(user) ? 'Delete friend' : 'Add friend' }}</div>
-                </div>
-            </div>
+        <ng-container *ngFor="let user of filterUsers">
+            <app-user-line [user]="user" showAction="true" addAndDelete="true" (action)="addFriend(user)">
+
+            </app-user-line>
+        </ng-container>
        </div>
     </div>
 </div>
